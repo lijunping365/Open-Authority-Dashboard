@@ -76,9 +76,9 @@ const NoticeIconView = () => {
   const { currentUser } = initialState || {};
   const [notices, setNotices] = useState<API.NoticeIconItem[]>([]);
 
-  useEffect(() => {
-    getNotices().then(({ data }) => setNotices(data || []));
-  }, []);
+  // useEffect(() => {
+  //   getNotices().then(({ data }) => setNotices(data || []));
+  // }, []);
 
   const noticeData = getNoticeData(notices);
   const unreadMsg = getUnreadData(noticeData || {});
