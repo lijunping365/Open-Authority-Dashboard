@@ -1,4 +1,4 @@
-import { RequestInterceptor, ResponseInterceptor } from 'umi-request';
+import type { RequestInterceptor, ResponseInterceptor } from 'umi-request';
 import { history } from 'umi';
 import { getAccessToken, getDeviceId, getRefreshToken } from '@/utils/cache';
 import { onRefreshToken } from '@/utils/token';

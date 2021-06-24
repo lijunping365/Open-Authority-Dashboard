@@ -1,7 +1,7 @@
 import { request } from 'umi';
 import { setAccessToken, setRefreshToken } from '@/utils/cache';
 import { refreshAppToken } from '@/services/ant-design-pro/api';
-import { RequestOptionsInit } from 'umi-request';
+import type { RequestOptionsInit } from 'umi-request';
 import {HTTP_URL} from "../../config/env.config";
 
 export const refreshToken = () => {
