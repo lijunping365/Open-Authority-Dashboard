@@ -8,6 +8,7 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+import {requestInterceptor, responseInterceptor} from "@/utils/request";
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -88,6 +89,8 @@ export async function getInitialState(): Promise<{
  * @see https://beta-pro.ant.design/docs/request-cn
  */
 export const request: RequestConfig = {
+  requestInterceptors: [requestInterceptor],
+  responseInterceptors: [responseInterceptor],
   errorHandler: (error: any) => {
     const { response } = error;
 

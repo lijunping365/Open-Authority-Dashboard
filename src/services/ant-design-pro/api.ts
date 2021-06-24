@@ -1,6 +1,5 @@
-// @ts-ignore
-/* eslint-disable */
 import { request } from 'umi';
+import {getRefreshToken} from "@/utils/cache";
 
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
@@ -79,5 +78,14 @@ export async function removeRule(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/rule', {
     method: 'DELETE',
     ...(options || {}),
+  });
+}
+
+export async function refreshAppToken() {
+  return request('/oauth/token/refresh', {
+    method: 'GET',
+    params: {
+      "refreshToken": getRefreshToken(),
+    },
   });
 }
