@@ -71,7 +71,7 @@ const Login: React.FC = () => {
     setSubmitting(true);
     try {
       // 登录
-      const msg = await login({ ...values, type });
+      const msg = await login({ ...values, type, deviceId: getDeviceId()});
       if (msg.status === 'ok') {
         const defaultloginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
@@ -230,7 +230,7 @@ const Login: React.FC = () => {
                       </div>
                     )
                   }}
-                  name="imageCaptcha"
+                  name="captcha"
                   rules={[
                     {
                       required: true,
