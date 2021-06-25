@@ -11,9 +11,9 @@ export async function login(body: API.LoginParams) {
 
 /** 退出登录接口 POST /login/outLogin */
 export async function outLogin() {
-  return request<Record<string, any>>('/login/outLogin', {
-    method: 'POST',
-    data: {accessToken: getAccessToken()}
+  return request('/login/outLogin', {
+    method: 'GET',
+    params: {accessToken: getAccessToken()}
   });
 }
 
