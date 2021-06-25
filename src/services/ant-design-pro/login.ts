@@ -1,4 +1,5 @@
 import { request } from 'umi';
+import {getAccessToken} from "@/utils/cache";
 
 /** 登录接口 POST /login/type */
 export async function login(body: API.LoginParams) {
@@ -8,11 +9,11 @@ export async function login(body: API.LoginParams) {
   });
 }
 
-/** 退出登录接口 POST /api/login/outLogin */
-export async function outLogin(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/login/outLogin', {
+/** 退出登录接口 POST /login/outLogin */
+export async function outLogin() {
+  return request<Record<string, any>>('/login/outLogin', {
     method: 'POST',
-    ...(options || {}),
+    data: {accessToken: getAccessToken()}
   });
 }
 
