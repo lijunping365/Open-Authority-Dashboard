@@ -318,10 +318,6 @@ const Login: React.FC = () => {
                   ]}
                   phoneName="mobile"
                   onGetCaptcha={async (mobile) => {
-                    if (!mobile){
-                      message.warn('请输入手机号');
-                      return;
-                    }
                     const result = await getFakeCaptcha({
                       type: "sms", mobile, deviceId: getDeviceId()
                     });

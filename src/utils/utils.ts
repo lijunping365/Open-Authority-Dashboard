@@ -2,7 +2,11 @@
 const reg =
   /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/;
 
+const phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/;
+
 export const isUrl = (path: string): boolean => reg.test(path);
+
+export const isMobile = (mobile: string): boolean => phoneReg.test(mobile);
 
 export const isAntDesignPro = (): boolean => {
   if (ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site') {
