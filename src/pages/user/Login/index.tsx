@@ -271,7 +271,7 @@ const Login: React.FC = () => {
                   ]}
                   onGetCaptcha={async (phone) => {
                     const result = await getFakeCaptcha({
-                      phone,
+                      type: "sms", mobile: phone,
                     });
                     if (result === false) {
                       return;
