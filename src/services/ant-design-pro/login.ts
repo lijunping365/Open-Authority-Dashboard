@@ -1,5 +1,4 @@
 import { request } from 'umi';
-import CaptchaParams = API.CaptchaParams;
 
 /** 登录接口 POST /api/login/account */
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
@@ -23,10 +22,10 @@ export async function outLogin(options?: { [key: string]: any }) {
 
 
 /** 发送验证码 POST /validate/code/type */
-export async function getFakeCaptcha(params: Partial<CaptchaParams>) {
+export async function getFakeCaptcha(params: Partial<API.CaptchaParams>) {
   return request(`/validate/code/${params.type}`, {
     method: 'POST',
-    params: {
+    data: {
       ...params,
     },
   });

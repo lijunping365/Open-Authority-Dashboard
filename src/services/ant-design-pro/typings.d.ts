@@ -58,6 +58,7 @@ declare namespace API {
 
   type CaptchaParams = {
     type?: string;
+    deviceId?: string;
     mobile?: string;
   };
 

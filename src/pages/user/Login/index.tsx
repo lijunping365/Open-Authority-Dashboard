@@ -3,14 +3,16 @@ import {
   MobileOutlined,
   UserOutlined
 } from '@ant-design/icons';
-import { Alert, message, Tabs } from 'antd';
-import React, { useState } from 'react';
+import { Alert, message, Tabs, Image } from 'antd';
+import React, {useCallback, useEffect, useState} from 'react';
 import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
 import { login, getFakeCaptcha } from '@/services/ant-design-pro/login';
 
 import styles from './index.less';
+import {arrayBufferToBase64} from "@/utils/utils";
+import {getDeviceId} from "@/utils/cache";
 
 const LoginMessage: React.FC<{
   content: string;
@@ -40,8 +42,14 @@ const Login: React.FC = () => {
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
+  const [imageUrl, setImageUrl] = useState("");
 
   const intl = useIntl();
+
+  const onGetImageCaptcha = useCallback(async () => {
+    const result = await getFakeCaptcha({type:"image", deviceId: getDeviceId()});
+    if (result) setImageUrl(`data:image/jpeg;base64,${arrayBufferToBase64(result)}`)
+  }, []);
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
@@ -52,6 +60,12 @@ const Login: React.FC = () => {
       });
     }
   };
+
+  useEffect(()=>{
+    if (type === "account"){
+      onGetImageCaptcha().then()
+    }
+  },[]);
 
   const handleSubmit = async (values: API.LoginParams) => {
     setSubmitting(true);
@@ -196,6 +210,43 @@ const Login: React.FC = () => {
                     },
                   ]}
                 />
+                <ProFormCaptcha
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <LockOutlined className={styles.prefixIcon} />,
+                  }}
+                  captchaProps={{
+                    size: 'large',
+                  }}
+                  placeholder={intl.formatMessage({
+                    id: 'pages.login.captcha.placeholder',
+                    defaultMessage: '请输入验证码',
+                  })}
+                  captchaTextRender={() => {
+                    return (
+                      <div style={{width: "100px", height: "100%"}}>
+                        <Image
+                          preview={false}
+                          src={imageUrl}
+                          onClick={onGetImageCaptcha}
+                        />
+                      </div>
+                    )
+                  }}
+                  name="imageCaptcha"
+                  rules={[
+                    {
+                      required: true,
+                      message: (
+                        <FormattedMessage
+                          id="pages.login.captcha.required"
+                          defaultMessage="请输入验证码！"
+                        />
+                      ),
+                    },
+                  ]}
+                  onGetCaptcha={onGetImageCaptcha}
+                />
               </>
             )}
 
@@ -271,7 +322,7 @@ const Login: React.FC = () => {
                   ]}
                   onGetCaptcha={async (phone) => {
                     const result = await getFakeCaptcha({
-                      type: "sms", mobile: phone,
+                      type: "sms", mobile: phone, deviceId: getDeviceId()
                     });
                     if (result === false) {
                       return;

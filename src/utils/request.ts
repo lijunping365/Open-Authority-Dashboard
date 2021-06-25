@@ -1,6 +1,6 @@
 import type { RequestInterceptor, ResponseInterceptor } from 'umi-request';
 import { history } from 'umi';
-import { getAccessToken, getDeviceId, getRefreshToken } from '@/utils/cache';
+import { getAccessToken, getRefreshToken } from '@/utils/cache';
 import { onRefreshToken } from '@/utils/token';
 import { notification } from 'antd';
 import { HTTP_URL } from '../../config/env.config';
@@ -28,13 +28,12 @@ export const requestInterceptor: RequestInterceptor = (url, options) => {
   const o: any = options;
   o.headers = {
     ...options.headers,
-    Authorization: o.headers.Authorization ?? `Bearer ${getAccessToken()}`,
-    deviceId: getDeviceId(),
-    agent: 2,
+    Authorization: `Bearer ${getAccessToken()}`
   };
 
   // 当返回 data 的值为 null 时会走 errorHandle
   o.skipErrorHandler = true;
+  console.log("当前发出的请求是", `${HTTP_URL}${url}`)
   return {
     url: `${HTTP_URL}${url}`,
     options: o,
