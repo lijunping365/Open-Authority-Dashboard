@@ -3,7 +3,7 @@ import {
   MobileOutlined,
   UserOutlined
 } from '@ant-design/icons';
-import { Alert, message, Tabs, Image } from 'antd';
+import {Alert, message, Tabs, Image} from 'antd';
 import React, {useCallback, useEffect, useState} from 'react';
 import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
 import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
@@ -316,9 +316,14 @@ const Login: React.FC = () => {
                       ),
                     },
                   ]}
-                  onGetCaptcha={async (phone) => {
+                  phoneName="mobile"
+                  onGetCaptcha={async (mobile) => {
+                    if (!mobile){
+                      message.warn('请输入手机号');
+                      return;
+                    }
                     const result = await getFakeCaptcha({
-                      type: "sms", mobile: phone, deviceId: getDeviceId()
+                      type: "sms", mobile, deviceId: getDeviceId()
                     });
                     if (result === false) {
                       return;
