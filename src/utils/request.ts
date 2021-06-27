@@ -4,6 +4,7 @@ import { getAccessToken, getRefreshToken } from '@/utils/cache';
 import { onRefreshToken } from '@/utils/token';
 import { notification } from 'antd';
 import { HTTP_URL } from '../../config/env.config';
+import {ignorePath} from "@/utils/utils";
 
 export const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -47,10 +48,18 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
       if (response.url.includes('image')) {
         return response.clone().arrayBuffer();
       }
-
       const result: any = await response.clone().json();
       if (result && result.code === 200) {
         return result.data;
+      }
+      if (result && result.code === 401 && ignorePath()) {
+        if (!getRefreshToken()) history.push('/user/login');
+        return onRefreshToken(response, options);
+      }
+      // refresh_token 过期，需要重新登录
+      if (result && result.code === 402 && ignorePath()) {
+        notification.error({message: result.msg});
+        history.push('/user/login');
       }
       if (result && result.code === 403) {
         history.push('/exception/403');
@@ -63,22 +72,12 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
       }
       return result;
     }
-    if (response.status === 401) {
-      // access_token 过期 和 refresh_token 过期都会抛出 401 异常，url 包含 oauth/token 说明就是 refresh_token 过期了。
-      // 如果是 access_token 过期，则刷新 token
-      if (getRefreshToken() && response.url.indexOf('oauth/token') === -1) {
-        return onRefreshToken(response, options);
-      }
-      // 否则可能就是未登录或 refresh_token 过期抛出 401， 所以要重新登录
-      history.push('/user/login');
-    } else {
-      const errorText = codeMessage[response.status] || response.statusText;
-      const { status, url } = response;
-      notification.error({
-        message: `请求错误 ${status}: ${url}`,
-        description: errorText,
-      });
-    }
+    const errorText = codeMessage[response.status] || response.statusText;
+    const { status, url } = response;
+    notification.error({
+      message: `请求错误 ${status}: ${url}`,
+      description: errorText,
+    });
   } else {
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
