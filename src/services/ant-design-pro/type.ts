@@ -12,7 +12,7 @@ export async function fetchTypePage(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/rule', {
+  return request<API.RuleList>('/type/page', {
     method: 'GET',
     params: {
       ...params,
@@ -23,7 +23,7 @@ export async function fetchTypePage(
 
 /** 新建规则 PUT /api/rule */
 export async function updateType(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/rule', {
+  return request<API.RuleListItem>('/type/update', {
     method: 'PUT',
     ...(options || {}),
   });
@@ -31,7 +31,7 @@ export async function updateType(options?: { [key: string]: any }) {
 
 /** 新建规则 POST /api/rule */
 export async function addType(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/rule', {
+  return request<API.RuleListItem>('/type/save', {
     method: 'POST',
     ...(options || {}),
   });
@@ -39,8 +39,8 @@ export async function addType(options?: { [key: string]: any }) {
 
 /** 删除规则 DELETE /api/rule */
 export async function removeType(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/rule', {
-    method: 'DELETE',
+  return request<Record<string, any>>('/type/delete', {
+    method: 'PUT',
     ...(options || {}),
   });
 }
