@@ -1,7 +1,7 @@
 import { request } from 'umi';
 import {getAccessToken, getRefreshToken} from "@/utils/cache";
 
-/** 登录接口 POST /login/type */
+/** 登录接口 POST /login/list */
 export async function login(body: API.LoginParams) {
   return request(`/login/${body.type}`, {
     method: 'POST',
@@ -18,7 +18,7 @@ export async function outLogin() {
 }
 
 
-/** 发送验证码 POST /validate/code/type */
+/** 发送验证码 POST /validate/code/list */
 export async function getFakeCaptcha(params: Partial<API.CaptchaParams>) {
   return request(`/validate/code/${params.type}`, {
     method: 'POST',

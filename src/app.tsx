@@ -110,7 +110,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: initialState?.currentUser?.username,
+      content: '口袋贵金属',
+
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
