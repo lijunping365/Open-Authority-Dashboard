@@ -7,9 +7,9 @@ const { confirm } = Modal;
 export const deleteConfirm = () => {
   return new Promise((resolve) => {
     confirm({
-      title: 'Do you Want to delete these items?',
+      title: 'Do you Want to delete this item?',
       icon: <ExclamationCircleOutlined />,
-      content: 'Some descriptions',
+      // content: 'Some descriptions',
       okText: '确认',
       okType: 'danger',
       cancelText: '取消',
