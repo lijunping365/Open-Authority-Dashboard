@@ -23,7 +23,7 @@ export async function fetchTypePage(
 
 /** 新建规则 PUT /type/update */
 export async function updateType(params: Partial<API.TypeListItem>) {
-  return request<API.RuleListItem>('/type/update', {
+  return request('/type/update', {
     method: 'PUT',
     data: {...params}
   });
@@ -31,7 +31,7 @@ export async function updateType(params: Partial<API.TypeListItem>) {
 
 /** 新建规则 POST /type/save */
 export async function addType(params: API.TypeListItem) {
-  return request<API.RuleListItem>('/type/save', {
+  return request('/type/save', {
     method: 'POST',
     data: {...params}
   });

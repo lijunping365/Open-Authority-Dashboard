@@ -1,46 +1,46 @@
 import { request } from 'umi';
 
 
-/** 获取分类列表 GET /type/rule */
-export async function fetchPage(
+/** 获取分类列表 GET /proxygroup/page */
+export async function fetchProxyGroupPage(
   params: {
     // query
     /** 当前的页码 */
     current?: number;
     /** 页面的容量 */
     pageSize?: number;
-  },
-  options?: { [key: string]: any },
+    /** 分组名称 */
+    name?: string
+  }
 ) {
-  return request<API.RuleList>('/api/rule', {
+  return request('/proxygroup/page', {
     method: 'GET',
     params: {
       ...params,
     },
-    ...(options || {}),
   });
 }
 
-/** 新建规则 PUT /api/rule */
-export async function update(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/rule', {
+/** 新建规则 PUT /proxygroup/update */
+export async function updateProxyGroup(params: Partial<API.ProxyGroupListItem>) {
+  return request('/proxygroup/update', {
     method: 'PUT',
-    ...(options || {}),
+    data: {...params}
   });
 }
 
-/** 新建规则 POST /api/rule */
-export async function add(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/rule', {
+/** 新建规则 POST /proxygroup/save */
+export async function addProxyGroup(params: API.ProxyGroupListItem) {
+  return request('/proxygroup/save', {
     method: 'POST',
-    ...(options || {}),
+    data: {...params}
   });
 }
 
-/** 删除规则 DELETE /api/rule */
-export async function remove(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/rule', {
+/** 删除规则 DELETE /proxygroup/delete */
+export async function removeProxyGroup(params: {ids: number[]}) {
+  return request('/proxygroup/delete', {
     method: 'DELETE',
-    ...(options || {}),
+    data: {...params}
   });
 }

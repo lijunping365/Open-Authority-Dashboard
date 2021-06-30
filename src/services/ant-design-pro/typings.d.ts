@@ -55,6 +55,12 @@ declare namespace API {
     createTime?: string;
   };
 
+  type ProxyGroupListItem = {
+    id?: number;
+    groupName?: string;
+    createTime?: string;
+  };
+
   type RuleList = {
     data?: RuleListItem[];
     /** 列表的内容总数 */
