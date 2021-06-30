@@ -1,1 +1,1 @@
-export const HTTP_URL = "http://192.168.4.77:8090";
+export const HTTP_URL = "http://localhost:8090";

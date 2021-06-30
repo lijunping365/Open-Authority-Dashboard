@@ -15,6 +15,7 @@ export default {
   'menu.util': '反监控管理',
   'menu.util.proxy': '代理IP管理',
   'menu.util.white': 'IP白名单',
+  'menu.util.ip': '代理IP列表',
   'menu.monitor': '监控报警',
   'menu.monitor.task': '任务监控',
   'menu.analysis': '统计分析',

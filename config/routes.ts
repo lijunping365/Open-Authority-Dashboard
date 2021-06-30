@@ -83,6 +83,13 @@
         icon: 'smile',
         component: './util/white',
       },
+      {
+        path: '/util/ip',
+        name: 'ip',
+        icon: 'smile',
+        component: './util/ip',
+        hideInMenu: true,
+      },
     ],
   },
   {
