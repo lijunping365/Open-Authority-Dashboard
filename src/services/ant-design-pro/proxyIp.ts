@@ -10,7 +10,7 @@ export async function fetchProxyIpPage(
     /** 页面的容量 */
     pageSize?: number;
     /** 分组名称 */
-    groupId?: string
+    groupId?: any
     /** 分组名称 */
     ip?: string
     /** 分组名称 */

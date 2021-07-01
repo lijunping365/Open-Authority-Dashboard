@@ -48,28 +48,38 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
       if (response.url.includes('image')) {
         return response.clone().arrayBuffer();
       }
+
       const result: any = await response.clone().json();
       if (result && result.code === 200) {
         return result.data;
       }
+
+      if (result && result.code === 400) { // 参数校验失败
+        notification.error({message: result.msg});
+      }
+
       if (result && result.code === 401 && ignorePath()) {
         if (!getRefreshToken()) history.push('/user/login');
         return onRefreshToken(response, options);
       }
-      // refresh_token 过期，需要重新登录
-      if (result && result.code === 402 && ignorePath()) {
+
+      if (result && result.code === 402 && ignorePath()) { // refresh_token 过期，需要重新登录
         notification.error({message: result.msg});
         history.push('/user/login');
       }
+
       if (result && result.code === 403) {
         history.push('/exception/403');
       }
+
       if (result && result.code === 404) {
         history.push('/exception/404');
       }
+
       if (result && result.code === 500) {
         history.push('/exception/500');
       }
+
       return result;
     }
     const errorText = codeMessage[response.status] || response.statusText;
