@@ -22,17 +22,10 @@
     component: './Welcome',
   },
   {
-    name: 'template',
+    name: 'dashboard',
     icon: 'table',
-    path: '/template',
-    routes: [
-      {
-        path: '/template/list',
-        name: 'list',
-        icon: 'smile',
-        component: './template/list',
-      },
-    ],
+    path: '/dashboard',
+    component: './dashboard',
   },
   {
     name: 'task',
