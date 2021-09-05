@@ -31,14 +31,7 @@
     name: 'task',
     icon: 'table',
     path: '/task',
-    routes: [
-      {
-        path: '/task/list',
-        name: 'list',
-        icon: 'smile',
-        component: './task/list',
-      },
-    ],
+    component: './task',
   },
   {
     name: 'data',

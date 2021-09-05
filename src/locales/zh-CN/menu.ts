@@ -7,7 +7,6 @@ export default {
   'menu.login': '登录',
   'menu.dashboard': '运行报表',
   'menu.task': '任务管理',
-  'menu.task.list': '任务列表',
   'menu.data': '数据管理',
   'menu.data.list': '数据列表',
   'menu.data.real': '实时数据',
