@@ -28,12 +28,6 @@
     component: './dashboard',
   },
   {
-    name: 'category',
-    icon: 'table',
-    path: '/category',
-    component: './category',
-  },
-  {
     name: 'task',
     icon: 'table',
     path: '/task',

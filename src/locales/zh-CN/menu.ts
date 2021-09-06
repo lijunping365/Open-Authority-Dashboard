@@ -5,7 +5,6 @@ export default {
   'menu.admin.sub-page': '二级管理页',
   'menu.login': '登录',
   'menu.dashboard': '运行报表',
-  'menu.category': '分类管理',
   'menu.task': '任务管理',
   'menu.executor': '执行器管理',
   'menu.proxy': '代理IP管理',
