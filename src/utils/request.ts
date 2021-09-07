@@ -1,6 +1,6 @@
 import type { RequestInterceptor, ResponseInterceptor } from 'umi-request';
 import { history } from 'umi';
-import { getAccessToken, getRefreshToken } from '@/utils/cache';
+import {getAccessToken, getRefreshToken, setRefreshToken} from '@/utils/cache';
 import { onRefreshToken } from '@/utils/token';
 import { notification } from 'antd';
 import { HTTP_URL } from '../../config/env.config';
@@ -60,12 +60,8 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
 
       if (result && result.code === 401 && ignorePath()) {
         if (!getRefreshToken()) history.push('/user/login');
+        if (response.url.includes('refresh')) setRefreshToken('');
         return onRefreshToken(response, options);
-      }
-
-      if (result && result.code === 402 && ignorePath()) { // refresh_token 过期，需要重新登录
-        notification.error({message: result.msg});
-        history.push('/user/login');
       }
 
       if (result && result.code === 403) {

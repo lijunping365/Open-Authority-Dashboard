@@ -1,27 +1,19 @@
 import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Alert, Typography } from 'antd';
-import { useIntl, FormattedMessage } from 'umi';
+import {Card, Alert, Typography, Tag, Statistic, Row, Col} from 'antd';
 import styles from './Welcome.less';
-
-const CodePreview: React.FC = ({ children }) => (
-  <pre className={styles.pre}>
-    <code>
-      <Typography.Text copyable>{children}</Typography.Text>
-    </code>
-  </pre>
-);
+import {
+  AlertOutlined, ApiOutlined, ArrowUpOutlined, BarChartOutlined, BugOutlined,
+  CoffeeOutlined, DashboardOutlined, DeploymentUnitOutlined,
+} from "@ant-design/icons";
 
 export default (): React.ReactNode => {
-  const intl = useIntl();
+
   return (
     <PageContainer>
       <Card>
         <Alert
-          message={intl.formatMessage({
-            id: 'pages.welcome.alertMessage',
-            defaultMessage: '更快更强的重型组件，已经发布。',
-          })}
+          message='欢迎使用该分布式爬虫系统，你还可以把它当作一个分布式任务或定时调度系统。'
           type="success"
           showIcon
           banner
@@ -31,32 +23,58 @@ export default (): React.ReactNode => {
           }}
         />
         <Typography.Text strong>
-          <FormattedMessage id="pages.welcome.advancedComponent" defaultMessage="高级表格" />{' '}
+          <Tag icon={<BarChartOutlined />} color="#55acee">
+            企业级
+          </Tag>
+          <Tag icon={<DeploymentUnitOutlined />} color="#cd201f">
+            分布式
+          </Tag>
+          <Tag icon={<BugOutlined />} color="#3b5999">
+            爬虫系统
+          </Tag>
+          <Tag icon={<CoffeeOutlined />} color="#55acee">
+            调度系统
+          </Tag>
+          <Tag icon={<DashboardOutlined />} color="#55acee">
+            监控
+          </Tag>
+          <Tag icon={<AlertOutlined />} color="#55acee">
+            报警
+          </Tag>
+          <Tag icon={<ApiOutlined />} color="#55acee">
+            可拓展性高
+          </Tag>
+
           <a
             href="https://procomponents.ant.design/components/table"
             rel="noopener noreferrer"
             target="__blank"
           >
-            <FormattedMessage id="pages.welcome.link" defaultMessage="欢迎使用" />
+            欢迎使用
           </a>
         </Typography.Text>
-        <CodePreview>yarn add @ant-design/pro-table</CodePreview>
-        <Typography.Text
-          strong
-          style={{
-            marginBottom: 12,
-          }}
-        >
-          <FormattedMessage id="pages.welcome.advancedLayout" defaultMessage="高级布局" />{' '}
-          <a
-            href="https://procomponents.ant.design/components/layout"
-            rel="noopener noreferrer"
-            target="__blank"
-          >
-            <FormattedMessage id="pages.welcome.link" defaultMessage="欢迎使用" />
-          </a>
-        </Typography.Text>
-        <CodePreview>yarn add @ant-design/pro-layout</CodePreview>
+
+
+        <Row gutter={16} style={{marginTop:'20px'}}>
+          <Col span={12}>
+            <Card>
+              <Statistic title="累计使用人数" value={112893} />
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card>
+              <Statistic
+                title="今日新增人数"
+                value={20}
+                valueStyle={{ color: '#3f8600' }}
+                prefix={<ArrowUpOutlined />}
+              />
+            </Card>
+          </Col>
+        </Row>
+
+
+
       </Card>
     </PageContainer>
   );
