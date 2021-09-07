@@ -47,6 +47,7 @@ export const handler401 = async (response: Response, options: RequestOptionsInit
     return undefined;
   } if (response.url.includes('refresh')) {
     setRefreshToken('');
+    history.push('/user/login');
     return undefined;
   }
   return onRefreshToken(response, options);
