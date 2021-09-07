@@ -55,7 +55,7 @@ export default (): React.ReactNode => {
         </Typography.Text>
 
 
-        <Row gutter={16} style={{marginTop:'20px'}}>
+        <Row gutter={16} className={styles.statisticBlock}>
           <Col span={12}>
             <Card>
               <Statistic title="累计使用人数" value={112893} />
