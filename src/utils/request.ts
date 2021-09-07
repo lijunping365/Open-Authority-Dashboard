@@ -60,8 +60,8 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
 
       if (result && result.code === 401 && ignorePath()) {
         if (!getRefreshToken()) history.push('/user/login');
-        if (response.url.includes('refresh')) setRefreshToken('');
-        return onRefreshToken(response, options);
+        else if (response.url.includes('refresh')) setRefreshToken('');
+        else return onRefreshToken(response, options);
       }
 
       if (result && result.code === 403) {
