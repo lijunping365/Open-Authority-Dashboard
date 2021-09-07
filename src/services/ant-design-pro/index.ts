@@ -4,13 +4,11 @@
 // API 唯一标识：
 import * as api from './api';
 import * as login from './login';
-import * as type from './type';
-import * as proxyGroup from './proxyGroup';
-import * as proxyIp from './proxyIp';
+import * as task from './task';
+import * as proxy from './proxy';
 export default {
   api,
   login,
-  type,
-  proxyGroup,
-  proxyIp
+  task,
+  proxy
 };

@@ -6,7 +6,7 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import UpdateForm from './components/UpdateForm';
-import { fetchProxyGroupPage, addProxyGroup, updateProxyGroup, removeProxyGroup } from '@/services/ant-design-pro/proxyGroup';
+import { fetchProxyPage, addProxy, updateProxy, removeProxy } from '@/services/ant-design-pro/proxy';
 import {deleteConfirm} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
 
@@ -18,7 +18,7 @@ import {Link} from "@umijs/preset-dumi/lib/theme";
 const handleAdd = async (fields: API.ProxyGroupListItem) => {
   const hide = message.loading('正在添加');
   try {
-    await addProxyGroup({ ...fields });
+    await addProxy({ ...fields });
     hide();
     message.success('添加成功');
     return true;
@@ -37,7 +37,7 @@ const handleAdd = async (fields: API.ProxyGroupListItem) => {
 const handleUpdate = async (fields: Partial<API.ProxyGroupListItem>) => {
   const hide = message.loading('正在配置');
   try {
-    await updateProxyGroup(fields);
+    await updateProxy(fields);
     hide();
 
     message.success('配置成功');
@@ -58,7 +58,7 @@ const handleRemove = async (selectedRows: any[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeProxyGroup({ids: selectedRows});
+    await removeProxy({ids: selectedRows});
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -164,7 +164,7 @@ const TableList: React.FC = () => {
         ]}
 
         request={async (params) => {
-          const response = await fetchProxyGroupPage({ ...params });
+          const response = await fetchProxyPage({ ...params });
           return {
             data: response.records,
             total: response.total,
