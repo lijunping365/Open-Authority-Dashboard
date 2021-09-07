@@ -46,6 +46,12 @@
     component: './proxy',
   },
   {
+    name: 'admin',
+    icon: 'table',
+    path: '/admin',
+    component: './admin',
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },

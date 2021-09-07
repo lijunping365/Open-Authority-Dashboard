@@ -7,10 +7,12 @@ import * as login from './login';
 import * as task from './task';
 import * as proxy from './proxy';
 import * as server from './server';
+import * as user from './user';
 export default {
   api,
   login,
   task,
   proxy,
   server,
+  user,
 };
