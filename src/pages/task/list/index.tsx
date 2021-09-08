@@ -4,49 +4,9 @@ import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText } from '@ant-design/pro-form';
-import UpdateForm from './components/UpdateForm';
-import { fetchTaskPage, addTask, updateTask, removeTask } from '@/services/ant-design-pro/task';
+import { fetchTaskPage, removeTask } from '@/services/ant-design-pro/task';
 import {deleteConfirm} from "@/components/ConfirmModel";
-
-/**
- * 添加节点
- *
- * @param fields
- */
-const handleAdd = async (fields: API.TypeListItem) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addTask({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
-
-/**
- * 更新节点
- *
- * @param fields
- */
-const handleUpdate = async (fields: Partial<API.TypeListItem>) => {
-  const hide = message.loading('正在配置');
-  try {
-    await updateTask(fields);
-    hide();
-
-    message.success('配置成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('配置失败请重试！');
-    return false;
-  }
-};
+import {history} from "@@/core/history";
 
 /**
  * 删除节点
@@ -68,14 +28,13 @@ const handleRemove = async (selectedRows: any[]) => {
   }
 };
 
+const handleAdd = () =>{
+  history.push('/task/form');
+}
+
 const TableList: React.FC = () => {
-  /** 新建窗口的弹窗 */
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
-  /** 分布更新窗口的弹窗 */
-  const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.TypeListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.TypeListItem[]>([]);
 
   const columns: ProColumns<API.TypeListItem>[] = [
@@ -107,8 +66,7 @@ const TableList: React.FC = () => {
         <>
           <a
             onClick={() => {
-              handleUpdateModalVisible(true);
-              setCurrentRow(record);
+
             }}
           >
             修改
@@ -144,7 +102,7 @@ const TableList: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              handleModalVisible(true);
+              handleAdd();
             }}
           >
             <PlusOutlined /> 新建
@@ -187,51 +145,6 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <ModalForm
-        title="新建类型"
-        width="400px"
-        visible={createModalVisible}
-        onVisibleChange={handleModalVisible}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.TypeListItem);
-          if (success) {
-            handleModalVisible(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: "类型名称为必填项"
-            },
-          ]}
-          placeholder="请输入类型名称"
-          width="md"
-          name="name"
-        />
-      </ModalForm>
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
-          if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-          setCurrentRow(undefined);
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
     </PageContainer>
   );
 };

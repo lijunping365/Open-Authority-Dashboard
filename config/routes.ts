@@ -31,7 +31,21 @@
     name: 'task',
     icon: 'table',
     path: '/task',
-    component: './task',
+    component: './task/list',
+  },
+  {
+    path: '/task/basic',
+    name: 'basic',
+    icon: 'smile',
+    component: './task/basic',
+    hideInMenu: true,
+  },
+  {
+    path: '/task/form',
+    name: 'form',
+    icon: 'smile',
+    component: './task/form',
+    hideInMenu: true,
   },
   {
     name: 'executor',
