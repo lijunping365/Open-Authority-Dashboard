@@ -1,39 +1,19 @@
-import { PlusOutlined } from '@ant-design/icons';
 import {Button, message, Divider} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import UpdateForm from './components/UpdateForm';
-import { fetchUserPage, addUser, updateUser, removeUser } from '@/services/ant-design-pro/user';
+import { fetchUserPage, updateUser, removeUser } from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
-
-/**
- * 添加节点
- *
- * @param fields
- */
-const handleAdd = async (fields: API.TypeListItem) => {
-  const hide = message.loading('正在添加');
-  try {
-    await addUser({ ...fields });
-    hide();
-    message.success('添加成功');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('添加失败请重试！');
-    return false;
-  }
-};
+import type { User } from './data';
 
 /**
  * 更新节点
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<API.TypeListItem>) => {
+const handleUpdate = async (fields: Partial<User>) => {
   const hide = message.loading('正在配置');
   try {
     await updateUser(fields);
@@ -69,28 +49,38 @@ const handleRemove = async (selectedRows: any[]) => {
 };
 
 const TableList: React.FC = () => {
-  /** 新建窗口的弹窗 */
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   /** 分布更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.TypeListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.TypeListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<User>();
+  const [selectedRowsState, setSelectedRows] = useState<User[]>([]);
 
-  const columns: ProColumns<API.TypeListItem>[] = [
+  const columns: ProColumns<User>[] = [
     {
-      title: '分类ID',
+      title: '用户id',
       dataIndex: 'id',
-      tip: '分类ID是唯一的 key',
-      valueType: 'textarea',
+      valueType: 'text',
       hideInForm: true,
       search: false,
     },
     {
-      title: '分类名称',
-      dataIndex: 'name',
-      valueType: 'textarea',
+      title: '用户名称',
+      dataIndex: 'username',
+      valueType: 'text',
+    },
+    {
+      title: '手机号',
+      dataIndex: 'phone',
+      valueType: 'text',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      valueEnum: {
+        0: { text: '禁用', status: 'Exception' },
+        1: { text: '启用', status: 'Success' },
+      },
     },
     {
       title: '创建时间',
@@ -132,25 +122,14 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.TypeListItem, API.PageParams>
+      <ProTable<User>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
         search={{
           labelWidth: 120,
         }}
-        toolBarRender={() => [
-          <Button
-            type="primary"
-            key="primary"
-            onClick={() => {
-              handleModalVisible(true);
-            }}
-          >
-            <PlusOutlined /> 新建
-          </Button>,
-        ]}
-
+        toolBarRender={() => []}
         request={async (params) => {
           const response = await fetchUserPage({ ...params });
           return {
@@ -187,33 +166,6 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <ModalForm
-        title="新建类型"
-        width="400px"
-        visible={createModalVisible}
-        onVisibleChange={handleModalVisible}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.TypeListItem);
-          if (success) {
-            handleModalVisible(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: "类型名称为必填项"
-            },
-          ]}
-          placeholder="请输入类型名称"
-          width="md"
-          name="name"
-        />
-      </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
