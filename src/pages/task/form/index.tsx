@@ -78,12 +78,9 @@ const Index: React.FC<{}> = () => {
   };
 
   return (
-    <PageContainer content="高级表单常见于一次性输入和提交大批量数据的场景。">
+    <PageContainer content="任务表单参数">
       <Form
         hideRequiredMark
-        style={{
-          marginTop: 8,
-        }}
         form={form}
         name="basic"
         initialValues={{
@@ -93,24 +90,24 @@ const Index: React.FC<{}> = () => {
         onFinishFailed={onFinishFailed}
         onValuesChange={onValuesChange}
       >
-        <Card title="仓库管理" className={styles.card} bordered={false}>
+        <Card title="任务执行参数" className={styles.card} bordered={false}>
           <Row gutter={16}>
             <Col lg={6} md={12} sm={24}>
               <FormItem
                 label='任务名称'
                 name="name"
-                rules={[{ required: true, message: '请输入仓库名称' }]}
+                rules={[{ required: true, message: '请输入任务名称' }]}
               >
-                <Input placeholder="给目标起个名字" />
+                <Input placeholder="给任务起个名字" />
               </FormItem>
             </Col>
             <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
               <FormItem
-                label='任务名称'
+                label='cron表达式'
                 name="name"
-                rules={[{ required: true, message: '请输入仓库名称' }]}
+                rules={[{ required: true, message: '请输入cron表达式' }]}
               >
-                <Input placeholder="给目标起个名字" />
+                <Input placeholder="请输入cron表达式" />
               </FormItem>
             </Col>
             <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
@@ -153,7 +150,9 @@ const Index: React.FC<{}> = () => {
             </Col>
           </Row>
         </Card>
-        <Card title="任务管理" className={styles.card} bordered={false}>
+
+
+        <Card title="爬虫相关参数" className={styles.card} bordered={false}>
           <Row gutter={16}>
             <Col lg={6} md={12} sm={24}>
               <FormItem
