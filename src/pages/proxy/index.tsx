@@ -4,18 +4,18 @@ import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import UpdateForm from './components/UpdateForm';
-import { fetchProxyPage, addProxy, updateProxy, removeProxy } from '@/services/ant-design-pro/proxy';
+import { fetchProxyPage, addProxy, updateProxy, removeProxy } from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
-import {Link} from "@umijs/preset-dumi/lib/theme";
+import type {Proxy} from "./data";
+import CreateForm from "@/pages/proxy/components/CreateForm";
 
 /**
  * 添加节点
  *
  * @param fields
  */
-const handleAdd = async (fields: API.ProxyGroupListItem) => {
+const handleAdd = async (fields: Proxy) => {
   const hide = message.loading('正在添加');
   try {
     await addProxy({ ...fields });
@@ -34,7 +34,7 @@ const handleAdd = async (fields: API.ProxyGroupListItem) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<API.ProxyGroupListItem>) => {
+const handleUpdate = async (fields: Partial<Proxy>) => {
   const hide = message.loading('正在配置');
   try {
     await updateProxy(fields);
@@ -76,26 +76,47 @@ const TableList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.ProxyGroupListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.ProxyGroupListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<Proxy>();
+  const [selectedRowsState, setSelectedRows] = useState<Proxy[]>([]);
 
-  const columns: ProColumns<API.ProxyGroupListItem>[] = [
+  const columns: ProColumns<Proxy>[] = [
     {
-      title: '代理IP组ID',
-      dataIndex: 'id',
-      tip: '代理IP组ID是唯一的 key',
-      valueType: 'textarea',
-      hideInForm: true,
-      search: false,
+      title: '代理IP',
+      dataIndex: 'ip',
+      valueType: 'text',
     },
     {
-      title: '代理IP组名称',
-      dataIndex: 'groupName',
-      valueType: 'textarea',
+      title: '代理端口',
+      dataIndex: 'port',
+      valueType: 'text',
+    },
+    {
+      title: '代理类型',
+      dataIndex: 'type',
+      valueEnum: {
+        0: { text: 'http'},
+        1: { text: 'https'},
+      },
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      hideInForm: true,
+      valueEnum: {
+        0: { text: '禁用', status: 'Error' },
+        1: { text: '启用', status: 'Success' },
+      },
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
+      valueType: 'dateTime',
+      hideInForm: true,
+      search: false,
+    },
+    {
+      title: '校验时间',
+      dataIndex: 'verifyTime',
       valueType: 'dateTime',
       hideInForm: true,
       search: false,
@@ -106,17 +127,6 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <Link
-            to={{
-              pathname: '/util/ip',
-              search: `?id=${record.id}`,
-              hash: '#the-hash',
-              state: { fromDashboard: true },
-            }}
-          >
-            查看详情
-          </Link>
-          <Divider type="vertical" />
           <a
             onClick={() => {
               handleUpdateModalVisible(true);
@@ -144,7 +154,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.ProxyGroupListItem, API.PageParams>
+      <ProTable<Proxy>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
@@ -199,33 +209,23 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <ModalForm
-        title="新建代理IP组"
-        width="400px"
-        visible={createModalVisible}
-        onVisibleChange={handleModalVisible}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.ProxyGroupListItem);
-          if (success) {
-            handleModalVisible(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
+
+      <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
+        <ProTable<Proxy, Proxy>
+          onSubmit={async (value) => {
+            const success = await handleAdd(value);
+            if (success) {
+              handleModalVisible(false);
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
             }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: "代理IP组名称为必填项"
-            },
-          ]}
-          placeholder="请输入代理IP组名称"
-          width="md"
-          name="groupName"
+          }}
+          rowKey="id"
+          type="form"
+          columns={columns}
         />
-      </ModalForm>
+      </CreateForm>
       <UpdateForm
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
