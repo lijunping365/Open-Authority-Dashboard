@@ -1,7 +1,6 @@
-import type {RequestInterceptor, RequestOptionsInit, ResponseInterceptor} from 'umi-request';
+import type {RequestInterceptor, ResponseInterceptor} from 'umi-request';
 import { history } from 'umi';
-import {getAccessToken, getRefreshToken, setRefreshToken} from '@/utils/cache';
-import { onRefreshToken } from '@/utils/token';
+import {getAccessToken} from '@/utils/cache';
 import { notification } from 'antd';
 import { HTTP_URL } from '../../config/env.config';
 import {ignorePath} from "@/utils/utils";
@@ -41,18 +40,6 @@ export const requestInterceptor: RequestInterceptor = (url, options) => {
   };
 };
 
-export const handler401 = async (response: Response, options: RequestOptionsInit) =>{
-  if (!getRefreshToken()) {
-    history.push('/user/login');
-    return undefined;
-  } if (response.url.includes('refresh')) {
-    setRefreshToken('');
-    history.push('/user/login');
-    return undefined;
-  }
-  return onRefreshToken(response, options);
-}
-
 export const responseInterceptor: ResponseInterceptor = async (response, options) => {
   if (response && response.status) {
     if (response.status === 200) {
@@ -71,7 +58,7 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
       }
 
       if (result && result.code === 401 && ignorePath()) {
-        return handler401(response, options);
+        history.push('/user/login');
       }
 
       if (result && result.code === 403) {

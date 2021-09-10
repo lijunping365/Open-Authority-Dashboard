@@ -1,5 +1,5 @@
 import { request } from 'umi';
-import {getAccessToken, getRefreshToken} from "@/utils/cache";
+import {getAccessToken} from "@/utils/cache";
 
 /** 登录接口 POST /login/list */
 export async function login(body: API.LoginParams) {
@@ -13,7 +13,7 @@ export async function login(body: API.LoginParams) {
 export async function outLogin() {
   return request('/login/outLogin', {
     method: 'GET',
-    params: {accessToken: getAccessToken(), refreshToken: getRefreshToken()}
+    params: {accessToken: getAccessToken()}
   });
 }
 

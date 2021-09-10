@@ -16,22 +16,6 @@ export function setAccessToken(accessToken: string) {
 }
 
 /**
- * 从 localStorage 中获取 refreshToken
- */
-export function getRefreshToken() {
-  return localStorage.getItem('refreshToken');
-}
-
-/**
- * 把 refreshToken 存储到 localStorage
- * @param refreshToken
- */
-export function setRefreshToken(refreshToken: string) {
-  localStorage.setItem('refreshToken', refreshToken);
-}
-
-
-/**
  * 从 localStorage 中获取 deviceId
  * localStorage:localStorage的生命周期是永久的，关闭页面或浏览器之后localStorage中的数据也不会消失。localStorage除非主动删除数据，否则数据永远不会消失。
  */

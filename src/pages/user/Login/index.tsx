@@ -12,7 +12,7 @@ import { login, getFakeCaptcha } from '@/services/ant-design-pro/login';
 
 import styles from './index.less';
 import {arrayBufferToBase64} from "@/utils/utils";
-import {getDeviceId, setAccessToken, setRefreshToken} from "@/utils/cache";
+import {getDeviceId, setAccessToken} from "@/utils/cache";
 
 const LoginMessage: React.FC<{
   content: string;
@@ -74,7 +74,6 @@ const Login: React.FC = () => {
       const result = await login({ ...values, type, deviceId: getDeviceId()});
       if (result) {
         setAccessToken(result.accessToken);
-        setRefreshToken(result.refreshToken);
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
