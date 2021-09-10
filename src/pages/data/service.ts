@@ -9,8 +9,6 @@ export async function fetchSpiderDataPage(
     pageSize?: number;
     /** 任务id */
     taskId?: number
-    /** 任务状态 */
-    status?: number
   }
 ) {
   return request('/spiderData/page', {
