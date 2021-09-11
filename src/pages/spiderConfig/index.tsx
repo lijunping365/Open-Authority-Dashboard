@@ -8,7 +8,7 @@ import UpdateForm from './components/UpdateForm';
 import { fetchProxyPage, addProxy, updateProxy, removeProxy } from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
 import type {Proxy} from "./data";
-import CreateForm from "@/pages/proxy/components/CreateForm";
+import CreateForm from "./components/CreateForm";
 
 /**
  * 添加节点
