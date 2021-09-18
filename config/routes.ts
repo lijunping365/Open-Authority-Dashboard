@@ -28,6 +28,30 @@
     component: './dashboard',
   },
   {
+    name: 'spiderConf',
+    icon: 'smile',
+    path: 'spiderConf',
+    component: './spiderConf',
+  },
+  {
+    name: 'spiderData',
+    icon: 'smile',
+    path: 'spiderData',
+    component: './spiderData',
+  },
+  {
+    name: 'spiderLog',
+    icon: 'smile',
+    path: 'spiderLog',
+    component: './spiderLog',
+  },
+  {
+    name: 'spiderProxy',
+    icon: 'table',
+    path: '/spiderProxy',
+    component: './spiderProxy',
+  },
+  {
     name: 'spiderTask',
     icon: 'table',
     path: '/spiderTask',
@@ -40,22 +64,10 @@
     component: './taskLog',
   },
   {
-    name: 'spiderData',
-    icon: 'smile',
-    path: 'spiderData',
-    component: './spiderData',
-  },
-  {
     name: 'executor',
     icon: 'table',
     path: '/executor',
     component: './executor',
-  },
-  {
-    name: 'spiderProxy',
-    icon: 'table',
-    path: '/spiderProxy',
-    component: './spiderProxy',
   },
   {
     name: 'admin',
