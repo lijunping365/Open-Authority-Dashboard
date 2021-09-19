@@ -1,24 +1,16 @@
 import { request } from 'umi';
-import type {Proxy} from "./data";
+import type {Spider} from "./data";
 
-export async function fetchProxyPage(
+export async function fetchSpiderPage(
   params: {
     // query
     /** 当前的页码 */
     current?: number;
     /** 页面的容量 */
     pageSize?: number;
-    /** 分组名称 */
-    groupId?: any
-    /** 分组名称 */
-    ip?: string
-    /** 分组名称 */
-    type?: number
-    /** 分组名称 */
-    status?: number
   }
 ) {
-  return request('/spiderProxy/page', {
+  return request('/spiderConfig/page', {
     method: 'GET',
     params: {
       ...params,
@@ -26,22 +18,22 @@ export async function fetchProxyPage(
   });
 }
 
-export async function updateProxy(params: Partial<Proxy>) {
-  return request('/spiderProxy/update', {
+export async function updateSpider(params: Partial<Spider>) {
+  return request('/spiderConfig/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
-export async function addProxy(params: Proxy) {
-  return request('/spiderProxy/save', {
+export async function addSpider(params: Spider) {
+  return request('/spiderConfig/save', {
     method: 'POST',
     data: {...params}
   });
 }
 
-export async function removeProxy(params: {ids: number[]}) {
-  return request('/spiderProxy/delete', {
+export async function removeSpider(params: {ids: number[]}) {
+  return request('/spiderConfig/delete', {
     method: 'DELETE',
     data: {...params}
   });

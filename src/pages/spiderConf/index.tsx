@@ -5,9 +5,9 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import { fetchProxyPage, addProxy, updateProxy, removeProxy } from './service';
+import { fetchSpiderPage, addSpider, updateSpider, removeSpider } from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
-import type {Proxy} from "./data";
+import type {Spider} from "./data";
 import CreateForm from "./components/CreateForm";
 
 /**
@@ -15,10 +15,10 @@ import CreateForm from "./components/CreateForm";
  *
  * @param fields
  */
-const handleAdd = async (fields: Proxy) => {
+const handleAdd = async (fields: Spider) => {
   const hide = message.loading('正在添加');
   try {
-    await addProxy({ ...fields });
+    await addSpider({ ...fields });
     hide();
     message.success('添加成功');
     return true;
@@ -34,10 +34,10 @@ const handleAdd = async (fields: Proxy) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<Proxy>) => {
+const handleUpdate = async (fields: Partial<Spider>) => {
   const hide = message.loading('正在配置');
   try {
-    await updateProxy(fields);
+    await updateSpider(fields);
     hide();
 
     message.success('配置成功');
@@ -58,7 +58,7 @@ const handleRemove = async (selectedRows: any[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeProxy({ids: selectedRows});
+    await removeSpider({ids: selectedRows});
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -76,35 +76,26 @@ const TableList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<Proxy>();
-  const [selectedRowsState, setSelectedRows] = useState<Proxy[]>([]);
+  const [currentRow, setCurrentRow] = useState<Spider>();
+  const [selectedRowsState, setSelectedRows] = useState<Spider[]>([]);
 
-  const columns: ProColumns<Proxy>[] = [
+  const columns: ProColumns<Spider>[] = [
     {
-      title: '代理IP',
-      dataIndex: 'ip',
+      title: '爬虫名称',
+      dataIndex: 'name',
       valueType: 'text',
     },
     {
-      title: '代理端口',
-      dataIndex: 'port',
+      title: 'url',
+      dataIndex: 'url',
       valueType: 'text',
     },
     {
-      title: '代理类型',
-      dataIndex: 'type',
+      title: '爬取方式',
+      dataIndex: 'spiderType',
       valueEnum: {
-        0: { text: 'http'},
-        1: { text: 'https'},
-      },
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      hideInForm: true,
-      valueEnum: {
-        0: { text: '禁用', status: 'Error' },
-        1: { text: '启用', status: 'Success' },
+        0: { text: 'Page'},
+        1: { text: 'Json'},
       },
     },
     {
@@ -115,9 +106,9 @@ const TableList: React.FC = () => {
       search: false,
     },
     {
-      title: '校验时间',
-      dataIndex: 'verifyTime',
-      valueType: 'dateTime',
+      title: '创建人',
+      dataIndex: 'createUserId',
+      valueType: 'text',
       hideInForm: true,
       search: false,
     },
@@ -127,6 +118,15 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <>
+          <a
+            onClick={() => {
+              handleUpdateModalVisible(true);
+              setCurrentRow(record);
+            }}
+          >
+            运行
+          </a>
+          <Divider type="vertical" />
           <a
             onClick={() => {
               handleUpdateModalVisible(true);
@@ -154,7 +154,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<Proxy>
+      <ProTable<Spider>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
@@ -174,7 +174,7 @@ const TableList: React.FC = () => {
         ]}
 
         request={async (params) => {
-          const response = await fetchProxyPage({ ...params });
+          const response = await fetchSpiderPage({ ...params });
           return {
             data: response.records,
             total: response.total,
@@ -211,7 +211,7 @@ const TableList: React.FC = () => {
       )}
 
       <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
-        <ProTable<Proxy, Proxy>
+        <ProTable<Spider, Spider>
           onSubmit={async (value) => {
             const success = await handleAdd(value);
             if (success) {

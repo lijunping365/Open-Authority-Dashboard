@@ -1,9 +1,16 @@
-export interface Proxy {
+export interface Spider {
   id: number;
-  ip: string;
-  port: string;
-  type: number;
-  status: number;
+  name: string;
+  url: string;
+  method: number;
+  headers: string;
+  cookies: string;
+  charset: string;
+  retry: number;
+  timeout: number;
+  acceptStatCode: string;
+  spiderType: number;
+  spiderData: string;
   createTime: Date;
-  verifyTime: Date;
+  createUser: number;
 }
