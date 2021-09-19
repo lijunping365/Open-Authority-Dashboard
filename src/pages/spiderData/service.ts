@@ -8,7 +8,7 @@ export async function fetchSpiderDataPage(
     /** 页面的容量 */
     pageSize?: number;
     /** 任务id */
-    taskId?: number
+    spiderId?: number
   }
 ) {
   return request('/spiderData/page', {

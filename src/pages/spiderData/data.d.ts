@@ -1,6 +1,6 @@
 export interface SpiderData {
   id: number;
-  taskId: number;
+  spiderId: number;
   data: string;
   createTime: Date;
 }

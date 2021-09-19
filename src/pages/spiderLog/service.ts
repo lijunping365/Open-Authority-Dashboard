@@ -1,6 +1,6 @@
 import { request } from 'umi';
 
-export async function fetchTaskLogPage(
+export async function fetchSpiderLogPage(
   params: {
     // query
     /** 当前的页码 */
@@ -8,12 +8,12 @@ export async function fetchTaskLogPage(
     /** 页面的容量 */
     pageSize?: number;
     /** 任务id */
-    taskId?: number
+    spiderId?: number
     /** 任务状态 */
     status?: number
   }
 ) {
-  return request('/taskLog/page', {
+  return request('/spiderLog/page', {
     method: 'GET',
     params: {
       ...params,
@@ -21,8 +21,8 @@ export async function fetchTaskLogPage(
   });
 }
 
-export async function removeTaskLog(params: {ids: number[]}) {
-  return request('/taskLog/delete', {
+export async function removeSpiderLog(params: {ids: number[]}) {
+  return request('/spiderLog/delete', {
     method: 'DELETE',
     data: {...params}
   });

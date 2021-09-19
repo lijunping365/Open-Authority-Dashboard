@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { fetchTaskLogPage, removeTaskLog} from './service';
+import { fetchSpiderLogPage, removeSpiderLog} from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
 import type {TaskLog} from "./data";
@@ -19,7 +19,7 @@ const handleRemove = async (selectedRows: any[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeTaskLog({ids: selectedRows});
+    await removeSpiderLog({ids: selectedRows});
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -98,7 +98,7 @@ const TableList: React.FC = () => {
         }}
         toolBarRender={() => []}
         request={async (params) => {
-          const response = await fetchTaskLogPage({ ...params });
+          const response = await fetchSpiderLogPage({ ...params });
           return {
             data: response.records,
             total: response.total,

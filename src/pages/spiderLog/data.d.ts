@@ -1,6 +1,7 @@
 export interface TaskLog {
   id: number;
-  taskId: number;
+  spiderId: number;
+  type: number;
   status: number;
   createTime: Date;
 }

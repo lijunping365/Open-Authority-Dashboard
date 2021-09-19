@@ -6,7 +6,7 @@ import ProTable from '@ant-design/pro-table';
 import { fetchSpiderDataPage, removeSpiderData } from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
-import type {SpiderData} from "@/pages/data/data";
+import type {SpiderData} from "./data";
 
 
 /**
@@ -35,8 +35,8 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<SpiderData>[] = [
     {
-      title: '任务ID',
-      dataIndex: 'taskId',
+      title: '爬虫ID',
+      dataIndex: 'spiderId',
       valueType: 'text',
     },
     {
