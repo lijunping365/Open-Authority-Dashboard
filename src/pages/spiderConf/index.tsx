@@ -81,6 +81,13 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<Spider>[] = [
     {
+      title: '爬虫ID',
+      dataIndex: 'id',
+      valueType: 'text',
+      hideInForm: true,
+      search: false,
+    },
+    {
       title: '爬虫名称',
       dataIndex: 'name',
       valueType: 'text',
@@ -103,7 +110,6 @@ const TableList: React.FC = () => {
       dataIndex: 'createTime',
       valueType: 'dateTime',
       hideInForm: true,
-      search: false,
     },
     {
       title: '创建人',
