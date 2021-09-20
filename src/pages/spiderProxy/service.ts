@@ -1,5 +1,5 @@
 import { request } from 'umi';
-import type {Proxy} from "@/pages/proxy/data";
+import type {Proxy} from "./data";
 
 export async function fetchProxyPage(
   params: {

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Form, Button, Input, Modal } from 'antd';
+import {Form, Button, Input, Modal} from 'antd';
+import type {ScheduleTask} from "../data";
 
 export interface UpdateFormProps {
-  onCancel: (flag?: boolean, formVals?: Partial<API.ProxyGroupListItem>) => void;
-  onSubmit: (values: Partial<API.ProxyGroupListItem>) => void;
+  onCancel: (flag?: boolean, formVals?: Partial<ScheduleTask>) => void;
+  onSubmit: (values: Partial<ScheduleTask>) => void;
   updateModalVisible: boolean;
-  values: Partial<API.ProxyGroupListItem>;
+  values: Partial<ScheduleTask>;
 }
 const FormItem = Form.Item;
 
@@ -24,7 +25,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     values,
   } = props;
 
-  const handleNext = async () => {
+  const handleSave = async () => {
     const fieldsValue: any = await form.validateFields();
     handleUpdate({
       ...values,
@@ -36,7 +37,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     return (
       <>
         <Button onClick={() => handleUpdateModalVisible(false, values)}>取消</Button>
-        <Button type="primary" onClick={() => handleNext()}>
+        <Button type="primary" onClick={() => handleSave()}>
           保存
         </Button>
       </>
@@ -48,7 +49,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       width={640}
       bodyStyle={{ padding: '32px 40px 48px' }}
       destroyOnClose
-      title="修改代理IP组"
+      title="编辑调度任务"
       visible={updateModalVisible}
       footer={renderFooter()}
       onCancel={() => handleUpdateModalVisible()}
@@ -58,15 +59,15 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         form={form}
         initialValues={{
           id: values.id,
-          groupName: values.groupName
+          cronExpression: values.cronExpression,
         }}
       >
         <FormItem
-          name="groupName"
-          label="代理IP组名称"
-          rules={[{ required: true, message: '请输入代理IP组名称！' }]}
+          name="cronExpression"
+          label="Cron 表达式"
+          rules={[{ required: true, message: '请输入Cron 表达式！' }]}
         >
-          <Input placeholder="请输入代理IP组名称" />
+          <Input placeholder="请输入Cron 表达式" />
         </FormItem>
       </Form>
     </Modal>

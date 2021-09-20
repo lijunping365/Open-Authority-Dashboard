@@ -1,26 +1,24 @@
 import { PlusOutlined } from '@ant-design/icons';
-import {Button, message, Divider, Drawer} from 'antd';
+import {Button, message, Divider} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import UpdateForm from './components/UpdateForm';
-import { fetchProxyPage, addProxy, updateProxy, removeProxy } from '@/services/ant-design-pro/proxy';
+import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeScheduleTask } from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
-import {Link} from "@umijs/preset-dumi/lib/theme";
-import type {ProDescriptionsItemProps} from "@ant-design/pro-descriptions";
-import ProDescriptions from '@ant-design/pro-descriptions';
+import type {ScheduleTask} from "./data";
+import CreateForm from "./components/CreateForm";
 
 /**
  * 添加节点
  *
  * @param fields
  */
-const handleAdd = async (fields: API.ProxyGroupListItem) => {
+const handleAdd = async (fields: ScheduleTask) => {
   const hide = message.loading('正在添加');
   try {
-    await addProxy({ ...fields });
+    await addScheduleTask({ ...fields });
     hide();
     message.success('添加成功');
     return true;
@@ -36,10 +34,10 @@ const handleAdd = async (fields: API.ProxyGroupListItem) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<API.ProxyGroupListItem>) => {
+const handleUpdate = async (fields: Partial<ScheduleTask>) => {
   const hide = message.loading('正在配置');
   try {
-    await updateProxy(fields);
+    await updateScheduleTask(fields);
     hide();
 
     message.success('配置成功');
@@ -60,7 +58,7 @@ const handleRemove = async (selectedRows: any[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeProxy({ids: selectedRows});
+    await removeScheduleTask({ids: selectedRows});
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -76,31 +74,42 @@ const TableList: React.FC = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   /** 分布更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-  const [showDetail, setShowDetail] = useState<boolean>(false);
-  const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.ProxyGroupListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.ProxyGroupListItem[]>([]);
 
-  const columns: ProColumns<API.ProxyGroupListItem>[] = [
+  const actionRef = useRef<ActionType>();
+  const [currentRow, setCurrentRow] = useState<ScheduleTask>();
+  const [selectedRowsState, setSelectedRows] = useState<ScheduleTask[]>([]);
+
+  const columns: ProColumns<ScheduleTask>[] = [
     {
-      title: '代理IP组ID',
-      dataIndex: 'id',
-      tip: '代理IP组ID是唯一的 key',
-      valueType: 'textarea',
-      hideInForm: true,
-      search: false,
+      title: '爬虫ID',
+      dataIndex: 'spiderId',
+      valueType: 'text',
     },
     {
-      title: '代理IP组名称',
-      dataIndex: 'groupName',
-      valueType: 'textarea',
+      title: 'Cron 表达式',
+      dataIndex: 'cronExpression',
+      valueType: 'text',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      hideInForm: true,
+      valueEnum: {
+        0: { text: '停止', status: 'Error' },
+        1: { text: '启动', status: 'Success' },
+      },
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
       hideInForm: true,
-      search: false,
+    },
+    {
+      title: '创建人',
+      dataIndex: 'createUser',
+      valueType: 'text',
+      hideInForm: true,
     },
     {
       title: '操作',
@@ -108,16 +117,14 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <Link
-            to={{
-              pathname: '/util/ip',
-              search: `?id=${record.id}`,
-              hash: '#the-hash',
-              state: { fromDashboard: true },
+          <a
+            onClick={() => {
+              handleUpdateModalVisible(true);
+              setCurrentRow(record);
             }}
           >
-            查看详情
-          </Link>
+            {record.status === 0 ? '启动': '停止'}
+          </a>
           <Divider type="vertical" />
           <a
             onClick={() => {
@@ -146,7 +153,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.ProxyGroupListItem, API.PageParams>
+      <ProTable<ScheduleTask>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
@@ -166,7 +173,7 @@ const TableList: React.FC = () => {
         ]}
 
         request={async (params) => {
-          const response = await fetchProxyPage({ ...params });
+          const response = await fetchScheduleTaskPage({ ...params });
           return {
             data: response.records,
             total: response.total,
@@ -201,33 +208,23 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <ModalForm
-        title="新建代理IP组"
-        width="400px"
-        visible={createModalVisible}
-        onVisibleChange={handleModalVisible}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.ProxyGroupListItem);
-          if (success) {
-            handleModalVisible(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
+
+      <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
+        <ProTable<ScheduleTask, ScheduleTask>
+          onSubmit={async (value) => {
+            const success = await handleAdd(value);
+            if (success) {
+              handleModalVisible(false);
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
             }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: "代理IP组名称为必填项"
-            },
-          ]}
-          placeholder="请输入代理IP组名称"
-          width="md"
-          name="groupName"
+          }}
+          rowKey="id"
+          type="form"
+          columns={columns}
         />
-      </ModalForm>
+      </CreateForm>
       <UpdateForm
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
@@ -246,29 +243,6 @@ const TableList: React.FC = () => {
         updateModalVisible={updateModalVisible}
         values={currentRow || {}}
       />
-      <Drawer
-        width={600}
-        visible={showDetail}
-        onClose={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
-        }}
-        closable={false}
-      >
-        {currentRow?.id && (
-          <ProDescriptions<API.TypeListItem>
-            column={2}
-            title={currentRow?.id}
-            request={async () => ({
-              data: currentRow || {},
-            })}
-            params={{
-              id: currentRow?.id,
-            }}
-            columns={columns as ProDescriptionsItemProps<API.TypeListItem>[]}
-          />
-        )}
-      </Drawer>
     </PageContainer>
   );
 };
