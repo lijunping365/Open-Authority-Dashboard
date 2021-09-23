@@ -25,7 +25,7 @@ export async function updateSpider(params: Partial<Spider>) {
   });
 }
 
-export async function addSpider(params: Spider) {
+export async function addSpider(params: Partial<Spider>) {
   return request('/spiderConfig/save', {
     method: 'POST',
     data: {...params}

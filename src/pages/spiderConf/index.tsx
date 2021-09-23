@@ -15,10 +15,10 @@ import CreateForm from "./components/CreateForm";
  *
  * @param fields
  */
-const handleAdd = async (fields: Spider) => {
+const handleAdd = async (fields: Partial<Spider>) => {
   const hide = message.loading('正在添加');
   try {
-    await addSpider({ ...fields });
+    await addSpider(fields);
     hide();
     message.success('添加成功');
     return true;
@@ -216,7 +216,20 @@ const TableList: React.FC = () => {
         </FooterToolbar>
       )}
 
-      <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
+      <CreateForm
+        onSubmit={async (value) => {
+          const success = await handleAdd(value);
+          if (success) {
+            handleUpdateModalVisible(false);
+            setCurrentRow(undefined);
+            if (actionRef.current) {
+              actionRef.current.reload();
+            }
+          }
+        }}
+        onCancel={() => handleModalVisible(false)}
+        modalVisible={createModalVisible}
+        >
         <ProTable<Spider, Spider>
           onSubmit={async (value) => {
             const success = await handleAdd(value);
