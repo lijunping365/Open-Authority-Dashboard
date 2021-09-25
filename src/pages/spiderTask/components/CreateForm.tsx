@@ -57,12 +57,319 @@ const data = [
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [form] = Form.useForm();
   const { modalVisible, onCancel } = props;
-  const [value, setValue] = React.useState(1);
 
-  const onChange = (e: any) => {
-    console.log('radio checked', e.target.value);
-    setValue(e.target.value);
+  const [secondRadioValue, setSecondRadioValue] = React.useState(1);
+  const [minutesRadioValue, setMinutesRadioValue] = React.useState(1);
+  const [hourRadioValue, setHourRadioValue] = React.useState(1);
+  const [dayRadioValue, setDayRadioValue] = React.useState(1);
+  const [monthRadioValue, setMonthRadioValue] = React.useState(1);
+  const [weekRadioValue, setWeekRadioValue] = React.useState(1);
+  const [yearRadioValue, setYearRadioValue] = React.useState(1);
+
+  const [secondCheckboxValue, setSecondCheckboxValue] = React.useState<string[]>([]);
+  const [minutesCheckboxValue, setMinutesCheckboxValue] = React.useState<string[]>([]);
+  const [hourCheckboxValue, setHourCheckboxValue] = React.useState<string[]>([]);
+  const [dayCheckboxValue, setDayCheckboxValue] = React.useState<string[]>([]);
+  const [monthCheckboxValue, setMonthCheckboxValue] = React.useState<string[]>([]);
+  const [weekCheckboxValue, setWeekCheckboxValue] = React.useState<string[]>([]);
+
+  const [secondCheckboxDisabled, setSecondCheckboxDisabled] = React.useState(true);
+  const [minutesCheckboxDisabled, setMinutesCheckboxDisabled] = React.useState(false);
+  const [hourCheckboxDisabled, setHourCheckboxDisabled] = React.useState(false);
+  const [dayCheckboxDisabled, setDayCheckboxDisabled] = React.useState(false);
+  const [monthCheckboxDisabled, setMonthCheckboxDisabled] = React.useState(false);
+  const [weekCheckboxDisabled, setWeekCheckboxDisabled] = React.useState(false);
+
+
+  const [secondValue, setSecondValue] = React.useState('');
+  const [minutesValue, setMinutesValue] = React.useState('');
+  const [hourValue, setHourValue] = React.useState('');
+  const [dayValue, setDayValue] = React.useState('');
+  const [monthValue, setMonthValue] = React.useState('');
+  const [weekValue, setWeekValue] = React.useState('');
+  const [yearValue, setYearValue] = React.useState('');
+
+  const cronParse = (cronExpress: string) =>{
+    const regs = cronExpress.split(' ');
+    setSecondValue(regs[0]);
+    setMinutesValue(regs[1]);
+    setHourValue(regs[2]);
+    setDayValue(regs[3]);
+    setMonthValue(regs[4]);
+    setWeekValue(regs[5]);
+
+  }
+
+  const cronResult = () =>{
+    let result;
+
+    const second = secondValue === "" ? "*": secondValue;
+    const minute = minutesValue === "" ? "*":minutesValue;
+    const hour = hourValue === "" ? "*":hourValue;
+    const day = dayValue === "" ? "*":dayValue;
+    const month = monthValue === "" ? "*":monthValue;
+    const week = weekValue === "" ? "?":weekValue;
+    if(yearValue!=="")
+    {
+      result = `${second} ${minute} ${hour} ${day} ${month} ${week} ${yearValue}`;
+    }else {
+      result = `${second} ${minute} ${hour} ${day} ${month} ${week}`;
+    }
+    return result;
+  }
+
+  const setInputValue = (value: string) => {
+    console.log('onInputChange', value);
+    form.setFieldsValue({
+      cronExpression: value,
+    });
+  }
+
+
+  const onSecondChange = (e: any) => {
+    console.log('onSecondChange', e.target.value);
+    const v = e.target.value;
+    setSecondRadioValue(v);
+    let results = "";
+    switch (v) {
+      case 1:
+        setSecondValue("*");
+        setSecondCheckboxValue([]);
+        setSecondCheckboxDisabled(true);
+        results = cronResult();
+        // $.fn.cronGen.tools.everyTime("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case 2:
+        setSecondCheckboxValue([]);
+        setSecondCheckboxDisabled(true);
+        results = cronResult();
+        // $.fn.cronGen.tools.cycle("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case 3:
+        setSecondCheckboxValue([]);
+        setSecondCheckboxDisabled(true);
+        results = cronResult();
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case 4:
+        setSecondCheckboxDisabled(false);
+        results = cronResult();
+        // $.fn.cronGen.tools.initCheckBox("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      default:
+        break;
+    }
+    setInputValue(results);
+  }
+
+  const onMinutesChange = (e: any) => {
+    console.log('onSecondChange', e.target.value);
+    const v = e.target.value;
+    setMinutesRadioValue(v);
+    switch (v) {
+      case "1":
+        // $.fn.cronGen.tools.everyTime("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "2":
+        // $.fn.cronGen.tools.cycle("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "3":
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "4":
+        // $.fn.cronGen.tools.initCheckBox("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      default:
+        break;
+    }
+  }
+
+  const onHourChange = (e: any) => {
+    console.log('onSecondChange', e.target.value);
+    const v = e.target.value;
+    setHourRadioValue(v);
+    switch (v) {
+      case "1":
+        // $.fn.cronGen.tools.everyTime("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "2":
+        // $.fn.cronGen.tools.cycle("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "3":
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "4":
+        // $.fn.cronGen.tools.initCheckBox("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      default: break;
+    }
   };
+
+  const onDayChange = (e: any) => {
+    console.log('onSecondChange', e.target.value);
+    const v = e.target.value;
+    setDayRadioValue(v);
+    switch (v) {
+      case "1":
+        // $.fn.cronGen.tools.everyTime("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "2":
+        // $.fn.cronGen.tools.cycle("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "3":
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "4":
+        // $.fn.cronGen.tools.initCheckBox("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "5":
+        // $.fn.cronGen.tools.cycle("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "6":
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "7":
+        // $.fn.cronGen.tools.initCheckBox("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      default: break;
+    }
+  };
+
+  const onMonthChange = (e: any) => {
+    console.log('onSecondChange', e.target.value);
+    const v = e.target.value;
+    setMonthRadioValue(v);
+    switch (v) {
+      case "1":
+        // $.fn.cronGen.tools.everyTime("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "2":
+        // $.fn.cronGen.tools.cycle("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "3":
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "4":
+        // $.fn.cronGen.tools.initCheckBox("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "5":
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      default: break;
+    }
+  };
+
+  const onWeekChange = (e: any) => {
+    console.log('onSecondChange', e.target.value);
+    const v = e.target.value;
+    setWeekRadioValue(v);
+    switch (v) {
+      case "1":
+        // $.fn.cronGen.tools.everyTime("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "2":
+        // $.fn.cronGen.tools.cycle("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "3":
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "4":
+        // $.fn.cronGen.tools.initCheckBox("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "5":
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "6":
+        // $.fn.cronGen.tools.initCheckBox("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      default: break;
+    }
+  };
+
+  const onYearChange = (e: any) => {
+    console.log('onSecondChange', e.target.value);
+    const v = e.target.value;
+    setYearRadioValue(v);
+    switch (v) {
+      case "1":
+        // $.fn.cronGen.tools.everyTime("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "2":
+        // $.fn.cronGen.tools.cycle("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      case "3":
+        // $.fn.cronGen.tools.startOn("second");
+        // results = $.fn.cronGen.tools.cronResult();
+        break;
+      default: break;
+    }
+  };
+
+  const onSecondCheckboxChange = (checkedValues: any[]) => {
+    console.log('checked = ', checkedValues);
+    setSecondCheckboxValue(checkedValues);
+  };
+
+  const onMinutesCheckboxChange = (checkedValues: any) => {
+    console.log('checked = ', checkedValues);
+    setMinutesCheckboxValue(checkedValues);
+  };
+
+  const onHourCheckboxChange = (checkedValues: any) => {
+    console.log('checked = ', checkedValues);
+    setHourCheckboxValue(checkedValues);
+  };
+
+  const onDayCheckboxChange = (checkedValues: any) => {
+    console.log('checked = ', checkedValues);
+    setDayCheckboxValue(checkedValues);
+  };
+
+  const onMonthCheckboxChange = (checkedValues: any) => {
+    console.log('checked = ', checkedValues);
+    setMonthCheckboxValue(checkedValues);
+  };
+
+  const onWeekCheckboxChange = (checkedValues: any) => {
+    console.log('checked = ', checkedValues);
+    setWeekCheckboxValue(checkedValues);
+  };
+
+
+
+
 
   return (
     <Modal
@@ -90,46 +397,46 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="秒" key="1">
-            <Radio.Group onChange={onChange} value={value} defaultValue={1}>
+            <Radio.Group onChange={onSecondChange} value={secondRadioValue} defaultValue={1}>
               <Space direction="vertical">
                 <Radio value={1}>每秒 允许的通配符[, - * /]</Radio>
                 <Radio value={2}>周期 从<Input defaultValue="1" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input defaultValue="2" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒</Radio>
                 <Radio value={3}>从<Input defaultValue="0" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒开始,每<Input defaultValue="1" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒执行一次</Radio>
                 <Radio value={4}>
                   指定
-                  <Checkbox.Group options={plainOptions} onChange={onChange} />
+                  <Checkbox.Group options={plainOptions} onChange={onSecondCheckboxChange} value={secondCheckboxValue} disabled={secondCheckboxDisabled}/>
                 </Radio>
               </Space>
             </Radio.Group>
           </TabPane>
           <TabPane tab="分钟" key="2">
-            <Radio.Group onChange={onChange} value={value} defaultValue={1}>
+            <Radio.Group onChange={onMinutesChange} value={minutesRadioValue} defaultValue={1}>
               <Space direction="vertical">
                 <Radio value={1}>每分钟 允许的通配符[, - * /]</Radio>
                 <Radio value={2}>周期 从<Input defaultValue="1" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input defaultValue="2" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟</Radio>
                 <Radio value={3}>从<Input defaultValue="0" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟开始,每<Input defaultValue="1" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟执行一次</Radio>
                 <Radio value={4}>
                   指定
-                  <Checkbox.Group options={plainOptions} onChange={onChange} />
+                  <Checkbox.Group options={plainOptions} onChange={onMinutesCheckboxChange} value={minutesCheckboxValue} disabled={minutesCheckboxDisabled}/>
                 </Radio>
               </Space>
             </Radio.Group>
           </TabPane>
           <TabPane tab="小时" key="3">
-            <Radio.Group onChange={onChange} value={value} defaultValue={1}>
+            <Radio.Group onChange={onHourChange} value={hourRadioValue} defaultValue={1}>
               <Space direction="vertical">
                 <Radio value={1}>每小时 允许的通配符[, - * /]</Radio>
                 <Radio value={2}>周期 从<Input defaultValue="1" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input defaultValue="2" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时</Radio>
                 <Radio value={3}>从<Input defaultValue="0" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时开始,每<Input defaultValue="1" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时执行一次</Radio>
                 <Radio value={4}>
                   指定
-                  <Checkbox.Group options={hourOptions} onChange={onChange} />
+                  <Checkbox.Group options={hourOptions} onChange={onHourCheckboxChange} value={hourCheckboxValue} disabled={hourCheckboxDisabled}/>
                 </Radio>
               </Space>
             </Radio.Group>
           </TabPane>
           <TabPane tab="日" key="4">
-            <Radio.Group onChange={onChange} value={value} defaultValue={1}>
+            <Radio.Group onChange={onDayChange} value={dayRadioValue} defaultValue={1}>
               <Space direction="vertical">
                 <Radio value={1}>每天 允许的通配符[, - * / L W]</Radio>
                 <Radio value={2}>不指定</Radio>
@@ -139,13 +446,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                 <Radio value={6}>本月最后一天</Radio>
                 <Radio value={7}>
                   指定
-                  <Checkbox.Group options={dayOptions} onChange={onChange} />
+                  <Checkbox.Group options={dayOptions} onChange={onDayCheckboxChange} value={dayCheckboxValue} disabled={dayCheckboxDisabled}/>
                 </Radio>
               </Space>
             </Radio.Group>
           </TabPane>
           <TabPane tab="月" key="5">
-            <Radio.Group onChange={onChange} value={value} defaultValue={1}>
+            <Radio.Group onChange={onMonthChange} value={monthRadioValue} defaultValue={1}>
               <Space direction="vertical">
                 <Radio value={1}>每月 允许的通配符[, - * /]</Radio>
                 <Radio value={2}>不指定</Radio>
@@ -153,28 +460,28 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                 <Radio value={4}>从<Input defaultValue="0" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>月开始,每<Input defaultValue="1" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>月执行一次</Radio>
                 <Radio value={5}>
                   指定
-                  <Checkbox.Group options={monthOptions} onChange={onChange} />
+                  <Checkbox.Group options={monthOptions} onChange={onMonthCheckboxChange} value={monthCheckboxValue} disabled={monthCheckboxDisabled}/>
                 </Radio>
               </Space>
             </Radio.Group>
           </TabPane>
           <TabPane tab="周" key="6">
-            <Radio.Group onChange={onChange} value={value} defaultValue={1}>
+            <Radio.Group onChange={onWeekChange} value={weekRadioValue} defaultValue={1}>
               <Space direction="vertical">
                 <Radio value={1}>每周 允许的通配符[, - * / L #]</Radio>
                 <Radio value={2}>不指定</Radio>
                 <Radio value={3}>周期 从星期<Input defaultValue="1" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input defaultValue="2" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
                 <Radio value={4}>第<Input defaultValue="0" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>周的星期<Input defaultValue="1" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
-                <Radio value={4}>本月最后一个星期<Input defaultValue="0" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
-                <Radio value={5}>
+                <Radio value={5}>本月最后一个星期<Input defaultValue="0" style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
+                <Radio value={6}>
                   指定
-                  <Checkbox.Group options={weekOptions} onChange={onChange} />
+                  <Checkbox.Group options={weekOptions} onChange={onWeekCheckboxChange} value={weekCheckboxValue} disabled={weekCheckboxDisabled}/>
                 </Radio>
               </Space>
             </Radio.Group>
           </TabPane>
           <TabPane tab="年" key="7">
-            <Radio.Group onChange={onChange} value={value} defaultValue={1}>
+            <Radio.Group onChange={onYearChange} value={yearRadioValue} defaultValue={1}>
               <Space direction="vertical">
                 <Radio value={1}>不指定 允许的通配符[, - * /] 非必填</Radio>
                 <Radio value={2}>每年</Radio>
