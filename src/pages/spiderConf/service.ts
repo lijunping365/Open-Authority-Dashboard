@@ -38,3 +38,9 @@ export async function removeSpider(params: {ids: number[]}) {
     data: {...params}
   });
 }
+
+export async function runSpider(id: number) {
+  return request(`/spiderConfig/run/${id}`, {
+    method: 'PUT',
+  });
+}

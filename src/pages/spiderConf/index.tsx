@@ -5,7 +5,7 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import { fetchSpiderPage, addSpider, updateSpider, removeSpider } from './service';
+import { fetchSpiderPage, addSpider, updateSpider, removeSpider, runSpider } from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
 import type {Spider} from "./data";
 import CreateForm from "./components/CreateForm";
@@ -69,6 +69,22 @@ const handleRemove = async (selectedRows: any[]) => {
   }
 };
 
+/**
+ * 运行爬虫
+ *
+ * @param spiderId
+ */
+const handleRun = async (spiderId: number) => {
+  try {
+    await runSpider(spiderId);
+    message.success('运行成功');
+    return true;
+  } catch (error) {
+    message.error('运行失败，请重试');
+    return false;
+  }
+};
+
 const TableList: React.FC = () => {
   /** 新建窗口的弹窗 */
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
@@ -98,14 +114,6 @@ const TableList: React.FC = () => {
       valueType: 'text',
     },
     {
-      title: '爬取方式',
-      dataIndex: 'spiderType',
-      valueEnum: {
-        0: { text: 'Page'},
-        1: { text: 'Json'},
-      },
-    },
-    {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
@@ -113,10 +121,9 @@ const TableList: React.FC = () => {
     },
     {
       title: '创建人',
-      dataIndex: 'createUserId',
+      dataIndex: 'createUser',
       valueType: 'text',
       hideInForm: true,
-      search: false,
     },
     {
       title: '操作',
@@ -126,8 +133,7 @@ const TableList: React.FC = () => {
         <>
           <a
             onClick={() => {
-              handleUpdateModalVisible(true);
-              setCurrentRow(record);
+              handleRun(record.id).then();
             }}
           >
             运行

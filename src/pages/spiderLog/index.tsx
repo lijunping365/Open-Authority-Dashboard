@@ -37,17 +37,22 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<TaskLog>[] = [
     {
-      title: '任务ID',
-      dataIndex: 'taskId',
+      title: '爬虫ID',
+      dataIndex: 'spiderId',
       valueType: 'text',
     },
     {
-      title: '调度结果',
+      title: '执行结果',
       dataIndex: 'status',
       valueEnum: {
-        0: { text: '执行失败', status: 'Error' },
-        1: { text: '执行成功', status: 'Success' },
+        0: { text: '失败', status: 'Error' },
+        1: { text: '成功', status: 'Success' },
       },
+    },
+    {
+      title: '失败原因',
+      dataIndex: 'cause',
+      valueType: 'text',
     },
     {
       title: '调度时间',
