@@ -87,12 +87,12 @@ const handleRun = async (spiderId: number) => {
 
 const TableList: React.FC = () => {
   /** 新建窗口的弹窗 */
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
+  const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   /** 分布更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<Spider>();
+  const [updateFormValues, setUpdateFormValues] = useState({});
   const [selectedRowsState, setSelectedRows] = useState<Spider[]>([]);
 
   const columns: ProColumns<Spider>[] = [
@@ -100,7 +100,6 @@ const TableList: React.FC = () => {
       title: '爬虫ID',
       dataIndex: 'id',
       valueType: 'text',
-      hideInForm: true,
       search: false,
     },
     {
@@ -117,13 +116,11 @@ const TableList: React.FC = () => {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
-      hideInForm: true,
     },
     {
       title: '创建人',
       dataIndex: 'createUser',
       valueType: 'text',
-      hideInForm: true,
     },
     {
       title: '操作',
@@ -142,7 +139,7 @@ const TableList: React.FC = () => {
           <a
             onClick={() => {
               handleUpdateModalVisible(true);
-              setCurrentRow(record);
+              setUpdateFormValues(record);
             }}
           >
             修改
@@ -176,9 +173,9 @@ const TableList: React.FC = () => {
         toolBarRender={() => [
           <Button
             type="primary"
-            key="primary"
+            key="id"
             onClick={() => {
-              handleModalVisible(true);
+              handleCreateModalVisible(true);
             }}
           >
             <PlusOutlined /> 新建
@@ -226,49 +223,36 @@ const TableList: React.FC = () => {
         onSubmit={async (value) => {
           const success = await handleAdd(value);
           if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
+            handleCreateModalVisible(false);
             if (actionRef.current) {
               actionRef.current.reload();
             }
           }
         }}
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-        >
-        <ProTable<Spider, Spider>
+        onCancel={() => handleCreateModalVisible(false)}
+        modalVisible={createModalVisible}>
+      </CreateForm>
+      {updateFormValues && Object.keys(updateFormValues).length ? (
+        <UpdateForm
           onSubmit={async (value) => {
-            const success = await handleAdd(value);
+            const success = await handleUpdate(value);
             if (success) {
-              handleModalVisible(false);
+              handleUpdateModalVisible(false);
+              setUpdateFormValues({});
               if (actionRef.current) {
                 actionRef.current.reload();
               }
             }
           }}
-          rowKey="id"
-          type="form"
-          columns={columns}
-        />
-      </CreateForm>
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
-          if (success) {
+          onCancel={() => {
             handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-          setCurrentRow(undefined);
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
+            setUpdateFormValues({});
+          }}
+          updateModalVisible={updateModalVisible}
+          values={updateFormValues}
+        />
+      ) : null}
+
     </PageContainer>
   );
 };

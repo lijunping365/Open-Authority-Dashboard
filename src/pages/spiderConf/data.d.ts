@@ -4,8 +4,7 @@ export interface Spider {
   url: string;
   method: number;
   headers: string;
-  cookies: string;
-  charset: string;
+  charset: number;
   retry: number;
   timeout: number;
   acceptStatCode: string;

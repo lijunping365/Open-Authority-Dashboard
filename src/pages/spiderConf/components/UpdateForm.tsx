@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Form, Button, Input, Modal, Select} from 'antd';
+import {Form, Button, Input, Modal, Select, Col, Row} from 'antd';
 import type {Spider} from "../data";
 
 export interface UpdateFormProps {
@@ -18,33 +18,45 @@ const formLayout = {
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const [form] = Form.useForm();
-  const [proxyType, setSpiderType] = useState(0);
+  const [spiderType, setSpiderType] = useState(0);
+  const [method, setMethod] = useState(0);
+  const [charset, setCharset] = useState(0);
 
   const {
-    onSubmit: handleUpdate,
+    onSubmit: handleSubmit,
     onCancel: handleUpdateModalVisible,
     updateModalVisible,
     values,
   } = props;
 
-  const handleNext = async () => {
+  const handleUpdate = async () => {
     const fieldsValue: any = await form.validateFields();
-    handleUpdate({
+    handleSubmit({
       ...values,
       ...fieldsValue,
-      type: proxyType
+      spiderType,
+      method,
+      charset
     });
   };
 
-  const handleSelect = (op: number) => {
+  const handleSpiderTypeSelect = (op: number) => {
     setSpiderType(op);
+  };
+
+  const handleMethodSelect = (op: number) => {
+    setMethod(op);
+  };
+
+  const handleCharsetSelect = (op: number) => {
+    setCharset(op);
   };
 
   const renderFooter = () => {
     return (
       <>
         <Button onClick={() => handleUpdateModalVisible(false, values)}>取消</Button>
-        <Button type="primary" onClick={() => handleNext()}>
+        <Button type="primary" onClick={() => handleUpdate()}>
           保存
         </Button>
       </>
@@ -53,8 +65,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
 
   return (
     <Modal
-      width={640}
-      bodyStyle={{ padding: '32px 40px 48px' }}
+      width={900}
       destroyOnClose
       title="编辑爬虫"
       visible={updateModalVisible}
@@ -70,7 +81,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           url: values.url,
           method: values.method,
           headers: values.headers,
-          cookies: values.cookies,
           charset: values.charset,
           retry: values.retry,
           timeout: values.timeout,
@@ -79,99 +89,119 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           spiderData: values.spiderData,
         }}
       >
-        <FormItem
-          name="name"
-          label="爬虫名称"
-          rules={[{ required: true, message: '请输入爬虫名称！' }]}
-        >
-          <Input placeholder="请输入爬虫名称" />
-        </FormItem>
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="name"
+              label="爬虫名称"
+              rules={[{ required: true, message: '请输入爬虫名称！' }]}
+            >
+              <Input placeholder="请输入爬虫名称" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="url"
+              label="url"
+              rules={[{ required: true, message: '请输入爬虫url！' }]}
+            >
+              <Input placeholder="请输入爬虫url" />
+            </FormItem>
+          </Col>
+        </Row>
 
-        <FormItem
-          name="url"
-          label="url"
-          rules={[{ required: true, message: '请输入爬虫url！' }]}
-        >
-          <Input placeholder="请输入爬虫url" />
-        </FormItem>
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="method"
+              label="请求方式"
+              rules={[{ required: true, message: '请选择请求方式！' }]}
+            >
+              <Select defaultValue={values.method} onChange={handleMethodSelect}>
+                <Option value={0}>Get</Option>
+                <Option value={1}>Post</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="charset"
+              label="编码格式"
+              rules={[{ required: true, message: '请选择编码格式！' }]}
+            >
+              <Select defaultValue={values.charset} onChange={handleCharsetSelect}>
+                <Option value={0}>GBK</Option>
+                <Option value={1}>UTF-8</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
 
-        <FormItem
-          name="method"
-          label="请求方式"
-          rules={[{ required: true, message: '请选择请求方式！' }]}
-        >
-          <Select defaultValue={values.method} style={{ width: 120 }} onChange={handleSelect}>
-            <Option value={0}>Get</Option>
-            <Option value={1}>Post</Option>
-          </Select>
-        </FormItem>
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="retry"
+              label="重试次数"
+              rules={[{ required: true, message: '请输入重试次数！' }]}
+            >
+              <Input placeholder="请输入重试次数" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="timeout"
+              label="重试次数"
+              rules={[{ required: true, message: '请输入重试次数！' }]}
+            >
+              <Input placeholder="请输入重试次数" />
+            </FormItem>
+          </Col>
+        </Row>
 
-        <FormItem
-          name="headers"
-          label="请求头"
-          rules={[{ required: true, message: '请输入请求头！' }]}
-        >
-          <Input placeholder="请输入请求头" />
-        </FormItem>
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="acceptStatCode"
+              label="接受代码"
+              rules={[{ required: true, message: '请输入接受代码！' }]}
+            >
+              <Input placeholder="请输入接受代码" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="spiderType"
+              label="爬取方式"
+              rules={[{ required: true, message: '请选择爬取方式！' }]}
+            >
+              <Select onChange={handleSpiderTypeSelect}>
+                <Option value={0}>Page</Option>
+                <Option value={1}>Json</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
 
-        <FormItem
-          name="cookies"
-          label="Cookies"
-          rules={[{ required: true, message: '请输入Cookies！' }]}
-        >
-          <Input placeholder="请输入Cookies" />
-        </FormItem>
-
-        <FormItem
-          name="charset"
-          label="编码格式"
-          rules={[{ required: true, message: '请输入编码格式！' }]}
-        >
-          <Input placeholder="请输入编码格式" />
-        </FormItem>
-
-        <FormItem
-          name="retry"
-          label="重试次数"
-          rules={[{ required: true, message: '请输入重试次数！' }]}
-        >
-          <Input placeholder="请输入重试次数" />
-        </FormItem>
-
-        <FormItem
-          name="timeout"
-          label="重试次数"
-          rules={[{ required: true, message: '请输入重试次数！' }]}
-        >
-          <Input placeholder="请输入重试次数" />
-        </FormItem>
-
-        <FormItem
-          name="acceptStatCode"
-          label="接受代码"
-          rules={[{ required: true, message: '请输入接受代码！' }]}
-        >
-          <Input placeholder="请输入接受代码" />
-        </FormItem>
-
-        <FormItem
-          name="spiderType"
-          label="爬取方式"
-          rules={[{ required: true, message: '请选择爬取方式！' }]}
-        >
-          <Select defaultValue={values.method} style={{ width: 120 }} onChange={handleSelect}>
-            <Option value={0}>Page</Option>
-            <Option value={1}>Json</Option>
-          </Select>
-        </FormItem>
-
-        <FormItem
-          name="spiderData"
-          label="抽取规则"
-          rules={[{ required: true, message: '请输入抽取规则！' }]}
-        >
-          <Input placeholder="请输入抽取规则" />
-        </FormItem>
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="spiderData"
+              label="抽取规则"
+              rules={[{ required: true, message: '请输入抽取规则！' }]}
+            >
+              <Input placeholder="请输入抽取规则" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="headers"
+              label="请求头"
+              rules={[{ required: true, message: '请输入请求头！' }]}
+            >
+              <Input placeholder="请输入请求头" />
+            </FormItem>
+          </Col>
+        </Row>
       </Form>
     </Modal>
   );
