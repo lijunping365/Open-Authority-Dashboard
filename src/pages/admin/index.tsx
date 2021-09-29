@@ -51,9 +51,10 @@ const handleRemove = async (selectedRows: any[]) => {
 const TableList: React.FC = () => {
   /** 分布更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [updateFormValues, setUpdateFormValues] = useState({});
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<User>();
+  // const [currentRow, setCurrentRow] = useState<User>();
   const [selectedRowsState, setSelectedRows] = useState<User[]>([]);
 
   const columns: ProColumns<User>[] = [
@@ -98,7 +99,7 @@ const TableList: React.FC = () => {
           <a
             onClick={() => {
               handleUpdateModalVisible(true);
-              setCurrentRow(record);
+              setUpdateFormValues(record);
             }}
           >
             修改
@@ -166,24 +167,27 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
-          if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
-            if (actionRef.current) {
-              actionRef.current.reload();
+      {updateFormValues && Object.keys(updateFormValues).length ? (
+        <UpdateForm
+          onSubmit={async (value) => {
+            const success = await handleUpdate(value);
+            if (success) {
+              handleUpdateModalVisible(false);
+              setUpdateFormValues({});
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
             }
-          }
-        }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-          setCurrentRow(undefined);
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
+          }}
+          onCancel={() => {
+            handleUpdateModalVisible(false);
+            setUpdateFormValues({});
+          }}
+          updateModalVisible={updateModalVisible}
+          values={updateFormValues}
+        />
+      ) : null}
+
     </PageContainer>
   );
 };
