@@ -5,7 +5,7 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeScheduleTask } from './service';
+import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeScheduleTask, startScheduleTask, stopScheduleTask } from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
 import type {ScheduleTask} from "./data";
 import CreateForm from "./components/CreateForm";
@@ -71,12 +71,13 @@ const handleRemove = async (selectedRows: any[]) => {
 
 const TableList: React.FC = () => {
   /** 新建窗口的弹窗 */
-  const [createModalVisible, handleModalVisible] = useState<boolean>(false);
+  const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
   /** 分布更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
+  const [updateFormValues, setUpdateFormValues] = useState({});
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<ScheduleTask>();
+  // const [currentRow, setCurrentRow] = useState<ScheduleTask>();
   const [selectedRowsState, setSelectedRows] = useState<ScheduleTask[]>([]);
 
   const columns: ProColumns<ScheduleTask>[] = [
@@ -89,6 +90,7 @@ const TableList: React.FC = () => {
       title: 'Cron 表达式',
       dataIndex: 'cronExpression',
       valueType: 'text',
+      search: false,
     },
     {
       title: '状态',
@@ -104,12 +106,14 @@ const TableList: React.FC = () => {
       dataIndex: 'createTime',
       valueType: 'dateTime',
       hideInForm: true,
+      search: false,
     },
     {
       title: '创建人',
       dataIndex: 'createUser',
       valueType: 'text',
       hideInForm: true,
+      search: false,
     },
     {
       title: '操作',
@@ -119,8 +123,11 @@ const TableList: React.FC = () => {
         <>
           <a
             onClick={() => {
-              handleUpdateModalVisible(true);
-              setCurrentRow(record);
+              if (record.status === 0) {
+                startScheduleTask(record.id).then();
+              }else {
+                stopScheduleTask(record.id).then();
+              }
             }}
           >
             {record.status === 0 ? '启动': '停止'}
@@ -129,7 +136,7 @@ const TableList: React.FC = () => {
           <a
             onClick={() => {
               handleUpdateModalVisible(true);
-              setCurrentRow(record);
+              setUpdateFormValues(record);
             }}
           >
             修改
@@ -165,7 +172,7 @@ const TableList: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              handleModalVisible(true);
+              handleCreateModalVisible(true);
             }}
           >
             <PlusOutlined /> 新建
@@ -209,12 +216,12 @@ const TableList: React.FC = () => {
         </FooterToolbar>
       )}
 
-      <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
+      <CreateForm onCancel={() => handleCreateModalVisible(false)} modalVisible={createModalVisible}>
         <ProTable<ScheduleTask, ScheduleTask>
           onSubmit={async (value) => {
             const success = await handleAdd(value);
             if (success) {
-              handleModalVisible(false);
+              handleCreateModalVisible(false);
               if (actionRef.current) {
                 actionRef.current.reload();
               }
@@ -225,24 +232,26 @@ const TableList: React.FC = () => {
           columns={columns}
         />
       </CreateForm>
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
-          if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
-            if (actionRef.current) {
-              actionRef.current.reload();
+      {updateFormValues && Object.keys(updateFormValues).length ? (
+        <UpdateForm
+          onSubmit={async (value) => {
+            const success = await handleUpdate(value);
+            if (success) {
+              handleUpdateModalVisible(false);
+              setUpdateFormValues({});
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
             }
-          }
-        }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-          setCurrentRow(undefined);
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
+          }}
+          onCancel={() => {
+            handleUpdateModalVisible(false);
+            setUpdateFormValues({});
+          }}
+          updateModalVisible={updateModalVisible}
+          values={updateFormValues}
+        />
+      ) : null}
     </PageContainer>
   );
 };

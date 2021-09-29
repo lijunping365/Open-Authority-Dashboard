@@ -42,3 +42,15 @@ export async function removeScheduleTask(params: {ids: number[]}) {
     data: {...params}
   });
 }
+
+export async function startScheduleTask(id: number) {
+  return request(`/spiderTask/start/${id}`, {
+    method: 'PUT',
+  });
+}
+
+export async function stopScheduleTask(id: number) {
+  return request(`/spiderTask/stop/${id}`, {
+    method: 'PUT',
+  });
+}
