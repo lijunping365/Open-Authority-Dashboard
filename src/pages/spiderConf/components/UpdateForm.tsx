@@ -16,6 +16,13 @@ const formLayout = {
   wrapperCol: { span: 13 },
 };
 
+const methods = [
+  "GET",
+  "POST",
+  "PUT",
+  "DELETE",
+]
+
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const [form] = Form.useForm();
   const [spiderType, setSpiderType] = useState(0);
@@ -118,8 +125,9 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               rules={[{ required: true, message: '请选择请求方式！' }]}
             >
               <Select defaultValue={values.method} onChange={handleMethodSelect}>
-                <Option value={0}>Get</Option>
-                <Option value={1}>Post</Option>
+                {methods.map(m => (
+                  <Option value={m}>{m}</Option>
+                ))}
               </Select>
             </FormItem>
           </Col>
