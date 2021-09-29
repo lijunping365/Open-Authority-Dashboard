@@ -2,9 +2,9 @@ export interface Spider {
   id: number;
   name: string;
   url: string;
-  method: number;
+  method: string;
   headers: string;
-  charset: number;
+  charset: string;
   retry: number;
   timeout: number;
   acceptStatCode: string;

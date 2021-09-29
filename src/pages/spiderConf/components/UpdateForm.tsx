@@ -23,11 +23,27 @@ const methods = [
   "DELETE",
 ]
 
+const charsets = [
+  "gbk",
+  "utf-8"
+]
+
+const codes = [
+  "200",
+  "202",
+  "400",
+  "401",
+  "402",
+  "403",
+  "404",
+]
+
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const [form] = Form.useForm();
   const [spiderType, setSpiderType] = useState(0);
-  const [method, setMethod] = useState(0);
-  const [charset, setCharset] = useState(0);
+  const [method, setMethod] = useState(methods[0]);
+  const [charset, setCharset] = useState(charsets[0]);
+  const [code, setCode] = useState(codes[0]);
 
   const {
     onSubmit: handleSubmit,
@@ -43,7 +59,8 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       ...fieldsValue,
       spiderType,
       method,
-      charset
+      charset,
+      code
     });
   };
 
@@ -51,12 +68,16 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     setSpiderType(op);
   };
 
-  const handleMethodSelect = (op: number) => {
+  const handleMethodSelect = (op: string) => {
     setMethod(op);
   };
 
-  const handleCharsetSelect = (op: number) => {
+  const handleCharsetSelect = (op: string) => {
     setCharset(op);
+  };
+
+  const handleCodeSelect = (op: string) => {
+    setCode(op);
   };
 
   const renderFooter = () => {
@@ -91,7 +112,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           charset: values.charset,
           retry: values.retry,
           timeout: values.timeout,
-          acceptStatCode: values.acceptStatCode,
+          acceptStatCode: values.acceptStatCode ? values.acceptStatCode.split(",") : "",
           spiderType: values.spiderType,
           spiderData: values.spiderData,
         }}
@@ -138,8 +159,9 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               rules={[{ required: true, message: '请选择编码格式！' }]}
             >
               <Select defaultValue={values.charset} onChange={handleCharsetSelect}>
-                <Option value={0}>GBK</Option>
-                <Option value={1}>UTF-8</Option>
+                {charsets.map(c => (
+                  <Option value={c}>{c}</Option>
+                ))}
               </Select>
             </FormItem>
           </Col>
@@ -171,9 +193,13 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             <FormItem
               name="acceptStatCode"
               label="接受代码"
-              rules={[{ required: true, message: '请输入接受代码！' }]}
+              rules={[{ required: true, message: '请选择接受代码！' }]}
             >
-              <Input placeholder="请输入接受代码" />
+              <Select mode="tags" placeholder="请选择接受代码" onChange={handleCodeSelect} tokenSeparators={[',']}>
+                {codes.map(c => (
+                  <Option value={c}>{c}</Option>
+                ))}
+              </Select>
             </FormItem>
           </Col>
           <Col span={12}>
