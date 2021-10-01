@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Form, Button, Input, Modal, Select, Col, Row} from 'antd';
 import type {Spider} from "../data";
+import DynamicForm from "@/pages/spiderConf/components/DynamicForm";
 
 export interface UpdateFormProps {
   onCancel: (flag?: boolean, formVals?: Partial<Spider>) => void;
@@ -108,7 +109,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           name: values.name,
           url: values.url,
           method: values.method,
-          headers: values.headers,
+          headers: values.headers ? JSON.parse(values.headers) : [],
           charset: values.charset,
           retry: values.retry,
           timeout: values.timeout,
@@ -216,26 +217,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           </Col>
         </Row>
 
-        <Row>
-          <Col span={12}>
-            <FormItem
-              name="spiderData"
-              label="抽取规则"
-              rules={[{ required: true, message: '请输入抽取规则！' }]}
-            >
-              <Input placeholder="请输入抽取规则" />
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              name="headers"
-              label="请求头"
-              rules={[{ required: true, message: '请输入请求头！' }]}
-            >
-              <Input placeholder="请输入请求头" />
-            </FormItem>
-          </Col>
-        </Row>
+        <DynamicForm/>
       </Form>
     </Modal>
   );
