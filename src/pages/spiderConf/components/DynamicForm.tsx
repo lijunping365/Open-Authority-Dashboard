@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Form, Input, Space} from "antd";
+import {Button, Checkbox, Form, Input, Space} from "antd";
+import {CheckboxChangeEvent} from "antd/es/checkbox";
 
 
 
@@ -33,6 +34,15 @@ const formItemLayout = {
 
 export default () => {
 
+  const [rowIndex, setRowIndex] = useState<number[]>([]);
+
+  const onChange = (e: any, index: any) =>{
+    const check: any = e.target.checked;
+    const array = rowIndex
+    array[index] = check && true ? 1 : 0;
+    setRowIndex(array);
+  }
+
   return (
     <Form.List name="headers">
       {(fields, { add, remove }) => (
@@ -41,19 +51,26 @@ export default () => {
             <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
               <Form.Item
                 {...restField}
+                name={[name, 'checked']}
+                fieldKey={[fieldKey, 'checked']}
+              >
+                <Checkbox onChange={(event: CheckboxChangeEvent) => onChange(event, key)} defaultChecked={true}/>
+              </Form.Item>
+              <Form.Item
+                {...restField}
                 name={[name, 'name']}
                 fieldKey={[fieldKey, 'name']}
-                rules={[{ required: true, message: 'Missing first name' }]}
+                rules={[{ required: true, message: '请输入name' }]}
               >
-                <Input placeholder="First Name" />
+                <Input placeholder="name" disabled={rowIndex[key] === 0}/>
               </Form.Item>
               <Form.Item
                 {...restField}
                 name={[name, 'value']}
                 fieldKey={[fieldKey, 'value']}
-                rules={[{ required: true, message: 'Missing last name' }]}
+                rules={[{ required: true, message: '请输入value' }]}
               >
-                <Input placeholder="Last Name" />
+                <Input placeholder="value" disabled={rowIndex[key] === 0}/>
               </Form.Item>
               <MinusCircleOutlined onClick={() => remove(name)} />
             </Space>
