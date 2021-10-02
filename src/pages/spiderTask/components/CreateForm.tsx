@@ -1,9 +1,11 @@
 import React from 'react';
 import {Form, Input, Modal, Tabs, Radio, Space, Checkbox, Divider, List, Typography} from 'antd';
+import {ScheduleTask} from "@/pages/spiderTask/data";
 
 interface CreateFormProps {
   modalVisible: boolean;
-  onCancel: () => void;
+  onCancel: (flag?: boolean) => void;
+  onSubmit: (values: Partial<ScheduleTask>) => void;
 }
 
 const FormItem = Form.Item;
@@ -56,7 +58,19 @@ const data = [
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [form] = Form.useForm();
-  const { modalVisible, onCancel } = props;
+
+  const {
+    modalVisible,
+    onSubmit: handleCreate,
+    onCancel: handleCreateModalVisible,
+  } = props;
+
+  const handleNext = async () => {
+    const fieldsValue: any = await form.validateFields();
+    handleCreate({
+      ...fieldsValue,
+    });
+  };
 
   const [secondRadioValue, setSecondRadioValue] = React.useState(1);
   const [minutesRadioValue, setMinutesRadioValue] = React.useState(1);
@@ -455,8 +469,8 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       title="新建任务"
       width={640}
       visible={modalVisible}
-      onCancel={() => onCancel()}
-      onOk={() => onCancel()}
+      onCancel={() => handleCreateModalVisible(false)}
+      onOk={() => handleNext()}
     >
       <Form
         {...formLayout}
