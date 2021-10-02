@@ -34,13 +34,13 @@ const formItemLayout = {
 
 export default () => {
 
-  const [rowIndex, setRowIndex] = useState<number[]>([]);
+  const [rowIndex, setRowIndex] = useState<boolean[]>([]);
 
   const onChange = (e: any, index: any) =>{
     const check: any = e.target.checked;
     const array = rowIndex
-    array[index] = check && true ? 1 : 0;
-    setRowIndex(array);
+    array[index] = !check && true;
+    setRowIndex(() => ([...array]));
   }
 
   return (
@@ -62,7 +62,7 @@ export default () => {
                 fieldKey={[fieldKey, 'name']}
                 rules={[{ required: true, message: '请输入name' }]}
               >
-                <Input placeholder="name" disabled={rowIndex[key] === 0}/>
+                <Input placeholder="name" disabled={rowIndex[key]}/>
               </Form.Item>
               <Form.Item
                 {...restField}
@@ -70,7 +70,7 @@ export default () => {
                 fieldKey={[fieldKey, 'value']}
                 rules={[{ required: true, message: '请输入value' }]}
               >
-                <Input placeholder="value" disabled={rowIndex[key] === 0}/>
+                <Input placeholder="value" disabled={rowIndex[key]}/>
               </Form.Item>
               <MinusCircleOutlined onClick={() => remove(name)} />
             </Space>
