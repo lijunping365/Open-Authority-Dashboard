@@ -72,7 +72,7 @@ export default () => {
           ))}
           <Form.Item>
             <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />} style={{width: 415, marginLeft: 10}}>
-              Add field
+              添加请求头
             </Button>
           </Form.Item>
         </>
