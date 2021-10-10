@@ -1,53 +1,32 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
-import {Button, Checkbox, Form, Input, Space} from "antd";
-import {CheckboxChangeEvent} from "antd/es/checkbox";
+import {Button, Checkbox, Form, Space, AutoComplete} from "antd";
 
-
-
-const header = [
-  "Accept",
-  "Content-Type",
-  "Referer",
-  "User-Agent",
-  "Cookie"
+const headers = [
+  {value: "Accept"},
+  {value: "Content-Type"},
+  {value: "Referer"},
+  {value: "User-Agent"},
+  {value: "Cookie"}
 ]
 
-const userAgent = [
-  {"label" : "USER_AGENT_CHROME", "value" : "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"},
-  {"label" : "USER_AGENT_FIREFOX_45", "value" : "Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0"},
-  {"label" : "USER_AGENT_IE", "value" : "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"},
-  {"label" : "USER_AGENT_EDGE", "value" : "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586"}
+const contentTypes = [
+  {value : "application/json"},
+  {value : "application/x-www-form-urlencoded"},
+  {value : "text/xml"},
+  {value : "text/plain"},
+  {value : "text/javascript"},
+  {value : "text/html"},
+  {value : "multipart/form-data"}
 ]
-
-const contentType = [
-  {"label" : "USER_AGENT_CHROME", "value" : "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"},
-  {"label" : "USER_AGENT_FIREFOX_45", "value" : "Mozilla/5.0 (Windows NT 6.1; rv:45.0) Gecko/20100101 Firefox/45.0"},
-  {"label" : "USER_AGENT_IE", "value" : "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"},
-  {"label" : "USER_AGENT_EDGE", "value" : "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586"}
-]
-
-const formItemLayout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 14},
-};
 
 export default () => {
-  const [rowIndex, setRowIndex] = useState<boolean[]>([]);
-
-  const onChange = (e: any, index: any) =>{
-    const check: any = e.target.checked;
-    const array = rowIndex;
-    array[index] = !check && true;
-    setRowIndex(() => ([...array]));
-  }
-
   return (
     <Form.List name="headers">
       {(fields, { add, remove }) => (
         <>
           {fields.map(({ key, name, fieldKey, ...restField }) => (
-            <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+            <Space key={key} style={{ display: 'flex', marginBottom: 8, marginLeft: 10}} align="baseline">
               <Form.Item
                 {...restField}
                 name={[name, 'checked']}
@@ -55,7 +34,7 @@ export default () => {
                 valuePropName={'checked'}
                 initialValue={true}
               >
-                <Checkbox onChange={(event: CheckboxChangeEvent) => onChange(event, key)} />
+                <Checkbox />
               </Form.Item>
               <Form.Item
                 {...restField}
@@ -63,21 +42,36 @@ export default () => {
                 fieldKey={[fieldKey, 'name']}
                 rules={[{ required: true, message: '请输入name' }]}
               >
-                <Input placeholder="name" disabled={rowIndex[key]}/>
+                <AutoComplete
+                  style={{ width: 120 }}
+                  options={headers}
+                  placeholder="name"
+                  filterOption={(inputValue, option) =>
+                    option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                  }
+                />
               </Form.Item>
+              :
               <Form.Item
                 {...restField}
                 name={[name, 'value']}
                 fieldKey={[fieldKey, 'value']}
                 rules={[{ required: true, message: '请输入value' }]}
               >
-                <Input placeholder="value" disabled={rowIndex[key]}/>
+                <AutoComplete
+                  style={{ width: 252 }}
+                  options={contentTypes}
+                  placeholder="value"
+                  filterOption={(inputValue, option) =>
+                    option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                  }
+                />
               </Form.Item>
               <MinusCircleOutlined onClick={() => remove(name)} />
             </Space>
           ))}
           <Form.Item>
-            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />} style={{width: 415, marginLeft: 10}}>
               Add field
             </Button>
           </Form.Item>
