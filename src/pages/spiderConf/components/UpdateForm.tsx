@@ -13,8 +13,8 @@ const FormItem = Form.Item;
 const { Option } = Select;
 
 const formLayout = {
-  labelCol: { span: 7 },
-  wrapperCol: { span: 13 },
+  labelCol: { span: 5 },
+  wrapperCol: { span: 19 },
 };
 
 const methods = [

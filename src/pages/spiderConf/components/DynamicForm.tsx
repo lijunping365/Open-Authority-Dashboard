@@ -33,12 +33,11 @@ const formItemLayout = {
 };
 
 export default () => {
-
   const [rowIndex, setRowIndex] = useState<boolean[]>([]);
 
   const onChange = (e: any, index: any) =>{
     const check: any = e.target.checked;
-    const array = rowIndex
+    const array = rowIndex;
     array[index] = !check && true;
     setRowIndex(() => ([...array]));
   }
@@ -53,8 +52,10 @@ export default () => {
                 {...restField}
                 name={[name, 'checked']}
                 fieldKey={[fieldKey, 'checked']}
+                valuePropName={'checked'}
+                initialValue={true}
               >
-                <Checkbox onChange={(event: CheckboxChangeEvent) => onChange(event, key)} defaultChecked={true}/>
+                <Checkbox onChange={(event: CheckboxChangeEvent) => onChange(event, key)} />
               </Form.Item>
               <Form.Item
                 {...restField}
