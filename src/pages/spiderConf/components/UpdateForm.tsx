@@ -55,13 +55,19 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
 
   const handleUpdate = async () => {
     const fieldsValue: any = await form.validateFields();
+    const {headers} = fieldsValue;
+    let acceptStatCode = "";
+    Object.keys(code).forEach((key,index) => {
+      acceptStatCode = index === 0 ? `${code[key]}`: `${acceptStatCode},${code[key]}`;
+    });
     handleSubmit({
       ...values,
       ...fieldsValue,
       spiderType,
       method,
       charset,
-      code
+      acceptStatCode,
+      headers: headers ? JSON.stringify(headers): ""
     });
   };
 
@@ -216,7 +222,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             </FormItem>
           </Col>
         </Row>
-
         <DynamicForm/>
       </Form>
     </Modal>
