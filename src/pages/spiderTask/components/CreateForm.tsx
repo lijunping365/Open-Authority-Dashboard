@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Form, Input, Modal, Tabs, Radio, Space, Checkbox, Divider, List, Typography} from 'antd';
 import {ScheduleTask} from "@/pages/spiderTask/data";
 
@@ -72,13 +72,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     });
   };
 
-  const [secondRadioValue, setSecondRadioValue] = React.useState(1);
-  const [minutesRadioValue, setMinutesRadioValue] = React.useState(1);
-  const [hourRadioValue, setHourRadioValue] = React.useState(1);
-  const [dayRadioValue, setDayRadioValue] = React.useState(1);
-  const [monthRadioValue, setMonthRadioValue] = React.useState(1);
-  const [weekRadioValue, setWeekRadioValue] = React.useState(1);
-  const [yearRadioValue, setYearRadioValue] = React.useState(1);
+  const [secondRadioValue, setSecondRadioValue] = React.useState();
+  const [minutesRadioValue, setMinutesRadioValue] = React.useState();
+  const [hourRadioValue, setHourRadioValue] = React.useState();
+  const [dayRadioValue, setDayRadioValue] = React.useState();
+  const [monthRadioValue, setMonthRadioValue] = React.useState();
+  const [weekRadioValue, setWeekRadioValue] = React.useState();
+  const [yearRadioValue, setYearRadioValue] = React.useState();
 
   const [secondCheckboxValue, setSecondCheckboxValue] = React.useState<string[]>([]);
   const [minutesCheckboxValue, setMinutesCheckboxValue] = React.useState<string[]>([]);
@@ -138,6 +138,8 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [weekValue, setWeekValue] = React.useState('');
   const [yearValue, setYearValue] = React.useState('');
 
+  const [open, setOpen] = React.useState(false);
+
   const cronParse = (cronExpress: string) =>{
     const regs = cronExpress.split(' ');
     setSecondValue(regs[0]);
@@ -146,12 +148,18 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     setDayValue(regs[3]);
     setMonthValue(regs[4]);
     setWeekValue(regs[5]);
-
   }
 
-  const cronResult = () =>{
+  const setInputValue = (value: string) => {
+    console.log('onInputChange', value);
+    form.setFieldsValue({
+      cronExpression: value,
+    });
+  }
+
+  useEffect(() => {
+    if (!open) return;
     let result;
-    console.log(secondValue)
     const second = secondValue === "" ? "*" : secondValue;
     const minute = minutesValue === "" ? "*" : minutesValue;
     const hour = hourValue === "" ? "*" : hourValue;
@@ -164,15 +172,9 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     }else {
       result = `${second} ${minute} ${hour} ${day} ${month} ${week}`;
     }
-    return result;
-  }
+    setInputValue(result);
+  }, [open, secondValue, minutesValue, hourValue, dayValue, monthValue, weekValue, yearValue]);
 
-  const setInputValue = (value: string) => {
-    console.log('onInputChange', value);
-    form.setFieldsValue({
-      cronExpression: value,
-    });
-  }
 
   const clearAndDisabledSecondCheckbox = () =>{
     setSecondCheckboxValue([]);
@@ -205,107 +207,87 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   }
 
   const onSecondChange = (e: any) => {
-    console.log('onSecondChange', e.target.value);
     const v = e.target.value;
     setSecondRadioValue(v);
-    let results = "";
+    setOpen(true);
     switch (v) {
       case 1:
         clearAndDisabledSecondCheckbox();
         setSecondValue("*");
-        results = cronResult();
         break;
       case 2:
         clearAndDisabledSecondCheckbox();
-        setSecondValue(`${second_cycle_1_value} ${second_cycle_2_value}`);
-        results = cronResult();
+        setSecondValue(`${second_cycle_1_value}-${second_cycle_2_value}`);
         break;
       case 3:
         clearAndDisabledSecondCheckbox();
-        setSecondValue(`${second_from_value} ${second_to_value}`);
-        results = cronResult();
+        setSecondValue(`${second_from_value}/${second_to_value}`);
         break;
       case 4:
         setSecondCheckboxDisabled(false);
-        results = cronResult();
         break;
       default:
         break;
     }
-    setInputValue(results);
   }
 
   const onMinutesChange = (e: any) => {
-    console.log('onMinutesChange', e.target.value);
     const v = e.target.value;
     setMinutesRadioValue(v);
-    let results = "";
+    setOpen(true);
     switch (v) {
       case 1:
         clearAndDisabledMinutesCheckbox();
         setMinutesValue("*");
-        results = cronResult();
         break;
       case 2:
         clearAndDisabledMinutesCheckbox();
-        setMinutesValue(`${minutes_cycle_1_value} ${minutes_cycle_2_value}`);
-        results = cronResult();
+        setMinutesValue(`${minutes_cycle_1_value}-${minutes_cycle_2_value}`);
         break;
       case 3:
         clearAndDisabledMinutesCheckbox();
-        setMinutesValue(`${minutes_from_value} ${minutes_to_value}`);
-        results = cronResult();
+        setMinutesValue(`${minutes_from_value}/${minutes_to_value}`);
         break;
       case 4:
         setMinutesCheckboxDisabled(false);
-        results = cronResult();
         break;
       default:
         break;
     }
-    setInputValue(results);
   }
 
   const onHourChange = (e: any) => {
-    console.log('onHourChange', e.target.value);
     const v = e.target.value;
     setHourRadioValue(v);
-    let results = "";
+    setOpen(true);
     switch (v) {
       case 1:
         clearAndDisabledHourCheckbox();
         setHourValue("*");
-        results = cronResult();
         break;
       case 2:
         clearAndDisabledHourCheckbox();
-        setHourValue(`${hour_cycle_1_value} ${hour_cycle_2_value}`);
-        results = cronResult();
+        setHourValue(`${hour_cycle_1_value}-${hour_cycle_2_value}`);
         break;
       case 3:
         clearAndDisabledHourCheckbox();
-        setMinutesValue(`${hour_from_value} ${hour_to_value}`);
-        results = cronResult();
+        setHourValue(`${hour_from_value}/${hour_to_value}`);
         break;
       case 4:
         setHourCheckboxDisabled(false);
-        results = cronResult();
         break;
       default: break;
     }
-    setInputValue(results);
   };
 
   const onDayChange = (e: any) => {
-    console.log('onDayChange', e.target.value);
     const v = e.target.value;
     setDayRadioValue(v);
-    let results = "";
+    setOpen(true);
     switch (v) {
       case 1:
         clearAndDisabledDayCheckbox();
         setDayValue("*");
-        results = cronResult();
         break;
       case 2:
         clearAndDisabledDayCheckbox();
@@ -314,18 +296,15 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         break;
       case 3:
         clearAndDisabledDayCheckbox();
-        setDayValue(`${day_cycle_1_value} ${day_cycle_2_value}`);
-        results = cronResult();
+        setDayValue(`${day_cycle_1_value}-${day_cycle_2_value}`);
         break;
       case 4:
         clearAndDisabledDayCheckbox();
-        setDayValue(`${day_from_value} ${day_to_value}`);
-        results = cronResult();
+        setDayValue(`${day_from_value}/${day_to_value}`);
         break;
       case 5:
         clearAndDisabledDayCheckbox();
         setDayValue(`${day_last_value}`);
-        results = cronResult();
         break;
       case 6:
         clearAndDisabledDayCheckbox();
@@ -334,23 +313,19 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         break;
       case 7:
         setDayCheckboxDisabled(false);
-        results = cronResult();
         break;
       default: break;
     }
-    setInputValue(results);
   };
 
   const onMonthChange = (e: any) => {
-    console.log('onSecondChange', e.target.value);
     const v = e.target.value;
     setMonthRadioValue(v);
-    let results = "";
+    setOpen(true);
     switch (v) {
       case 1:
         clearAndDisabledMonthCheckbox();
         setMonthValue("*");
-        results = cronResult();
         break;
       case 2:
         clearAndDisabledMonthCheckbox();
@@ -359,33 +334,27 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         break;
       case 3:
         clearAndDisabledMonthCheckbox();
-        setMonthValue(`${month_cycle_1_value} ${month_cycle_2_value}`);
-        results = cronResult();
+        setMonthValue(`${month_cycle_1_value}-${month_cycle_2_value}`);
         break;
       case 4:
         clearAndDisabledMonthCheckbox();
-        setDayValue(`${month_from_value} ${month_to_value}`);
-        results = cronResult();
+        setMonthValue(`${month_from_value}/${month_to_value}`);
         break;
       case 5:
         setMonthCheckboxDisabled(false);
-        results = cronResult();
         break;
       default: break;
     }
-    setInputValue(results);
   };
 
   const onWeekChange = (e: any) => {
-    console.log('onSecondChange', e.target.value);
     const v = e.target.value;
     setWeekRadioValue(v);
-    let results = "";
+    setOpen(true);
     switch (v) {
       case 1:
         clearAndDisabledWeekCheckbox();
         setWeekValue("*");
-        results = cronResult();
         break;
       case 2:
         clearAndDisabledWeekCheckbox();
@@ -394,52 +363,44 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         break;
       case 3:
         clearAndDisabledWeekCheckbox();
-        setWeekValue(`${week_cycle_1_value} ${week_cycle_2_value}`);
-        results = cronResult();
+        setWeekValue(`${week_cycle_1_value}-${week_cycle_2_value}`);
         break;
       case 4:
         clearAndDisabledWeekCheckbox();
-        setDayValue(`${week_from_value} ${week_to_value}`);
-        results = cronResult();
+        setWeekValue(`${week_from_value}/${week_to_value}`);
         break;
       case 5:
         clearAndDisabledWeekCheckbox();
-        setDayValue(`${week_last_value}`);
-        results = cronResult();
+        setWeekValue(`${week_last_value}`);
         break;
       case 6:
         setWeekCheckboxDisabled(false);
-        results = cronResult();
         break;
       default: break;
     }
-    setInputValue(results);
   };
 
   const onYearChange = (e: any) => {
-    console.log('onSecondChange', e.target.value);
     const v = e.target.value;
     setYearRadioValue(v);
-    let results = "";
+    setOpen(true);
     switch (v) {
       case 1:
         setYearValue("*");
-        results = cronResult();
         break;
       case 2:
         // $.fn.cronGen.tools.startOn("second");
         // results = $.fn.cronGen.tools.cronResult();
         break;
       case 3:
-        setWeekValue(`${year_cycle_1_value} ${year_cycle_2_value}`);
-        results = cronResult();
+        setYearValue(`${year_cycle_1_value} ${year_cycle_2_value}`);
         break;
       default: break;
     }
-    setInputValue(results);
   };
 
   const onSecondCheckboxChange = (checkedValues: any[]) => {
+    console.log("dddddddddddddd" + checkedValues);
     setSecondCheckboxValue(checkedValues);
   };
 
@@ -489,7 +450,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
         <Tabs defaultActiveKey="1" centered>
           <TabPane tab="秒" key="1">
-            <Radio.Group onChange={onSecondChange} value={secondRadioValue} defaultValue={1}>
+            <Radio.Group onChange={onSecondChange} value={secondRadioValue}>
               <Space direction="vertical">
                 <Radio value={1}>每秒 允许的通配符[, - * /]</Radio>
                 <Radio value={2}>周期 从<Input value={second_cycle_1_value} onChange={(e: any)=>setSecond_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={second_cycle_2_value} onChange={(e: any)=>setSecond_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒</Radio>
@@ -502,7 +463,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             </Radio.Group>
           </TabPane>
           <TabPane tab="分钟" key="2">
-            <Radio.Group onChange={onMinutesChange} value={minutesRadioValue} defaultValue={1}>
+            <Radio.Group onChange={onMinutesChange} value={minutesRadioValue}>
               <Space direction="vertical">
                 <Radio value={1}>每分钟 允许的通配符[, - * /]</Radio>
                 <Radio value={2}>周期 从<Input value={minutes_cycle_1_value} onChange={(e: any)=>setMinutes_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={minutes_cycle_2_value} onChange={(e: any)=>setMinutes_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟</Radio>
@@ -515,7 +476,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             </Radio.Group>
           </TabPane>
           <TabPane tab="小时" key="3">
-            <Radio.Group onChange={onHourChange} value={hourRadioValue} defaultValue={1}>
+            <Radio.Group onChange={onHourChange} value={hourRadioValue}>
               <Space direction="vertical">
                 <Radio value={1}>每小时 允许的通配符[, - * /]</Radio>
                 <Radio value={2}>周期 从<Input value={hour_cycle_1_value} onChange={(e: any)=>setHour_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={hour_cycle_2_value} onChange={(e: any)=>setHour_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时</Radio>
@@ -528,7 +489,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             </Radio.Group>
           </TabPane>
           <TabPane tab="日" key="4">
-            <Radio.Group onChange={onDayChange} value={dayRadioValue} defaultValue={1}>
+            <Radio.Group onChange={onDayChange} value={dayRadioValue}>
               <Space direction="vertical">
                 <Radio value={1}>每天 允许的通配符[, - * / L W]</Radio>
                 <Radio value={2}>不指定</Radio>
@@ -544,7 +505,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             </Radio.Group>
           </TabPane>
           <TabPane tab="月" key="5">
-            <Radio.Group onChange={onMonthChange} value={monthRadioValue} defaultValue={1}>
+            <Radio.Group onChange={onMonthChange} value={monthRadioValue}>
               <Space direction="vertical">
                 <Radio value={1}>每月 允许的通配符[, - * /]</Radio>
                 <Radio value={2}>不指定</Radio>
@@ -558,7 +519,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             </Radio.Group>
           </TabPane>
           <TabPane tab="周" key="6">
-            <Radio.Group onChange={onWeekChange} value={weekRadioValue} defaultValue={1}>
+            <Radio.Group onChange={onWeekChange} value={weekRadioValue}>
               <Space direction="vertical">
                 <Radio value={1}>每周 允许的通配符[, - * / L #]</Radio>
                 <Radio value={2}>不指定</Radio>
@@ -573,7 +534,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             </Radio.Group>
           </TabPane>
           <TabPane tab="年" key="7">
-            <Radio.Group onChange={onYearChange} value={yearRadioValue} defaultValue={1}>
+            <Radio.Group onChange={onYearChange} value={yearRadioValue}>
               <Space direction="vertical">
                 <Radio value={1}>不指定 允许的通配符[, - * /] 非必填</Radio>
                 <Radio value={2}>每年</Radio>
