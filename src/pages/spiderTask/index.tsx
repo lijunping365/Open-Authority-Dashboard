@@ -128,6 +128,9 @@ const TableList: React.FC = () => {
               }else {
                 stopScheduleTask(record.id).then();
               }
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
             }}
           >
             {record.status === 0 ? '启动': '停止'}

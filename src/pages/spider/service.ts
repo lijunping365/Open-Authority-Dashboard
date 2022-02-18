@@ -10,7 +10,7 @@ export async function fetchSpiderPage(
     pageSize?: number;
   }
 ) {
-  return request('/spiderConfig/page', {
+  return request('/spider/page', {
     method: 'GET',
     params: {
       ...params,
@@ -19,28 +19,28 @@ export async function fetchSpiderPage(
 }
 
 export async function updateSpider(params: Partial<Spider>) {
-  return request('/spiderConfig/update', {
+  return request('/spider/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
 export async function addSpider(params: Partial<Spider>) {
-  return request('/spiderConfig/save', {
+  return request('/spider/save', {
     method: 'POST',
     data: {...params}
   });
 }
 
 export async function removeSpider(params: {ids: number[]}) {
-  return request('/spiderConfig/delete', {
+  return request('/spider/delete', {
     method: 'DELETE',
     data: {...params}
   });
 }
 
 export async function runSpider(id: number) {
-  return request(`/spiderConfig/run/${id}`, {
+  return request(`/spider/run/${id}`, {
     method: 'PUT',
   });
 }

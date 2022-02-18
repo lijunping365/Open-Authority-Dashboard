@@ -6,7 +6,7 @@ export default {
   'menu.login': '登录',
   'menu.dashboard': '运行报表',
   'menu.executor': '执行器管理',
-  'menu.spiderConf': '爬虫管理',
+  'menu.spider': '爬虫管理',
   'menu.spiderData': '爬虫数据',
   'menu.spiderLog': '爬虫日志',
   'menu.spiderProxy': '爬虫代理',

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Form, Button, Input, Modal, Select, Col, Row} from 'antd';
 import type {Spider} from "../data";
-import DynamicForm from "@/pages/spiderConf/components/DynamicForm";
+import DynamicForm from "@/pages/spider/components/DynamicForm";
 
 export interface UpdateFormProps {
   onCancel: (flag?: boolean, formVals?: Partial<Spider>) => void;

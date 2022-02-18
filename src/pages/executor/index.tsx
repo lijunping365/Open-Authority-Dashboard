@@ -4,18 +4,19 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import { fetchServerPage, updateServer, removeServer } from '@/services/ant-design-pro/server';
 import {deleteConfirm} from "@/components/ConfirmModel";
+import { Instance } from './data';
+import { fetchInstancePage, updateInstance, offline, online } from './service';
 
 /**
  * 更新节点
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<API.TypeListItem>) => {
+const handleUpdate = async (fields: Partial<Instance>) => {
   const hide = message.loading('正在配置');
   try {
-    await updateServer(fields);
+    await updateInstance(fields);
     hide();
 
     message.success('配置成功');
@@ -36,7 +37,7 @@ const handleRemove = async (selectedRows: any[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeServer({ids: selectedRows});
+    //await removeServer({ids: selectedRows});
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -52,28 +53,32 @@ const TableList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.TypeListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.TypeListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<Instance>();
+  const [selectedRowsState, setSelectedRows] = useState<Instance[]>([]);
 
-  const columns: ProColumns<API.TypeListItem>[] = [
+  const columns: ProColumns<Instance>[] = [
     {
-      title: '分类ID',
-      dataIndex: 'id',
-      tip: '分类ID是唯一的 key',
-      valueType: 'textarea',
-      hideInForm: true,
-      search: false,
+      title: '实例地址',
+      dataIndex: 'clientId',
+      tooltip: '唯一标识'
     },
     {
-      title: '分类名称',
-      dataIndex: 'name',
-      valueType: 'textarea',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
+      title: '上线时间',
+      dataIndex: 'onlineTime',
       valueType: 'dateTime',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
       hideInForm: true,
+      valueEnum: {
+        'OFF_LINE': { text: '已下线', status: 'Error' },
+        'ON_LINE': { text: '已上线', status: 'Success' },
+      },
+    },
+    {
+      title: '权重',
+      dataIndex: 'weight',
       search: false,
     },
     {
@@ -84,23 +89,26 @@ const TableList: React.FC = () => {
         <>
           <a
             onClick={() => {
+              if (record.status === 'OFF_LINE') {
+                online(record.clientId).then();
+              }else {
+                offline(record.clientId).then();
+              }
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
+            }}
+          >
+            {record.status === 'OFF_LINE' ? '上线': '下线'}
+          </a>
+          <Divider type="vertical" />
+          <a
+            onClick={() => {
               handleUpdateModalVisible(true);
               setCurrentRow(record);
             }}
           >
-            修改
-          </a>
-          <Divider type="vertical" />
-          <a
-            onClick={async () => {
-              const confirm = await deleteConfirm();
-              if (confirm){
-                await handleRemove([record.id]);
-                actionRef.current?.reloadAndRest?.();
-              }
-            }}
-          >
-            删除
+            修改权重
           </a>
         </>
       ),
@@ -109,7 +117,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.TypeListItem, API.PageParams>
+      <ProTable<Instance, API.PageParams>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
@@ -118,7 +126,7 @@ const TableList: React.FC = () => {
         }}
         toolBarRender={() => []}
         request={async (params) => {
-          const response = await fetchServerPage({ ...params });
+          const response = await fetchInstancePage({ ...params });
           return {
             data: response.records,
             total: response.total,

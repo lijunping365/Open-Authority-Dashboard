@@ -28,10 +28,10 @@
     component: './dashboard',
   },
   {
-    name: 'spiderConf',
+    name: 'spider',
     icon: 'smile',
-    path: 'spiderConf',
-    component: './spiderConf',
+    path: 'spider',
+    component: './spider',
   },
   {
     name: 'spiderData',
