@@ -3,13 +3,9 @@ export interface Spider {
   name: string;
   url: string;
   method: string;
+  params: string;
   headers: string;
-  charset: string;
-  retry: number;
-  timeout: number;
-  acceptStatCode: string;
-  spiderType: number;
-  spiderData: string;
+  content: string;
   createTime: Date;
   createUser: number;
 }

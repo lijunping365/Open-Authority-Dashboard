@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Button, Col, Form, Input, Modal, Row, Select, Space} from 'antd';
 import type {Spider} from "../data";
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
+import TextArea from 'antd/lib/input/TextArea';
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -24,30 +25,51 @@ const { Option } = Select;
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [form] = Form.useForm();
-  const [proxyType, setSpiderType] = useState(0);
+  const [parseType, setParseType] = useState('json');
+  const [method, setMethod] = useState('get');
   const {
     modalVisible,
     onSubmit: handleCreate,
     onCancel: handleCreateModalVisible,
   } = props;
 
-  const handleNext = async () => {
+  const handleFinish = async () => {
     const fieldsValue: any = await form.validateFields();
-    handleCreate({
+    const formData = {
       ...fieldsValue,
-      type: proxyType
-    });
+      method
+    }
+    const content = [];
+    const {params} = fieldsValue;
+    const {headers} = fieldsValue;
+    let {rules} = fieldsValue;
+    if(params && params.length !== 0){
+      formData.params = JSON.stringify(params);
+    }
+    if(headers && headers.length !== 0){
+      formData.headers = JSON.stringify(headers);
+    }
+    content.push({'name': 'resultClass', 'value': rules})
+    content.push({'name': 'parseType', 'value': parseType})
+    formData.content = JSON.stringify(content);
+    
+    console.log(formData);
+    handleCreate(formData);
   };
 
-  const handleSelect = (op: number) => {
-    setSpiderType(op);
+  const handleSelectMethod = (op: number) => {
+    setMethod(op === 0 ? 'get': 'post');
+  };
+
+  const handleSelectSpider = (op: number) => {
+    setParseType(op === 0 ? 'page' : 'json');
   };
 
   const renderFooter = () => {
     return (
       <>
         <Button onClick={() => handleCreateModalVisible(false)}>取消</Button>
-        <Button type="primary" onClick={() => handleNext()}>
+        <Button type="primary" onClick={() => handleFinish()}>
           保存
         </Button>
       </>
@@ -57,7 +79,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   return (
     <Modal
       destroyOnClose
-      title="新建代理"
+      title="新建爬虫"
       visible={modalVisible}
       onCancel={() => handleCreateModalVisible()}
       footer={renderFooter()}
@@ -91,143 +113,116 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         <Row>
           <Col span={12}>
             <FormItem
-              name="headers"
-              label="请求头"
-              rules={[{ required: true, message: '请输入请求头！' }]}
-            >
-              <Input placeholder="请输入请求头" />
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              name="cookies"
-              label="Cookies"
-              rules={[{ required: true, message: '请输入Cookies！' }]}
-            >
-              <Input placeholder="请输入Cookies" />
-            </FormItem>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span={12}>
-            <FormItem
-              name="charset"
-              label="编码格式"
-              rules={[{ required: true, message: '请选择编码格式！' }]}
-            >
-              <Select defaultValue={0} onChange={handleSelect}>
-                <Option value={0}>GBK</Option>
-                <Option value={1}>UTF-8</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
               name="method"
               label="请求方式"
-              rules={[{ required: true, message: '请选择请求方式！' }]}
             >
-              <Select defaultValue={0} onChange={handleSelect}>
+              <Select defaultValue={0} onChange={handleSelectMethod}>
                 <Option value={0}>Get</Option>
                 <Option value={1}>Post</Option>
               </Select>
             </FormItem>
           </Col>
-        </Row>
-
-        <Row>
           <Col span={12}>
             <FormItem
-              name="retry"
-              label="重试次数"
-              rules={[{ required: true, message: '请输入重试次数！' }]}
-            >
-              <Input placeholder="请输入重试次数" />
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              name="timeout"
-              label="超时时间"
-              rules={[{ required: true, message: '请输入超时时间！' }]}
-            >
-              <Input placeholder="请输入超时时间" />
-            </FormItem>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span={12}>
-            <FormItem
-              name="acceptStatCode"
-              label="接受代码"
-              rules={[{ required: true, message: '请选择或输入接受代码！' }]}
-            >
-              <Select mode="tags" defaultValue={200} onChange={handleSelect}>
-                <Option value={200}>200</Option>
-                <Option value={400}>400</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              name="spiderType"
+              name="parseType"
               label="爬取方式"
-              rules={[{ required: true, message: '请选择爬取方式！' }]}
             >
-              <Select defaultValue={0} onChange={handleSelect}>
-                <Option value={0}>Page</Option>
+              <Select defaultValue={1} onChange={handleSelectSpider}>
                 <Option value={1}>Json</Option>
+                <Option value={0}>Page</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
 
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="rules"
+              label="爬虫规则"
+              rules={[{ required: true, message: '请输入爬虫规则！' }]}
+            >
+              <TextArea placeholder="请输入爬虫规则"/>
+            </FormItem>
+          </Col>
+        </Row>
 
-        <Form.List name="users">
-          {(fields, { add, remove }) => (
-            <>
-              {fields.map(({ key, name, fieldKey }) => (
-                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                  <Form.Item
-                    {...formItemLayout}
-                    label="抽取规则"
-                    name={[name, 'extractRule']}
-                    fieldKey={[fieldKey, 'extractRule']}
-                    rules={[{ required: true, message: '请输入抽取规则' }]}
-                  >
-                    <Input placeholder="抽取规则" />
-                  </Form.Item>
-                  <Form.Item
-                    {...formItemLayout}
-                    label="字段名称"
-                    name={[name, 'field']}
-                    fieldKey={[fieldKey, 'field']}
-                    rules={[{ required: true, message: '请输入字段名称' }]}
-                  >
-                    <Input placeholder="字段名称" />
-                  </Form.Item>
-                  <Form.Item
-                    {...formItemLayout}
-                    label="字段描述"
-                    name={[name, 'description']}
-                    fieldKey={[fieldKey, 'description']}
-                    rules={[{ required: true, message: '请输入字段描述' }]}
-                  >
-                    <Input placeholder="字段描述" />
-                  </Form.Item>
-                  <MinusCircleOutlined onClick={() => remove(name)} />
-                </Space>
-              ))}
-              <Form.Item>
-                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                  Add field
-                </Button>
-              </Form.Item>
-            </>
-          )}
-        </Form.List>
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="params"
+              label="请求参数"
+            >
+              <Form.List name="params">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name }) => (
+                      <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'name']}
+                        >
+                          <Input placeholder="name" style={{'width':200}}/>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'value']}
+                        >
+                          <Input placeholder="value" style={{'width':400}}/>
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        添加一行
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="headers"
+              label="设请求头"
+            >
+              <Form.List name="headers">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name }) => (
+                      <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'name']}
+                        >
+                          <Input placeholder="name" style={{'width':200}}/>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'value']}
+                        >
+                          <Input placeholder="value" style={{'width':400}}/>
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        添加一行
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </FormItem>
+          </Col>
+        </Row>
+
       </Form>
     </Modal>
   );
