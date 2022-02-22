@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import {Form, Button, Input, Modal, Select, Col, Row} from 'antd';
+import {Form, Button, Input, Modal, Select, Col, Row, Space, AutoComplete} from 'antd';
 import type {Spider} from "../data";
-import DynamicForm from "@/pages/spider/components/DynamicForm";
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {Headers, ContentTypes, Methods, Targets} from "../common"
 
 export interface UpdateFormProps {
   onCancel: (flag?: boolean, formVals?: Partial<Spider>) => void;
@@ -17,34 +18,16 @@ const formLayout = {
   wrapperCol: { span: 19 },
 };
 
-const methods = [
-  "GET",
-  "POST",
-  "PUT",
-  "DELETE",
-]
-
-const charsets = [
-  "gbk",
-  "utf-8"
-]
-
-const codes = [
-  "200",
-  "202",
-  "400",
-  "401",
-  "402",
-  "403",
-  "404",
-]
+const formItemLayout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 14},
+};
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const [form] = Form.useForm();
-  const [spiderType, setSpiderType] = useState(0);
-  const [method, setMethod] = useState(methods[0]);
-  const [charset, setCharset] = useState(charsets[0]);
-  const [code, setCode] = useState(codes[0]);
+  const [method, setMethod] = useState(Methods[0]);
+  const [targetType, setTargetType] = useState(Targets[0]);
+
 
   const {
     onSubmit: handleSubmit,
@@ -56,35 +39,23 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const handleUpdate = async () => {
     const fieldsValue: any = await form.validateFields();
     const {headers} = fieldsValue;
-    let acceptStatCode = "";
-    Object.keys(code).forEach((key,index) => {
-      acceptStatCode = index === 0 ? `${code[key]}`: `${acceptStatCode},${code[key]}`;
-    });
+    const {params} = fieldsValue;
     handleSubmit({
       ...values,
       ...fieldsValue,
-      spiderType,
       method,
-      charset,
-      acceptStatCode,
-      headers: headers ? JSON.stringify(headers): ""
+      targetType,
+      headers: headers ? JSON.stringify(headers): "",
+      params: params ? JSON.stringify(params): ""
     });
   };
 
-  const handleSpiderTypeSelect = (op: number) => {
-    setSpiderType(op);
+  const handleSpiderTypeSelect = (op: string) => {
+    setTargetType(op);
   };
 
   const handleMethodSelect = (op: string) => {
     setMethod(op);
-  };
-
-  const handleCharsetSelect = (op: string) => {
-    setCharset(op);
-  };
-
-  const handleCodeSelect = (op: string) => {
-    setCode(op);
   };
 
   const renderFooter = () => {
@@ -115,13 +86,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           name: values.name,
           url: values.url,
           method: values.method,
+          params: values.params ? JSON.parse(values.params) : [],
           headers: values.headers ? JSON.parse(values.headers) : [],
-          charset: values.charset,
-          retry: values.retry,
-          timeout: values.timeout,
-          acceptStatCode: values.acceptStatCode ? values.acceptStatCode.split(",") : "",
-          spiderType: values.spiderType,
-          spiderData: values.spiderData,
+          rootPath: values.rootPath,
+          targetType: values.targetType,
         }}
       >
         <Row>
@@ -137,7 +105,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           <Col span={12}>
             <FormItem
               name="url"
-              label="url"
+              label="目标url"
               rules={[{ required: true, message: '请输入爬虫url！' }]}
             >
               <Input placeholder="请输入爬虫url" />
@@ -153,7 +121,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               rules={[{ required: true, message: '请选择请求方式！' }]}
             >
               <Select defaultValue={values.method} onChange={handleMethodSelect}>
-                {methods.map(m => (
+                {Methods.map(m => (
                   <Option value={m}>{m}</Option>
                 ))}
               </Select>
@@ -161,13 +129,12 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           </Col>
           <Col span={12}>
             <FormItem
-              name="charset"
-              label="编码格式"
-              rules={[{ required: true, message: '请选择编码格式！' }]}
+              name="targetType"
+              label="爬取目标"
             >
-              <Select defaultValue={values.charset} onChange={handleCharsetSelect}>
-                {charsets.map(c => (
-                  <Option value={c}>{c}</Option>
+              <Select defaultValue={values.targetType} onChange={handleSpiderTypeSelect}>
+                {Targets.map(m => (
+                  <Option value={m}>{m}</Option>
                 ))}
               </Select>
             </FormItem>
@@ -177,20 +144,49 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         <Row>
           <Col span={12}>
             <FormItem
-              name="retry"
-              label="重试次数"
-              rules={[{ required: true, message: '请输入重试次数！' }]}
+              name="rootPath"
+              label="设根节点"
             >
-              <Input placeholder="请输入重试次数" />
+              <Input placeholder="请输入数据根节点" />
             </FormItem>
           </Col>
+        </Row>
+
+
+        <Row>
           <Col span={12}>
             <FormItem
-              name="timeout"
-              label="重试次数"
-              rules={[{ required: true, message: '请输入重试次数！' }]}
+              name="params"
+              label="请求参数"
             >
-              <Input placeholder="请输入重试次数" />
+              <Form.List name="params">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name }) => (
+                      <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'name']}
+                        >
+                          <Input placeholder="name" style={{'width':130}}/>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'value']}
+                        >
+                          <Input placeholder="value" style={{'width':260}}/>
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        添加一行
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
             </FormItem>
           </Col>
         </Row>
@@ -198,31 +194,55 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         <Row>
           <Col span={12}>
             <FormItem
-              name="acceptStatCode"
-              label="接受代码"
-              rules={[{ required: true, message: '请选择接受代码！' }]}
+              name="headers"
+              label="设请求头"
             >
-              <Select mode="tags" placeholder="请选择接受代码" onChange={handleCodeSelect} tokenSeparators={[',']}>
-                {codes.map(c => (
-                  <Option value={c}>{c}</Option>
-                ))}
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              name="spiderType"
-              label="爬取方式"
-              rules={[{ required: true, message: '请选择爬取方式！' }]}
-            >
-              <Select onChange={handleSpiderTypeSelect}>
-                <Option value={0}>Page</Option>
-                <Option value={1}>Json</Option>
-              </Select>
+              <Form.List name="headers">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name }) => (
+                      <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'name']}
+                        >
+                          <AutoComplete
+                            style={{ width: 130 }}
+                            options={Headers}
+                            placeholder="name"
+                            filterOption={(inputValue, option) =>
+                              option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                            }
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'value']}
+                        >
+                          <AutoComplete
+                            style={{ width: 260 }}
+                            options={ContentTypes}
+                            placeholder="value"
+                            filterOption={(inputValue, option) =>
+                              option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                            }
+                          />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        添加一行
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
             </FormItem>
           </Col>
         </Row>
-        <DynamicForm/>
+        
       </Form>
     </Modal>
   );

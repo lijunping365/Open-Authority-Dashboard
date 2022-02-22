@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {Button, Col, Form, Input, Modal, Row, Select, Space} from 'antd';
+import {AutoComplete, Button, Col, Form, Input, Modal, Row, Select, Space} from 'antd';
 import type {Spider} from "../data";
+import {Headers, ContentTypes, Methods, Targets} from "../common"
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
-import TextArea from 'antd/lib/input/TextArea';
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -25,8 +25,8 @@ const { Option } = Select;
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [form] = Form.useForm();
-  const [parseType, setParseType] = useState('json');
-  const [method, setMethod] = useState('get');
+  const [targetType, setTargetType] = useState(Targets[0]);
+  const [method, setMethod] = useState(Methods[0]);
   const {
     modalVisible,
     onSubmit: handleCreate,
@@ -37,32 +37,29 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     const fieldsValue: any = await form.validateFields();
     const formData = {
       ...fieldsValue,
+      targetType,
       method
     }
-    const content = [];
+
     const {params} = fieldsValue;
     const {headers} = fieldsValue;
-    let {rules} = fieldsValue;
     if(params && params.length !== 0){
       formData.params = JSON.stringify(params);
     }
     if(headers && headers.length !== 0){
       formData.headers = JSON.stringify(headers);
     }
-    content.push({'name': 'resultClass', 'value': rules})
-    content.push({'name': 'parseType', 'value': parseType})
-    formData.content = JSON.stringify(content);
-    
+
     console.log(formData);
     handleCreate(formData);
   };
 
   const handleSelectMethod = (op: number) => {
-    setMethod(op === 0 ? 'get': 'post');
+    setMethod(Methods[op]);
   };
 
   const handleSelectSpider = (op: number) => {
-    setParseType(op === 0 ? 'page' : 'json');
+    setTargetType(Targets[op]);
   };
 
   const renderFooter = () => {
@@ -102,7 +99,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           <Col span={12}>
             <FormItem
               name="url"
-              label="url"
+              label="目标url"
               rules={[{ required: true, message: '请输入爬虫url！' }]}
             >
               <Input placeholder="请输入爬虫url" />
@@ -117,19 +114,19 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               label="请求方式"
             >
               <Select defaultValue={0} onChange={handleSelectMethod}>
-                <Option value={0}>Get</Option>
-                <Option value={1}>Post</Option>
+                <Option value={0}>GET</Option>
+                <Option value={1}>POST</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span={12}>
             <FormItem
-              name="parseType"
-              label="爬取方式"
+              name="targetType"
+              label="爬取目标"
             >
               <Select defaultValue={1} onChange={handleSelectSpider}>
-                <Option value={1}>Json</Option>
-                <Option value={0}>Page</Option>
+                <Option value={1}>JSON</Option>
+                <Option value={0}>PAGE</Option>
               </Select>
             </FormItem>
           </Col>
@@ -138,11 +135,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         <Row>
           <Col span={12}>
             <FormItem
-              name="rules"
-              label="爬虫规则"
-              rules={[{ required: true, message: '请输入爬虫规则！' }]}
+              name="rootPath"
+              label="设根节点"
             >
-              <TextArea placeholder="请输入爬虫规则"/>
+              <Input placeholder="请输入数据根节点" />
             </FormItem>
           </Col>
         </Row>
@@ -162,13 +158,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                           {...formItemLayout}
                           name={[name, 'name']}
                         >
-                          <Input placeholder="name" style={{'width':200}}/>
+                          <Input placeholder="name" style={{'width':130}}/>
                         </Form.Item>
                         <Form.Item
                           {...formItemLayout}
                           name={[name, 'value']}
                         >
-                          <Input placeholder="value" style={{'width':400}}/>
+                          <Input placeholder="value" style={{'width':260}}/>
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
@@ -200,13 +196,27 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                           {...formItemLayout}
                           name={[name, 'name']}
                         >
-                          <Input placeholder="name" style={{'width':200}}/>
+                          <AutoComplete
+                            style={{ width: 130 }}
+                            options={Headers}
+                            placeholder="name"
+                            filterOption={(inputValue, option) =>
+                              option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                            }
+                          />
                         </Form.Item>
                         <Form.Item
                           {...formItemLayout}
                           name={[name, 'value']}
                         >
-                          <Input placeholder="value" style={{'width':400}}/>
+                          <AutoComplete
+                            style={{ width: 260 }}
+                            options={ContentTypes}
+                            placeholder="value"
+                            filterOption={(inputValue, option) =>
+                              option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                            }
+                          />
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>

@@ -111,6 +111,8 @@ const TableList: React.FC = () => {
       title: 'url',
       dataIndex: 'url',
       valueType: 'text',
+      ellipsis: true,
+      copyable: true,
     },
     {
       title: '创建时间',

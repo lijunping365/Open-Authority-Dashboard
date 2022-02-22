@@ -5,7 +5,8 @@ export interface Spider {
   method: string;
   params: string;
   headers: string;
-  content: string;
+  rootPath: string;
+  targetType: string;
   createTime: Date;
   createUser: number;
 }
