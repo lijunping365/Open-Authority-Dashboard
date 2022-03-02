@@ -90,6 +90,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           headers: values.headers ? JSON.parse(values.headers) : [],
           rootPath: values.rootPath,
           targetType: values.targetType,
+          topicName: values.topicName
         }}
       >
         <Row>
@@ -148,6 +149,15 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               label="设根节点"
             >
               <Input placeholder="请输入数据根节点" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="topicName"
+              label="Topic名称"
+              rules={[{ required: true, message: '请输入Topic名称！' }]}
+            >
+              <Input placeholder="请输入Topic名称" />
             </FormItem>
           </Col>
         </Row>

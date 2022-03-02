@@ -141,6 +141,15 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               <Input placeholder="请输入数据根节点" />
             </FormItem>
           </Col>
+          <Col span={12}>
+            <FormItem
+              name="topicName"
+              label="Topic名称"
+              rules={[{ required: true, message: '请输入Topic名称！' }]}
+            >
+              <Input placeholder="请输入Topic名称" />
+            </FormItem>
+          </Col>
         </Row>
 
         <Row>

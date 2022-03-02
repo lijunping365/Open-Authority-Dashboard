@@ -7,6 +7,7 @@ export interface Spider {
   headers: string;
   rootPath: string;
   targetType: string;
+  topicName: string;
   createTime: Date;
   createUser: number;
 }
