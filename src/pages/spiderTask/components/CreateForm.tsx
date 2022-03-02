@@ -18,6 +18,7 @@ const formLayout = {
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [form] = Form.useForm();
+  const [inputValue, setInputValue] = React.useState("* * * * * ? *");
 
   const {
     modalVisible,
@@ -32,10 +33,14 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     });
   };
 
-  const setInputValue = (value: string) => {
+  const handlerInput = (index: number,value: string) => {
     console.log('onInputChange', value);
+    const regs = inputValue.split(' ');
+    regs[index] = value;
+    const tempValue = regs.join(' ');
+    setInputValue(tempValue);
     form.setFieldsValue({
-      cronExpression: value,
+      cronExpression: tempValue,
     });
   }
 
@@ -57,10 +62,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           label="Cron 表达式"
           rules={[{ required: true, message: '请输入Cron 表达式！' }]}
         >
-          <Input placeholder="请输入Cron 表达式" defaultValue={"* * * * * ? *"}/>
+          <Input placeholder="请输入Cron 表达式" defaultValue={inputValue}/>
         </FormItem>
         <CronComponent
-          onChange={setInputValue}
+          onChange={handlerInput}
         />
       </Form>
     </Modal>
