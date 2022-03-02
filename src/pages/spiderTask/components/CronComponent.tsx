@@ -12,7 +12,7 @@ import {
 const { TabPane } = Tabs;
 
 export interface CronProps {
-  onChange: (index:number,value: any) => void;
+  onChange: (index: number,value: any) => void;
 }
 
 const CronComponent: React.FC<CronProps> = (props) => {
@@ -82,9 +82,10 @@ const CronComponent: React.FC<CronProps> = (props) => {
   const onSecondChange = (e: any) => {
     const v = e.target.value;
     setSecondRadioValue(v);
-    let secondValue = "*";
+    let secondValue = "";
     switch (v) {
       case 1:
+        secondValue = "*";
         break;
       case 2:
         secondValue = `${second_cycle_1_value}-${second_cycle_2_value}`;
@@ -251,32 +252,215 @@ const CronComponent: React.FC<CronProps> = (props) => {
     setInputValue(6, yearValue);
   };
 
-  // const [second_cycle_1_value, setSecond_cycle_1_value] = React.useState<number>(1);
-  // const [second_cycle_2_value, setSecond_cycle_2_value] = React.useState<number>(2);
-  // const [second_from_value, setSecond_from_value] = React.useState<number>(0);
-  // const [second_to_value, setSecond_to_value] = React.useState<number>(1);
-
+  // second begin
   const onSecond_cycle_1_value_change = (value: any) =>{
     setSecond_cycle_1_value(value);
     if(secondRadioValue === 2){
-      setInputValue(0, value);
+      setInputValue(0, `${value}-${second_cycle_2_value}`);
     }
-    
   }
 
   const onSecond_cycle_2_value_change = (value: any) =>{
-    
+    setSecond_cycle_2_value(value);
+    if(secondRadioValue === 2){
+      setInputValue(0, `${second_cycle_1_value}-${value}`);
+    }
   }
 
   const onSecond_from_value_change = (value: any) =>{
-    
+    setSecond_from_value(value);
+    if(secondRadioValue === 3){
+      setInputValue(0, `${value}/${second_to_value}`);
+    }
   }
 
   const onSecond_to_value_change = (value: any) =>{
-    
+    setSecond_to_value(value);
+    if(secondRadioValue === 3){
+      setInputValue(0, `${second_from_value}/${value}`);
+    }
+  }
+  // second end
+
+  // minutes begin
+  const onMinutes_cycle_1_value_change = (value: any) =>{
+    setMinutes_cycle_1_value(value);
+    if(minutesRadioValue === 2){
+      setInputValue(1, `${value}-${minutes_cycle_2_value}`);
+    }
   }
 
+  const onMinutes_cycle_2_value_change = (value: any) =>{
+    setMinutes_cycle_2_value(value);
+    if(minutesRadioValue === 2){
+      setInputValue(1, `${minutes_cycle_1_value}-${value}`);
+    }
+  }
 
+  const onMinutes_from_value_change = (value: any) =>{
+    setMinutes_from_value(value);
+    if(minutesRadioValue === 3){
+      setInputValue(1, `${value}/${minutes_to_value}`);
+    }
+  }
+
+  const onMinutes_to_value_change = (value: any) =>{
+    setMinutes_to_value(value);
+    if(minutesRadioValue === 3){
+      setInputValue(1, `${minutes_from_value}/${value}`);
+    }
+  }
+  // minutes end
+
+  // hour begin
+  const onHour_cycle_1_value_change = (value: any) =>{
+    setHour_cycle_1_value(value);
+    if(hourRadioValue === 2){
+      setInputValue(2, `${value}-${hour_cycle_2_value}`);
+    }
+  }
+
+  const onHour_cycle_2_value_change = (value: any) =>{
+    setHour_cycle_2_value(value);
+    if(hourRadioValue === 2){
+      setInputValue(2, `${hour_cycle_1_value}-${value}`);
+    }
+  }
+
+  const onHour_from_value_change = (value: any) =>{
+    setHour_from_value(value);
+    if(hourRadioValue === 3){
+      setInputValue(2, `${value}/${hour_to_value}`);
+    }
+  }
+
+  const onHour_to_value_change = (value: any) =>{
+    setHour_to_value(value);
+    if(hourRadioValue === 3){
+      setInputValue(2, `${hour_from_value}/${value}`);
+    }
+  }
+  // hour end
+
+  // day begin
+  const onDay_cycle_1_value_change = (value: any) =>{
+    setDay_cycle_1_value(value);
+    if(dayRadioValue === 2){
+      setInputValue(3, `${value}-${day_cycle_2_value}`);
+    }
+  }
+
+  const onDay_cycle_2_value_change = (value: any) =>{
+    setDay_cycle_2_value(value);
+    if(dayRadioValue === 2){
+      setInputValue(3, `${day_cycle_1_value}-${value}`);
+    }
+  }
+
+  const onDay_from_value_change = (value: any) =>{
+    setDay_from_value(value);
+    if(dayRadioValue === 3){
+      setInputValue(3, `${value}/${day_to_value}`);
+    }
+  }
+
+  const onDay_to_value_change = (value: any) =>{
+    setDay_to_value(value);
+    if(dayRadioValue === 3){
+      setInputValue(3, `${day_from_value}/${value}`);
+    }
+  }
+
+  const onDay_last_value_change = (value: any) =>{
+    setDay_last_value(value);
+    if(dayRadioValue === 3){
+      setInputValue(3, value);
+    }
+  }
+  // day end
+
+  // month begin
+  const onMonth_cycle_1_value_change = (value: any) =>{
+    setMonth_cycle_1_value(value);
+    if(monthRadioValue === 2){
+      setInputValue(4, `${value}-${month_cycle_2_value}`);
+    }
+  }
+
+  const onMonth_cycle_2_value_change = (value: any) =>{
+    setMonth_cycle_2_value(value);
+    if(monthRadioValue === 2){
+      setInputValue(4, `${month_cycle_1_value}-${value}`);
+    }
+  }
+
+  const onMonth_from_value_change = (value: any) =>{
+    setMonth_from_value(value);
+    if(monthRadioValue === 3){
+      setInputValue(4, `${value}/${month_to_value}`);
+    }
+  }
+
+  const onMonth_to_value_change = (value: any) =>{
+    setMonth_to_value(value);
+    if(monthRadioValue === 3){
+      setInputValue(4, `${month_from_value}/${value}`);
+    }
+  }
+  // month end
+
+  // week begin
+  const onWeek_cycle_1_value_change = (value: any) =>{
+    setWeek_cycle_1_value(value);
+    if(weekRadioValue === 2){
+      setInputValue(5, `${value}-${week_cycle_2_value}`);
+    }
+  }
+
+  const onWeek_cycle_2_value_change = (value: any) =>{
+    setWeek_cycle_2_value(value);
+    if(weekRadioValue === 2){
+      setInputValue(5, `${week_cycle_1_value}-${value}`);
+    }
+  }
+
+  const onWeek_from_value_change = (value: any) =>{
+    setWeek_from_value(value);
+    if(weekRadioValue === 3){
+      setInputValue(5, `${value}/${week_to_value}`);
+    }
+  }
+
+  const onWeek_to_value_change = (value: any) =>{
+    setWeek_to_value(value);
+    if(weekRadioValue === 3){
+      setInputValue(5, `${week_from_value}/${value}`);
+    }
+  }
+
+  const onWeek_last_value_change = (value: any) =>{
+    setWeek_last_value(value);
+    if(weekRadioValue === 3){
+      setInputValue(5, value);
+    }
+  }
+  // week end
+
+  // year begin
+  const onYear_cycle_1_value_change = (value: any) =>{
+    setYear_cycle_1_value(value);
+    if(yearRadioValue === 2){
+      setInputValue(5, `${value}-${year_cycle_2_value}`);
+    }
+  }
+
+  const onYear_cycle_2_value_change = (value: any) =>{
+    setYear_cycle_2_value(value);
+    if(yearRadioValue === 2){
+      setInputValue(5, `${year_cycle_1_value}-${value}`);
+    }
+  }
+  // year end
 
 
   const onSecondCheckboxChange = (checkedValues: any[]) => {
@@ -319,8 +503,8 @@ const CronComponent: React.FC<CronProps> = (props) => {
           <Radio.Group onChange={onSecondChange} value={secondRadioValue} defaultValue={1}>
             <Space direction="vertical">
               <Radio value={1}>每秒 允许的通配符[, - * /]</Radio>
-              <Radio value={2}>周期 从<Input value={second_cycle_1_value} onChange={(e: any)=>setSecond_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={second_cycle_2_value} onChange={(e: any)=>setSecond_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒</Radio>
-              <Radio value={3}>从<Input value={second_from_value} onChange={(e: any)=>setSecond_from_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒开始,每<Input value={second_to_value} onChange={(e: any)=>setSecond_to_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒执行一次</Radio>
+              <Radio value={2}>周期 从<Input value={second_cycle_1_value} onChange={(e: any)=>onSecond_cycle_1_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={second_cycle_2_value} onChange={(e: any)=>onSecond_cycle_2_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒</Radio>
+              <Radio value={3}>从<Input value={second_from_value} onChange={(e: any)=>onSecond_from_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒开始,每<Input value={second_to_value} onChange={(e: any)=>onSecond_to_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>秒执行一次</Radio>
               <Radio value={4}>
                 指定
                 <Checkbox.Group options={plainOptions} onChange={onSecondCheckboxChange} value={secondCheckboxValue} />
@@ -332,8 +516,8 @@ const CronComponent: React.FC<CronProps> = (props) => {
           <Radio.Group onChange={onMinutesChange} value={minutesRadioValue} defaultValue={1}>
             <Space direction="vertical">
               <Radio value={1}>每分钟 允许的通配符[, - * /]</Radio>
-              <Radio value={2}>周期 从<Input value={minutes_cycle_1_value} onChange={(e: any)=>setMinutes_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={minutes_cycle_2_value} onChange={(e: any)=>setMinutes_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟</Radio>
-              <Radio value={3}>从<Input value={minutes_from_value} onChange={(e: any)=>setMinutes_from_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟开始,每<Input value={minutes_to_value} onChange={(e: any)=>setMinutes_to_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟执行一次</Radio>
+              <Radio value={2}>周期 从<Input value={minutes_cycle_1_value} onChange={(e: any)=>onMinutes_cycle_1_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={minutes_cycle_2_value} onChange={(e: any)=>onMinutes_cycle_2_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟</Radio>
+              <Radio value={3}>从<Input value={minutes_from_value} onChange={(e: any)=>onMinutes_from_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟开始,每<Input value={minutes_to_value} onChange={(e: any)=>onMinutes_to_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>分钟执行一次</Radio>
               <Radio value={4}>
                 指定
                 <Checkbox.Group options={plainOptions} onChange={onMinutesCheckboxChange} value={minutesCheckboxValue} />
@@ -345,8 +529,8 @@ const CronComponent: React.FC<CronProps> = (props) => {
           <Radio.Group onChange={onHourChange} value={hourRadioValue} defaultValue={1}>
             <Space direction="vertical">
               <Radio value={1}>每小时 允许的通配符[, - * /]</Radio>
-              <Radio value={2}>周期 从<Input value={hour_cycle_1_value} onChange={(e: any)=>setHour_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={hour_cycle_2_value} onChange={(e: any)=>setHour_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时</Radio>
-              <Radio value={3}>从<Input value={hour_from_value} onChange={(e: any)=>setHour_from_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时开始,每<Input value={hour_to_value} onChange={(e: any)=>setHour_to_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时执行一次</Radio>
+              <Radio value={2}>周期 从<Input value={hour_cycle_1_value} onChange={(e: any)=>onHour_cycle_1_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={hour_cycle_2_value} onChange={(e: any)=>onHour_cycle_2_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时</Radio>
+              <Radio value={3}>从<Input value={hour_from_value} onChange={(e: any)=>onHour_from_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时开始,每<Input value={hour_to_value} onChange={(e: any)=>onHour_to_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>小时执行一次</Radio>
               <Radio value={4}>
                 指定
                 <Checkbox.Group options={hourOptions} onChange={onHourCheckboxChange} value={hourCheckboxValue} />
@@ -359,9 +543,9 @@ const CronComponent: React.FC<CronProps> = (props) => {
             <Space direction="vertical">
               <Radio value={1}>每天 允许的通配符[, - * / L W]</Radio>
               <Radio value={2}>不指定</Radio>
-              <Radio value={3}>周期 从<Input value={day_cycle_1_value} onChange={(e: any)=>setDay_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={day_cycle_2_value} onChange={(e: any)=>setDay_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>天</Radio>
-              <Radio value={4}>从<Input value={day_from_value} onChange={(e: any)=>setDay_from_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>日开始,每<Input value={day_to_value} onChange={(e: any)=>setDay_to_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>天执行一次</Radio>
-              <Radio value={5}>每月<Input value={day_last_value} onChange={(e: any)=>setDay_last_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>号最近的那个工作日</Radio>
+              <Radio value={3}>周期 从<Input value={day_cycle_1_value} onChange={(e: any)=>onDay_cycle_1_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={day_cycle_2_value} onChange={(e: any)=>onDay_cycle_2_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>天</Radio>
+              <Radio value={4}>从<Input value={day_from_value} onChange={(e: any)=>onDay_from_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>日开始,每<Input value={day_to_value} onChange={(e: any)=>onDay_to_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>天执行一次</Radio>
+              <Radio value={5}>每月<Input value={day_last_value} onChange={(e: any)=>onDay_last_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>号最近的那个工作日</Radio>
               <Radio value={6}>本月最后一天</Radio>
               <Radio value={7}>
                 指定
@@ -375,8 +559,8 @@ const CronComponent: React.FC<CronProps> = (props) => {
             <Space direction="vertical">
               <Radio value={1}>每月 允许的通配符[, - * /]</Radio>
               <Radio value={2}>不指定</Radio>
-              <Radio value={3}>周期 从<Input value={month_cycle_1_value} onChange={(e: any)=>setMonth_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={month_cycle_2_value} onChange={(e: any)=>setMonth_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>月</Radio>
-              <Radio value={4}>从<Input value={month_from_value} onChange={(e: any)=>setMonth_from_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>月开始,每<Input value={month_to_value} onChange={(e: any)=>setMonth_to_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>月执行一次</Radio>
+              <Radio value={3}>周期 从<Input value={month_cycle_1_value} onChange={(e: any)=>onMonth_cycle_1_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={month_cycle_2_value} onChange={(e: any)=>onMonth_cycle_2_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>月</Radio>
+              <Radio value={4}>从<Input value={month_from_value} onChange={(e: any)=>onMonth_from_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>月开始,每<Input value={month_to_value} onChange={(e: any)=>onMonth_to_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>月执行一次</Radio>
               <Radio value={5}>
                 指定
                 <Checkbox.Group options={monthOptions} onChange={onMonthCheckboxChange} value={monthCheckboxValue} />
@@ -389,9 +573,9 @@ const CronComponent: React.FC<CronProps> = (props) => {
             <Space direction="vertical">
               <Radio value={1}>每周 允许的通配符[, - * / L #]</Radio>
               <Radio value={2}>不指定</Radio>
-              <Radio value={3}>周期 从星期<Input value={week_cycle_1_value} onChange={(e: any)=>setWeek_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={week_cycle_2_value} onChange={(e: any)=>setWeek_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
-              <Radio value={4}>第<Input value={week_from_value} onChange={(e: any)=>setWeek_from_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>周的星期<Input value={week_to_value} onChange={(e: any)=>setWeek_to_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
-              <Radio value={5}>本月最后一个星期<Input value={week_last_value} onChange={(e: any)=>setWeek_last_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
+              <Radio value={3}>周期 从星期<Input value={week_cycle_1_value} onChange={(e: any)=>onWeek_cycle_1_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={week_cycle_2_value} onChange={(e: any)=>onWeek_cycle_2_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
+              <Radio value={4}>第<Input value={week_from_value} onChange={(e: any)=>onWeek_from_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>周的星期<Input value={week_to_value} onChange={(e: any)=>onWeek_to_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
+              <Radio value={5}>本月最后一个星期<Input value={week_last_value} onChange={(e: any)=>onWeek_last_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/></Radio>
               <Radio value={6}>
                 指定
                 <Checkbox.Group options={weekOptions} onChange={onWeekCheckboxChange} value={weekCheckboxValue} />
@@ -404,7 +588,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
             <Space direction="vertical">
               <Radio value={1}>不指定 允许的通配符[, - * /] 非必填</Radio>
               <Radio value={2}>每年</Radio>
-              <Radio value={3}>周期 从<Input value={year_cycle_1_value} onChange={(e: any)=>setYear_cycle_1_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={year_cycle_2_value} onChange={(e: any)=>setYear_cycle_2_value(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>年</Radio>
+              <Radio value={3}>周期 从<Input value={year_cycle_1_value} onChange={(e: any)=>onYear_cycle_1_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={year_cycle_2_value} onChange={(e: any)=>onYear_cycle_2_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>年</Radio>
             </Space>
           </Radio.Group>
         </TabPane>
