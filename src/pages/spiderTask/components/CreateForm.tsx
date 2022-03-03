@@ -40,6 +40,8 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     const regs = inputValue.split(' ');
     regs[index] = value;
     const tempValue = regs.join(' ');
+    setErrMsg(`'?' can only be specfied for Day-of-Month or Day-of-Week.`);
+    setErrMsg(`Support for specifying both a day-of-week AND a day-of-month parameter is not implemented.`);
     setInputValue(tempValue);
     form.setFieldsValue({
       cronExpression: tempValue,
@@ -84,7 +86,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             )}
           />
         )}
-        
+
       </Form>
     </Modal>
   );
