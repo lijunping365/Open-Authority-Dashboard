@@ -1,7 +1,6 @@
 import React from 'react';
-import {Input, Tabs, Radio, Space, Checkbox, Divider, List, Typography} from 'antd';
+import {Input, Tabs, Radio, Space, Checkbox} from 'antd';
 import {
-  data,
   dayOptions,
   hourOptions,
   monthOptions,
@@ -72,8 +71,8 @@ const CronComponent: React.FC<CronProps> = (props) => {
   const [week_last_value, setWeek_last_value] = React.useState<number>(0);
 
   // year tab
-  const [year_cycle_1_value, setYear_cycle_1_value] = React.useState<number>(1);
-  const [year_cycle_2_value, setYear_cycle_2_value] = React.useState<number>(2);
+  const [year_cycle_1_value, setYear_cycle_1_value] = React.useState<number>(2021);
+  const [year_cycle_2_value, setYear_cycle_2_value] = React.useState<number>(2022);
 
   const setInputValue = (index: number,value: string) => {
     onChange(index, value);
@@ -94,7 +93,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
         secondValue = `${second_from_value}/${second_to_value}`;
         break;
       case 4:
-        secondValue = secondCheckboxValue.join(",");
+        secondValue = secondCheckboxValue.length !== 0 ? secondCheckboxValue.join(",") : "*";
         break;
       default:
         break;
@@ -117,7 +116,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
         minutesValue = `${minutes_from_value}/${minutes_to_value}`;
         break;
       case 4:
-        minutesValue = minutesCheckboxValue.join(",");
+        minutesValue = minutesCheckboxValue.length !== 0 ? minutesCheckboxValue.join(",") : "*";
         break;
       default:
         break;
@@ -140,7 +139,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
         hourValue = `${hour_from_value}/${hour_to_value}`;
         break;
       case 4:
-        hourValue = hourCheckboxValue.join(",");
+        hourValue = hourCheckboxValue.length !== 0 ? hourCheckboxValue.join(",") : "*";
         break;
       default: break;
     }
@@ -156,8 +155,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
         dayValue = "*";
         break;
       case 2:
-        // $.fn.cronGen.tools.cycle("second");
-        // results = $.fn.cronGen.tools.cronResult();
+        dayValue = "?";
         break;
       case 3:
         dayValue = `${day_cycle_1_value}-${day_cycle_2_value}`;
@@ -169,10 +167,10 @@ const CronComponent: React.FC<CronProps> = (props) => {
         dayValue = `${day_last_value}`;
         break;
       case 6:
-        // $.fn.cronGen.tools.startOn("second");
-        // results = $.fn.cronGen.tools.cronResult();
+        dayValue = "L";
         break;
       case 7:
+        dayValue = dayCheckboxValue.length !== 0 ? dayCheckboxValue.join(",") : "*";
         break;
       default: break;
     }
@@ -188,8 +186,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
         monthValue = "*";
         break;
       case 2:
-        // $.fn.cronGen.tools.cycle("second");
-        // results = $.fn.cronGen.tools.cronResult();
+        monthValue = "?";
         break;
       case 3:
         monthValue = `${month_cycle_1_value}-${month_cycle_2_value}`;
@@ -198,6 +195,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
         monthValue = `${month_from_value}/${month_to_value}`;
         break;
       case 5:
+        monthValue = monthCheckboxValue.length !== 0 ? monthCheckboxValue.join(",") : "*";
         break;
       default: break;
     }
@@ -213,8 +211,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
         weekValue = "*";
         break;
       case 2:
-        // $.fn.cronGen.tools.cycle("second");
-        // results = $.fn.cronGen.tools.cronResult();
+        weekValue = "?"
         break;
       case 3:
         weekValue = `${week_cycle_1_value}-${week_cycle_2_value}`;
@@ -226,6 +223,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
         weekValue = `${week_last_value}`;
         break;
       case 6:
+        weekValue = weekCheckboxValue.length !== 0 ? weekCheckboxValue.join(",") : "*";
         break;
       default: break;
     }
@@ -241,11 +239,10 @@ const CronComponent: React.FC<CronProps> = (props) => {
         yearValue = "*";
         break;
       case 2:
-        // $.fn.cronGen.tools.startOn("second");
-        // results = $.fn.cronGen.tools.cronResult();
+        yearValue = "?";
         break;
       case 3:
-        yearValue = `${year_cycle_1_value} ${year_cycle_2_value}`;
+        yearValue = `${year_cycle_1_value}-${year_cycle_2_value}`;
         break;
       default: break;
     }
@@ -449,14 +446,14 @@ const CronComponent: React.FC<CronProps> = (props) => {
   // year begin
   const onYear_cycle_1_value_change = (value: any) =>{
     setYear_cycle_1_value(value);
-    if(yearRadioValue === 2){
+    if(yearRadioValue === 3){
       setInputValue(5, `${value}-${year_cycle_2_value}`);
     }
   }
 
   const onYear_cycle_2_value_change = (value: any) =>{
     setYear_cycle_2_value(value);
-    if(yearRadioValue === 2){
+    if(yearRadioValue === 3){
       setInputValue(5, `${year_cycle_1_value}-${value}`);
     }
   }
@@ -486,14 +483,23 @@ const CronComponent: React.FC<CronProps> = (props) => {
 
   const onDayCheckboxChange = (checkedValues: any) => {
     setDayCheckboxValue(checkedValues);
+    if(dayRadioValue === 7){
+      setInputValue(3, checkedValues.join(","));
+    }
   };
 
   const onMonthCheckboxChange = (checkedValues: any) => {
     setMonthCheckboxValue(checkedValues);
+    if(monthRadioValue === 5){
+      setInputValue(4, checkedValues.join(","));
+    }
   };
 
   const onWeekCheckboxChange = (checkedValues: any) => {
     setWeekCheckboxValue(checkedValues);
+    if(weekRadioValue === 6){
+      setInputValue(5, checkedValues.join(","));
+    }
   };
 
   return (
@@ -586,24 +592,13 @@ const CronComponent: React.FC<CronProps> = (props) => {
         <TabPane tab="年" key="7">
           <Radio.Group onChange={onYearChange} value={yearRadioValue} defaultValue={1}>
             <Space direction="vertical">
-              <Radio value={1}>不指定 允许的通配符[, - * /] 非必填</Radio>
-              <Radio value={2}>每年</Radio>
+              <Radio value={1}>每年 允许的通配符[, - * /] 非必填</Radio>
+              <Radio value={2}>不指定</Radio>
               <Radio value={3}>周期 从<Input value={year_cycle_1_value} onChange={(e: any)=>onYear_cycle_1_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={year_cycle_2_value} onChange={(e: any)=>onYear_cycle_2_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>年</Radio>
             </Space>
           </Radio.Group>
         </TabPane>
       </Tabs>
-
-      <Divider orientation="left">最近运行时间</Divider>
-      <List
-        dataSource={data}
-        size="small"
-        renderItem={item => (
-          <List.Item>
-            <Typography.Text>{item}</Typography.Text>
-          </List.Item>
-        )}
-      />
     </>
   );
 };

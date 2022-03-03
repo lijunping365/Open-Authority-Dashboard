@@ -1,7 +1,8 @@
 import React from 'react';
-import {Form, Input, Modal} from 'antd';
+import {Divider, Form, Input, List, Modal, Typography} from 'antd';
 import type {ScheduleTask} from "../data";
 import CronComponent from "./CronComponent";
+import { data } from './CronData';
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -19,6 +20,7 @@ const formLayout = {
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [form] = Form.useForm();
   const [inputValue, setInputValue] = React.useState("* * * * * ? *");
+  const [errMsg, setErrMsg] = React.useState("");
 
   const {
     modalVisible,
@@ -67,6 +69,22 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         <CronComponent
           onChange={handlerInput}
         />
+        <Divider orientation="left">最近运行时间</Divider>
+        {errMsg?.length !== 0 && (
+          <Typography.Text>{errMsg}</Typography.Text>
+        )}
+        {errMsg?.length === 0 && (
+          <List
+            dataSource={data}
+            size="small"
+            renderItem={item => (
+              <List.Item>
+                <Typography.Text>{item}</Typography.Text>
+              </List.Item>
+            )}
+          />
+        )}
+        
       </Form>
     </Modal>
   );
