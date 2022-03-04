@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Divider, Form, Input, List, message, Modal, Typography} from 'antd';
 import type {ScheduleTask} from "../data";
 import CronComponent from "./CronComponent";
@@ -42,6 +42,24 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     onSubmit: handleCreate,
     onCancel: handleCreateModalVisible,
   } = props;
+
+  useEffect(()=>{
+    if (!modalVisible){
+      return;
+    }
+    nextTriggerTime(inputValue).then((res: string[]) => {
+      if(res && res.length === 5){
+        setNextTimeList(res);
+        form.setFieldsValue({
+          cronExpression: inputValue,
+        });
+      }else{
+        setErrMsg(res[0]);
+      }
+    }).catch(() => {
+      message.error('获取下次执行时间失败，请重试');
+    });
+  },[modalVisible]);
 
   const handleNext = async () => {
     const fieldsValue: any = await form.validateFields();
@@ -88,7 +106,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           rules={[{ required: true, message: '请输入Cron 表达式！' }]}
           tooltip= {{title:cronTip, placement: 'topLeft', overlayStyle: { maxWidth: 600 }, arrowPointAtCenter: true, color:'cyan'}}
         >
-          <Input placeholder="请输入Cron 表达式" defaultValue={inputValue}/>
+          <Input placeholder="请输入Cron 表达式" value={inputValue}/>
         </FormItem>
         <CronComponent
           onChange={handlerInput}
