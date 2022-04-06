@@ -72,7 +72,7 @@ const Login: React.FC = () => {
     try {
       // 登录
       const result = await login({ ...values, type, deviceId: getDeviceId()});
-      if (result && result.code === 200) {
+      if (result) {
         setAccessToken(result.accessToken);
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
