@@ -11,7 +11,7 @@ export async function login(body: API.LoginParams) {
 
 /** 发送验证码 POST /validate/code/list */
 export async function getFakeCaptcha(params: Partial<API.CaptchaParams>) {
-  return request('/create', {
+  return request('/captcha/create', {
     method: 'POST',
     data: {
       ...params,
