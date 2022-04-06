@@ -1,5 +1,6 @@
 import { request } from 'umi';
 
+
 export async function fetchInstancePage(
   params: {
     // query
@@ -39,3 +40,4 @@ export async function online(clientId: string) {
     method: 'PUT',
   });
 }
+

@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { fetchSpiderDataPage, removeSpiderData } from './service';
+import { fetchSpiderDataPage, removeSpiderData } from '@/services/open-crawler/spiderdata';
 import {confirmModal} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
 

@@ -1,6 +1,5 @@
 import { request } from 'umi';
 
-
 export async function fetchUserPage(
   params: {
     /** 当前的页码 */

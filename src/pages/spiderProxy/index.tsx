@@ -5,7 +5,7 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import { fetchProxyPage, addProxy, updateProxy, removeProxy } from './service';
+import { fetchProxyPage, addProxy, updateProxy, removeProxy } from '@/services/open-crawler/spiderproxy';
 import {confirmModal} from "@/components/ConfirmModel";
 import CreateForm from "./components/CreateForm";
 
