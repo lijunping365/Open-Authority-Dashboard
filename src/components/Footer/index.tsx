@@ -7,7 +7,7 @@ export default () => {
   const intl = useIntl();
   const defaultMessage = intl.formatMessage({
     id: 'app.copyright.produced',
-    defaultMessage: '口袋贵金属研发部出品',
+    defaultMessage: '酱子生鲜研发部出品',
   });
 
   return (
@@ -15,8 +15,8 @@ export default () => {
       copyright={`2020 ${defaultMessage}`}
       links={[
         {
-          key: 'Ant Design Pro',
-          title: 'Ant Design Pro',
+          key: 'Open-Crawler-Admin',
+          title: 'Open-Crawler-Admin',
           href: 'https://pro.ant.design',
           blankTarget: true,
         },
@@ -27,8 +27,8 @@ export default () => {
           blankTarget: true,
         },
         {
-          key: 'Ant Design',
-          title: 'Ant Design',
+          key: 'Open-Crawler',
+          title: 'Open-Crawler',
           href: 'https://ant.design',
           blankTarget: true,
         },
