@@ -1,5 +1,4 @@
 import { request } from 'umi';
-import type {ScheduleTask} from "./data";
 
 export async function fetchScheduleTaskPage(
   params: {
@@ -22,14 +21,14 @@ export async function fetchScheduleTaskPage(
   });
 }
 
-export async function updateScheduleTask(params: Partial<ScheduleTask>) {
+export async function updateScheduleTask(params: Partial<API.SpiderTask>) {
   return request('/task/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
-export async function addScheduleTask(params: Partial<ScheduleTask>) {
+export async function addScheduleTask(params: Partial<API.SpiderTask>) {
   return request('/task/save', {
     method: 'POST',
     data: {...params}

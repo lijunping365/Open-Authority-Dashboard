@@ -2,6 +2,76 @@
 /* eslint-disable */
 
 declare namespace API {
+  type User  = {
+    id: number;
+    username: string;
+    status: number;
+    phone: string;
+    createTime: Date
+  };
+
+  type Instance = {
+    clientId: string;
+    onlineTime: Date;
+    status: string;
+    weight: number;
+  };
+
+  type Spider = {
+    id: number;
+    name: string;
+    url: string;
+    method: string;
+    params: string;
+    headers: string;
+    rootPath: string;
+    targetType: string;
+    topicName: string;
+    createTime: Date;
+    createUser: number;
+  };
+
+  type SpiderData = {
+    id: number;
+    spiderId: number;
+    data: string;
+    createTime: Date;
+  };
+
+  type SpiderLog = {
+    id: number;
+    spiderId: number;
+    status: number;
+    cause: string;
+    createTime: Date;
+  };
+
+  type SpiderProxy = {
+    id: number;
+    ip: string;
+    port: string;
+    type: number;
+    status: number;
+    createTime: Date;
+    verifyTime: Date;
+  };
+
+  type SpiderTask = {
+    id: number;
+    spiderId: string;
+    cronExpression: string;
+    status: number;
+    createTime: Date;
+    createUser: number;
+  }
+
+  type TaskLog = {
+    id: number;
+    taskId: number;
+    status: number;
+    createTime: Date;
+  }
+
   type CurrentUser = {
     username?: string;
     avatar?: string;

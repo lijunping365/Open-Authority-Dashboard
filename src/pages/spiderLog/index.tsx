@@ -6,7 +6,6 @@ import ProTable from '@ant-design/pro-table';
 import { fetchSpiderLogPage, removeSpiderLog} from './service';
 import {confirmModal} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
-import type {TaskLog} from "./data";
 
 
 
@@ -33,9 +32,9 @@ const handleRemove = async (selectedRows: any[]) => {
 const TableList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
-  const [selectedRowsState, setSelectedRows] = useState<TaskLog[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.SpiderLog[]>([]);
 
-  const columns: ProColumns<TaskLog>[] = [
+  const columns: ProColumns<API.SpiderLog>[] = [
     {
       title: '爬虫ID',
       dataIndex: 'spiderId',
@@ -94,7 +93,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<TaskLog>
+      <ProTable<API.SpiderLog>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"

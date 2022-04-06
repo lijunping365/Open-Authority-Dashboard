@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
 import {Form, Button, Input, Modal, Select, Col, Row, Space, AutoComplete} from 'antd';
-import type {Spider} from "../data";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {Headers, ContentTypes, Methods, Targets} from "../common"
 
 export interface UpdateFormProps {
-  onCancel: (flag?: boolean, formVals?: Partial<Spider>) => void;
-  onSubmit: (values: Partial<Spider>) => void;
+  onCancel: (flag?: boolean, formVals?: Partial<API.Spider>) => void;
+  onSubmit: (values: Partial<API.Spider>) => void;
   updateModalVisible: boolean;
-  values: Partial<Spider>;
+  values: Partial<API.Spider>;
 }
 const FormItem = Form.Item;
 const { Option } = Select;

@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import {Form, Button, Input, Modal, Select} from 'antd';
-import type {Proxy} from "../data";
 
 export interface UpdateFormProps {
-  onCancel: (flag?: boolean, formVals?: Partial<Proxy>) => void;
-  onSubmit: (values: Partial<Proxy>) => void;
+  onCancel: (flag?: boolean, formVals?: Partial<API.SpiderProxy>) => void;
+  onSubmit: (values: Partial<API.SpiderProxy>) => void;
   updateModalVisible: boolean;
-  values: Partial<Proxy>;
+  values: Partial<API.SpiderProxy>;
 }
 const FormItem = Form.Item;
 const { Option } = Select;

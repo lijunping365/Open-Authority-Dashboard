@@ -7,7 +7,6 @@ import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import { fetchProxyPage, addProxy, updateProxy, removeProxy } from './service';
 import {confirmModal} from "@/components/ConfirmModel";
-import type {Proxy} from "./data";
 import CreateForm from "./components/CreateForm";
 
 /**
@@ -15,7 +14,7 @@ import CreateForm from "./components/CreateForm";
  *
  * @param fields
  */
-const handleAdd = async (fields: Proxy) => {
+const handleAdd = async (fields: API.SpiderProxy) => {
   const hide = message.loading('正在添加');
   try {
     await addProxy({ ...fields });
@@ -34,7 +33,7 @@ const handleAdd = async (fields: Proxy) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<Proxy>) => {
+const handleUpdate = async (fields: Partial<API.SpiderProxy>) => {
   const hide = message.loading('正在配置');
   try {
     await updateProxy(fields);
@@ -78,9 +77,9 @@ const TableList: React.FC = () => {
   const [updateFormValues, setUpdateFormValues] = useState({});
   const actionRef = useRef<ActionType>();
   // const [currentRow, setCurrentRow] = useState<Proxy>();
-  const [selectedRowsState, setSelectedRows] = useState<Proxy[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.SpiderProxy[]>([]);
 
-  const columns: ProColumns<Proxy>[] = [
+  const columns: ProColumns<API.SpiderProxy>[] = [
     {
       title: '代理IP',
       dataIndex: 'ip',
@@ -155,7 +154,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<Proxy>
+      <ProTable<API.SpiderProxy>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
@@ -212,7 +211,7 @@ const TableList: React.FC = () => {
       )}
 
       <CreateForm onCancel={() => handleCreateModalVisible(false)} modalVisible={createModalVisible}>
-        <ProTable<Proxy, Proxy>
+        <ProTable<API.SpiderProxy, API.SpiderProxy>
           onSubmit={async (value) => {
             const success = await handleAdd(value);
             if (success) {

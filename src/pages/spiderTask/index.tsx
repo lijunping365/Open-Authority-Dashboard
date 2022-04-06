@@ -7,7 +7,6 @@ import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeScheduleTask, startScheduleTask, stopScheduleTask } from './service';
 import {confirmModal} from "@/components/ConfirmModel";
-import type {ScheduleTask} from "./data";
 import CreateForm from "./components/CreateForm";
 
 /**
@@ -15,7 +14,7 @@ import CreateForm from "./components/CreateForm";
  *
  * @param fields
  */
-const handleAdd = async (fields: Partial<ScheduleTask>) => {
+const handleAdd = async (fields: Partial<API.SpiderTask>) => {
   const hide = message.loading('正在添加');
   try {
     await addScheduleTask(fields);
@@ -34,7 +33,7 @@ const handleAdd = async (fields: Partial<ScheduleTask>) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<ScheduleTask>) => {
+const handleUpdate = async (fields: Partial<API.SpiderTask>) => {
   const hide = message.loading('正在配置');
   try {
     await updateScheduleTask(fields);
@@ -78,9 +77,9 @@ const TableList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
   // const [currentRow, setCurrentRow] = useState<ScheduleTask>();
-  const [selectedRowsState, setSelectedRows] = useState<ScheduleTask[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.SpiderTask[]>([]);
 
-  const columns: ProColumns<ScheduleTask>[] = [
+  const columns: ProColumns<API.SpiderTask>[] = [
     {
       title: '爬虫ID',
       dataIndex: 'spiderId',
@@ -163,7 +162,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<ScheduleTask>
+      <ProTable<API.SpiderTask>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"

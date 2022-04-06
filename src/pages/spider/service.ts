@@ -1,5 +1,4 @@
 import { request } from 'umi';
-import type {Spider} from "./data";
 
 export async function fetchSpiderPage(
   params: {
@@ -18,14 +17,14 @@ export async function fetchSpiderPage(
   });
 }
 
-export async function updateSpider(params: Partial<Spider>) {
+export async function updateSpider(params: Partial<API.Spider>) {
   return request('/spider/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
-export async function addSpider(params: Partial<Spider>) {
+export async function addSpider(params: Partial<API.Spider>) {
   return request('/spider/save', {
     method: 'POST',
     data: {...params}

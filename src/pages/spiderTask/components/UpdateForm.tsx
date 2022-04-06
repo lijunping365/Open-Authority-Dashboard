@@ -1,12 +1,11 @@
 import React from 'react';
 import {Form, Button, Input, Modal} from 'antd';
-import type {ScheduleTask} from "../data";
 
 export interface UpdateFormProps {
-  onCancel: (flag?: boolean, formVals?: Partial<ScheduleTask>) => void;
-  onSubmit: (values: Partial<ScheduleTask>) => void;
+  onCancel: (flag?: boolean, formVals?: Partial<API.SpiderTask>) => void;
+  onSubmit: (values: Partial<API.SpiderTask>) => void;
   updateModalVisible: boolean;
-  values: Partial<ScheduleTask>;
+  values: Partial<API.SpiderTask>;
 }
 const FormItem = Form.Item;
 

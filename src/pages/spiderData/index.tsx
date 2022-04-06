@@ -6,7 +6,6 @@ import ProTable from '@ant-design/pro-table';
 import { fetchSpiderDataPage, removeSpiderData } from './service';
 import {confirmModal} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
-import type {SpiderData} from "./data";
 
 
 /**
@@ -31,9 +30,9 @@ const handleRemove = async (selectedRows: any[]) => {
 
 const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  const [selectedRowsState, setSelectedRows] = useState<SpiderData[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.SpiderData[]>([]);
 
-  const columns: ProColumns<SpiderData>[] = [
+  const columns: ProColumns<API.SpiderData>[] = [
     {
       title: '爬虫ID',
       dataIndex: 'spiderId',
@@ -84,7 +83,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<SpiderData>
+      <ProTable<API.SpiderData>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"

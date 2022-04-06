@@ -7,7 +7,6 @@ import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import { fetchSpiderPage, addSpider, updateSpider, removeSpider, runSpider } from './service';
 import {confirmModal} from "@/components/ConfirmModel";
-import type {Spider} from "./data";
 import CreateForm from "./components/CreateForm";
 
 /**
@@ -15,7 +14,7 @@ import CreateForm from "./components/CreateForm";
  *
  * @param fields
  */
-const handleAdd = async (fields: Partial<Spider>) => {
+const handleAdd = async (fields: Partial<API.Spider>) => {
   const hide = message.loading('正在添加');
   try {
     await addSpider(fields);
@@ -34,7 +33,7 @@ const handleAdd = async (fields: Partial<Spider>) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<Spider>) => {
+const handleUpdate = async (fields: Partial<API.Spider>) => {
   const hide = message.loading('正在配置');
   try {
     await updateSpider(fields);
@@ -93,9 +92,9 @@ const TableList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
   const [updateFormValues, setUpdateFormValues] = useState({});
-  const [selectedRowsState, setSelectedRows] = useState<Spider[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.Spider[]>([]);
 
-  const columns: ProColumns<Spider>[] = [
+  const columns: ProColumns<API.Spider>[] = [
     {
       title: '爬虫ID',
       dataIndex: 'id',
@@ -165,7 +164,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<Spider>
+      <ProTable<API.Spider>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"

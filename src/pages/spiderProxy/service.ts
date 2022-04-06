@@ -1,5 +1,4 @@
 import { request } from 'umi';
-import type {Proxy} from "./data";
 
 export async function fetchProxyPage(
   params: {
@@ -26,14 +25,14 @@ export async function fetchProxyPage(
   });
 }
 
-export async function updateProxy(params: Partial<Proxy>) {
+export async function updateProxy(params: Partial<API.SpiderProxy>) {
   return request('/spiderProxy/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
-export async function addProxy(params: Proxy) {
+export async function addProxy(params: API.SpiderProxy) {
   return request('/spiderProxy/save', {
     method: 'POST',
     data: {...params}

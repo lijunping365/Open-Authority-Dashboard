@@ -1,13 +1,12 @@
 import React, {useEffect} from 'react';
 import {Divider, Form, Input, List, message, Modal, Typography} from 'antd';
-import type {ScheduleTask} from "../data";
 import CronComponent from "./CronComponent";
 import { nextTriggerTime } from '../service';
 
 interface CreateFormProps {
   modalVisible: boolean;
   onCancel: (flag?: boolean) => void;
-  onSubmit: (values: Partial<ScheduleTask>) => void;
+  onSubmit: (values: Partial<API.SpiderTask>) => void;
 }
 
 const cronTip = (

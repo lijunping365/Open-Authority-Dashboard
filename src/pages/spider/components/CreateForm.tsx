@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import {AutoComplete, Button, Col, Form, Input, Modal, Row, Select, Space} from 'antd';
-import type {Spider} from "../data";
 import {Headers, ContentTypes, Methods, Targets} from "../common"
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 
 interface CreateFormProps {
   modalVisible: boolean;
-  onSubmit: (values: Partial<Spider>) => void;
-  onCancel: (flag?: boolean, formVals?: Partial<Spider>) => void;
+  onSubmit: (values: Partial<API.Spider>) => void;
+  onCancel: (flag?: boolean, formVals?: Partial<API.Spider>) => void;
 }
 
 const formLayout = {
