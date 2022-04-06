@@ -72,7 +72,7 @@ const Login: React.FC = () => {
     try {
       // 登录
       const result = await login({ ...values, type, deviceId: getDeviceId()});
-      if (result) {
+      if (result && result.code === 200) {
         setAccessToken(result.accessToken);
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
@@ -82,6 +82,8 @@ const Login: React.FC = () => {
         await fetchUserInfo();
         goto();
         return;
+      } else{
+        message.error(result.msg);
       }
       // 如果失败去设置用户错误信息
       setUserLoginState(result);
