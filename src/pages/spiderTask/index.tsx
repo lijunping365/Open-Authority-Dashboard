@@ -86,6 +86,16 @@ const TableList: React.FC = () => {
       valueType: 'text',
     },
     {
+      title: '任务名称',
+      dataIndex: 'taskName',
+      valueType: 'text',
+    },
+    {
+      title: 'handlerName',
+      dataIndex: 'handlerName',
+      valueType: 'text',
+    },
+    {
       title: 'Cron 表达式',
       dataIndex: 'cronExpression',
       valueType: 'text',

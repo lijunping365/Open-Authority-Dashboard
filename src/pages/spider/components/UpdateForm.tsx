@@ -127,41 +127,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               </Select>
             </FormItem>
           </Col>
-          <Col span={12}>
-            <FormItem
-              name="targetType"
-              label="爬取目标"
-            >
-              <Select defaultValue={values.targetType} onChange={handleSpiderTypeSelect}>
-                {Targets.map(m => (
-                  <Option value={m}>{m}</Option>
-                ))}
-              </Select>
-            </FormItem>
-          </Col>
         </Row>
-
-        <Row>
-          <Col span={12}>
-            <FormItem
-              name="rootPath"
-              label="设根节点"
-            >
-              <Input placeholder="请输入数据根节点" />
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              name="topicName"
-              label="Topic名称"
-              rules={[{ required: true, message: '请输入Topic名称！' }]}
-            >
-              <Input placeholder="请输入Topic名称" />
-            </FormItem>
-          </Col>
-        </Row>
-
-
         <Row>
           <Col span={12}>
             <FormItem

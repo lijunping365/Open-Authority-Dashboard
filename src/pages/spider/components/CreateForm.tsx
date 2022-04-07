@@ -118,37 +118,6 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               </Select>
             </FormItem>
           </Col>
-          <Col span={12}>
-            <FormItem
-              name="targetType"
-              label="爬取目标"
-            >
-              <Select defaultValue={1} onChange={handleSelectSpider}>
-                <Option value={1}>JSON</Option>
-                <Option value={0}>PAGE</Option>
-              </Select>
-            </FormItem>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span={12}>
-            <FormItem
-              name="rootPath"
-              label="设根节点"
-            >
-              <Input placeholder="请输入数据根节点" />
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              name="topicName"
-              label="Topic名称"
-              rules={[{ required: true, message: '请输入Topic名称！' }]}
-            >
-              <Input placeholder="请输入Topic名称" />
-            </FormItem>
-          </Col>
         </Row>
 
         <Row>

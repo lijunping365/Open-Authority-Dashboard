@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Col, Form, Input, Modal, Row} from 'antd';
+import {Button, Col, Form, Input, Modal, Row, Select} from 'antd';
 import CronModal from './CronModal';
 
 interface CreateFormProps {
@@ -9,7 +9,7 @@ interface CreateFormProps {
 }
 
 const FormItem = Form.Item;
-const { TextArea } = Input;
+const { Option } = Select;
 
 const formLayout = {
   labelCol: { span: 7 },
@@ -19,7 +19,8 @@ const formLayout = {
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   /** 新建窗口的弹窗 */
   const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
-  const [cronExpressValue, setCronExpressValue] = useState("")
+  const [cronExpressValue, setCronExpressValue] = useState("");
+  const [data, setData] = useState([])
   const [form] = Form.useForm();
 
   const {
@@ -33,6 +34,20 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     handleCreate({
       ...fieldsValue,
     });
+  };
+
+  const handleSearch = (value: any) => {
+    console.log(value);
+    // if (searchValue) {
+    //   fetch(value, data => this.setState({ data }));
+    // } else {
+    //   this.setState({ data: [] });
+    // }
+  };
+
+  const handleChange = (value: any) => {
+    console.log(value);
+    // this.setState({ value });
   };
 
   return (
@@ -51,7 +66,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         <Row>
           <Col span={12}>
             <FormItem
-              name="name"
+              name="taskName"
               label="任务名称"
               rules={[{ required: true, message: '请输入任务名称！' }]}
             >
@@ -60,11 +75,42 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           </Col>
           <Col span={12}>
             <FormItem
+              name="handlerName"
+              label="handlerName"
+              rules={[{ required: true, message: '请输入handlerName！' }]}
+            >
+              <Input placeholder="请输入handlerName" />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="spiderId"
+              label="选择爬虫"
+            >
+              <Select
+                showSearch
+                value={'测试'}
+                placeholder={'请输入爬虫名称'}
+                defaultActiveFirstOption={false}
+                showArrow={false}
+                filterOption={false}
+                onSearch={handleSearch}
+                onChange={handleChange}
+                notFoundContent={null}
+              >
+                {/* {options} */}
+            </Select>
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
               name="cronExpression"
               label="Cron 表达式"
               rules={[{ required: true, message: '请输入Cron 表达式！' }]}>
               <Input.Group compact>
-                <Input placeholder="请输入Cron 表达式" style={{ width: 'calc(100% - 50%)' }} value={cronExpressValue}/>
+                <Input placeholder="请输入Cron 表达式" style={{ width: 'calc(100% - 50%)' }} defaultValue={cronExpressValue}/>
                 <Button
                   type="primary"
                   onClick={() => {
@@ -74,17 +120,6 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                   Cron 工具
                 </Button>
               </Input.Group>
-            </FormItem>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span={12}>
-            <FormItem
-              name="spiderId"
-              label="选择爬虫"
-            >
-              <TextArea rows={4}  placeholder="请输入任务参数（json 格式）" />
             </FormItem>
           </Col>
         </Row>

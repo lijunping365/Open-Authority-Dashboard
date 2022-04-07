@@ -58,7 +58,9 @@ declare namespace API {
 
   type SpiderTask = {
     id: number;
-    spiderId: string;
+    spiderId: number;
+    taskName: string;
+    handlerName: string;
     cronExpression: string;
     status: number;
     createTime: Date;

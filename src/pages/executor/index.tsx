@@ -104,13 +104,19 @@ const TableList: React.FC = () => {
           <a
             onClick={async () => {
               if (record.status === 'OFF_LINE') {
-                await handlerChange(record.clientId)
-                actionRef.current?.reloadAndRest?.();
+                await handlerChange(record.clientId);
+                let t = setTimeout(()=>{
+                  clearTimeout(t);
+                  actionRef.current?.reloadAndRest?.();
+                },1000);
               } else {
                 const confirm = await confirmModal("确定要下线吗？");
                 if (confirm){
                   await handlerOffline(record.clientId);
-                  actionRef.current?.reloadAndRest?.();
+                  let t = setTimeout(()=>{
+                    clearTimeout(t);
+                    actionRef.current?.reloadAndRest?.();
+                  },1000);
                 }
               }
             }}
