@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import {Card, Col, Row, Statistic} from "antd";
-import {ArrowUpOutlined} from "@ant-design/icons";
 import { Chart, Axis, Geom, Legend, Tooltip } from 'bizcharts';
+import { fetchSpiderNumber } from '@/services/open-crawler/dashboard';
 
 
 
 const TableList: React.FC = () => {
+  const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
 
   // 数据源
   const data = [
@@ -20,42 +21,63 @@ const TableList: React.FC = () => {
   // 定义度量
   const cols = {  sold: { alias: '销售量' },  genre: { alias: '游戏种类' }};
 
+  const onFetchStatisticData = useCallback(async () => {
+    const result = await fetchSpiderNumber();
+    setStatisticNumber(result)
+  }, []);
+
+  useEffect(()=>{
+    onFetchStatisticData().then();
+  },[]);
+
   return (
     <PageContainer>
       <Row gutter={16} style={{marginTop:'20px'}}>
         <Col span={6}>
           <Card>
-            <Statistic title="任务数量" value={112893} />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="调度次数"
-              value={20}
-              valueStyle={{ color: '#3f8600' }}
-              prefix={<ArrowUpOutlined />}
+            <Statistic 
+              title="采集模板数量" 
+              value={statisticNumber?.spiderTotalNum} 
             />
           </Card>
         </Col>
         <Col span={6}>
           <Card>
             <Statistic
-              title="今日新增人数"
-              value={20}
-              valueStyle={{ color: '#3f8600' }}
-              prefix={<ArrowUpOutlined />}
+              title="采集次数"
+              value={statisticNumber?.spiderExeSucceedNum}
+              suffix={'/ ' + statisticNumber?.spiderExeTotalNum}
             />
           </Card>
         </Col>
         <Col span={6}>
           <Card>
             <Statistic
-              title="今日新增人数"
-              value={20}
-              valueStyle={{ color: '#3f8600' }}
-              prefix={<ArrowUpOutlined />}
+              title="采集任务数量"
+              value={statisticNumber?.taskRunningNum}
+              suffix={'/ ' + statisticNumber?.taskTotalNum}
             />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="任务执行次数"
+              value={statisticNumber?.scheduleSucceedNum}
+              suffix={'/ ' + statisticNumber?.scheduleTotalNum}
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={16} style={{marginTop:'20px'}}>
+        <Col span={6}>
+          <Card>
+            <Statistic 
+              title="执行器数量" 
+              value={statisticNumber?.executorOnlineNum} 
+              suffix={'/ ' + statisticNumber?.executorTotalNum}
+              />
           </Card>
         </Col>
       </Row>

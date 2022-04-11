@@ -9,6 +9,18 @@ declare namespace API {
     phone: string;
     createTime: Date
   };
+  
+  type StatisticNumber = {
+    taskTotalNum: number;
+    taskRunningNum: number;
+    scheduleTotalNum: number;
+    scheduleSucceedNum: number;
+    spiderTotalNum: number;
+    spiderExeTotalNum: number;
+    spiderExeSucceedNum: number;
+    executorTotalNum: number;
+    executorOnlineNum: number;
+  }
 
   type Instance = {
     clientId: string;
