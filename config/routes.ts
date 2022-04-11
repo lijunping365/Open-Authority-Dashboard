@@ -29,12 +29,14 @@
     icon: 'smile',
     path: 'spiderData',
     component: './spiderData',
+    hideInMenu: true,
   },
   {
     name: 'spiderLog',
     icon: 'smile',
     path: 'spiderLog',
     component: './spiderLog',
+    hideInMenu: true,
   },
   {
     name: 'spiderProxy',
@@ -53,6 +55,7 @@
     icon: 'smile',
     path: 'taskLog',
     component: './taskLog',
+    hideInMenu: true,
   },
   {
     name: 'executor',

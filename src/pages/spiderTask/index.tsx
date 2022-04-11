@@ -5,9 +5,10 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeScheduleTask, startScheduleTask, stopScheduleTask } from '@/services/open-crawler/spidertask';
+import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeScheduleTask, startScheduleTask, stopScheduleTask, runTask } from '@/services/open-crawler/spidertask';
 import {confirmModal} from "@/components/ConfirmModel";
 import CreateForm from "./components/CreateForm";
+import { Link } from 'umi';
 
 /**
  * 添加节点
@@ -44,6 +45,22 @@ const handleUpdate = async (fields: Partial<API.SpiderTask>) => {
   } catch (error) {
     hide();
     message.error('配置失败请重试！');
+    return false;
+  }
+};
+
+/**
+ * 运行爬虫
+ *
+ * @param spiderId
+ */
+ const handleRun = async (taskId: number) => {
+  try {
+    await runTask(taskId);
+    message.success('运行成功');
+    return true;
+  } catch (error) {
+    message.error('运行失败，请重试');
     return false;
   }
 };
@@ -131,6 +148,14 @@ const TableList: React.FC = () => {
       render: (_, record) => (
         <>
           <a
+              onClick={() => {
+                handleRun(record.id).then();
+              }}
+            >
+            运行
+          </a>
+          <Divider type="vertical" />
+          <a
             onClick={() => {
               if (record.status === 0) {
                 startScheduleTask(record.id).then();
@@ -165,6 +190,17 @@ const TableList: React.FC = () => {
           >
             删除
           </a>
+          <Divider type="vertical" />
+          <Link
+            to={{
+              pathname: '/taskLog',
+              search: `?id=${record.id}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
+            }}
+          >
+            查看日志
+          </Link>
         </>
       ),
     },

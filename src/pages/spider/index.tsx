@@ -5,9 +5,10 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import { fetchSpiderPage, addSpider, updateSpider, removeSpider, runSpider } from '@/services/open-crawler/spider';
+import { fetchSpiderPage, addSpider, updateSpider, removeSpider } from '@/services/open-crawler/spider';
 import {confirmModal} from "@/components/ConfirmModel";
 import CreateForm from "./components/CreateForm";
+import { Link } from 'umi';
 
 /**
  * 添加节点
@@ -68,22 +69,6 @@ const handleRemove = async (selectedRows: any[]) => {
   }
 };
 
-/**
- * 运行爬虫
- *
- * @param spiderId
- */
-const handleRun = async (spiderId: number) => {
-  try {
-    await runSpider(spiderId);
-    message.success('运行成功');
-    return true;
-  } catch (error) {
-    message.error('运行失败，请重试');
-    return false;
-  }
-};
-
 const TableList: React.FC = () => {
   /** 新建窗口的弹窗 */
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -129,13 +114,27 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <a
-            onClick={() => {
-              handleRun(record.id).then();
+          <Link
+            to={{
+              pathname: '/spiderData',
+              search: `?id=${record.id}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
             }}
           >
-            运行
-          </a>
+            查看数据
+          </Link>
+          <Divider type="vertical" />
+          <Link
+            to={{
+              pathname: '/spiderLog',
+              search: `?id=${record.id}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
+            }}
+          >
+            查看日志
+          </Link>
           <Divider type="vertical" />
           <a
             onClick={() => {

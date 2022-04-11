@@ -43,6 +43,12 @@ export async function removeScheduleTask(params: {ids: number[]}) {
   });
 }
 
+export async function runTask(id: number) {
+  return request(`/task/run/${id}`, {
+    method: 'PUT',
+  });
+}
+
 export async function startScheduleTask(id: number) {
   return request(`/task/start/${id}`, {
     method: 'PUT',
