@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Col, Form, Input, Modal, Row, Select} from 'antd';
 import CronModal from './CronModal';
+import { querySpiderList } from '@/services/open-crawler/spider';
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -19,8 +20,9 @@ const formLayout = {
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   /** 新建窗口的弹窗 */
   const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
-  const [cronExpressValue, setCronExpressValue] = useState("");
-  const [data, setData] = useState([])
+  const [cronExpressValue, setCronExpressValue] = useState<string>();
+  const [spiderList, setSpiderList] = useState<API.Spider[]>([]);
+  const [spiderId, setSpiderId] = useState<number>();
   const [form] = Form.useForm();
 
   const {
@@ -36,19 +38,18 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     });
   };
 
-  const handleSearch = (value: any) => {
-    console.log(value);
-    // if (searchValue) {
-    //   fetch(value, data => this.setState({ data }));
-    // } else {
-    //   this.setState({ data: [] });
-    // }
+  const handleChange = (value: any) => {
+    setSpiderId(value);
   };
 
-  const handleChange = (value: any) => {
-    console.log(value);
-    // this.setState({ value });
-  };
+  const onFetchSpiderData = useCallback(async () => {
+    const result = await querySpiderList();
+    setSpiderList(result);
+  }, []);
+
+  useEffect(()=>{
+    onFetchSpiderData().then();
+  },[]);
 
   return (
     <Modal
@@ -62,6 +63,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       <Form
         {...formLayout}
         form={form}
+        initialValues={{spiderId}}
       >
         <Row>
           <Col span={12}>
@@ -90,17 +92,14 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               label="选择爬虫"
             >
               <Select
-                showSearch
-                value={'测试'}
-                placeholder={'请输入爬虫名称'}
-                defaultActiveFirstOption={false}
-                showArrow={false}
-                filterOption={false}
-                onSearch={handleSearch}
+                value={spiderId}
+                placeholder="请选项爬虫模板"
+                defaultActiveFirstOption={true}
                 onChange={handleChange}
-                notFoundContent={null}
               >
-                {/* {options} */}
+                {spiderList.map(d => (
+                  <Option key={d.id} value={d.id}>{d.name}</Option>
+                ))}
             </Select>
             </FormItem>
           </Col>
@@ -110,7 +109,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               label="Cron 表达式"
               rules={[{ required: true, message: '请输入Cron 表达式！' }]}>
               <Input.Group compact>
-                <Input placeholder="请输入Cron 表达式" style={{ width: 'calc(100% - 50%)' }} defaultValue={cronExpressValue}/>
+                <Input placeholder="请输入Cron 表达式" style={{ width: 'calc(100% - 50%)' }} value={cronExpressValue}/>
                 <Button
                   type="primary"
                   onClick={() => {

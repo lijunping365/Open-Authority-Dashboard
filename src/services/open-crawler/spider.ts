@@ -37,3 +37,9 @@ export async function removeSpider(params: {ids: number[]}) {
     data: {...params}
   });
 }
+
+export async function querySpiderList() {
+  return request(`/spider/list`, {
+    method: 'GET',
+  });
+}

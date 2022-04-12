@@ -42,9 +42,6 @@ declare namespace API {
     method: string;
     params: string;
     headers: string;
-    rootPath: string;
-    targetType: string;
-    topicName: string;
     createTime: Date;
     createUser: number;
   };
@@ -83,7 +80,7 @@ declare namespace API {
     status: number;
     createTime: Date;
     createUser: number;
-  }
+  };
 
   type TaskLog = {
     id: number;
