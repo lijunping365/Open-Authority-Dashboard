@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Col, Form, Input, Modal, Row, Select} from 'antd';
 import CronModal from './CronModal';
 import { querySpiderList } from '@/services/open-crawler/spider';
+import styles from './../index.less';
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -31,7 +32,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     onCancel: handleCreateModalVisible,
   } = props;
 
-  const handleNext = async () => {
+  const handleFinish = async () => {
     const fieldsValue: any = await form.validateFields();
     handleCreate({
       ...fieldsValue,
@@ -51,6 +52,18 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     onFetchSpiderData().then();
   },[]);
 
+  const buttonAfter = (
+    <Button
+      type="primary"
+      style={{ width: 80 }}
+      onClick={() => {
+        handleCronModalVisible(true);
+      }}
+    >
+      Cron 工具
+    </Button>
+  );
+
   return (
     <Modal
       destroyOnClose
@@ -58,7 +71,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       width={900}
       visible={modalVisible}
       onCancel={() => handleCreateModalVisible(false)}
-      onOk={() => handleNext()}
+      onOk={() => handleFinish()}
     >
       <Form
         {...formLayout}
@@ -105,20 +118,12 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           </Col>
           <Col span={12}>
             <FormItem
+              className={styles.cronButton}
               name="cronExpression"
               label="Cron 表达式"
-              rules={[{ required: true, message: '请输入Cron 表达式！' }]}>
-              <Input.Group compact>
-                <Input placeholder="请输入Cron 表达式" style={{ width: 'calc(100% - 50%)' }} value={cronExpressValue}/>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    handleCronModalVisible(true);
-                  }}
-                >
-                  Cron 工具
-                </Button>
-              </Input.Group>
+              rules={[{ required: true, message: '请输入Cron 表达式！' }]}
+            >
+              <Input placeholder="请输入Cron 表达式" value={cronExpressValue} addonAfter={buttonAfter}/>
             </FormItem>
           </Col>
         </Row>
