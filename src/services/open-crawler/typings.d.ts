@@ -22,6 +22,12 @@ declare namespace API {
     executorOnlineNum: number;
   }
 
+  type StatisticReport = {
+    date: Date;
+    name: string;
+    value: number;
+  }
+
   type Instance = {
     clientId: string;
     onlineTime: Date;

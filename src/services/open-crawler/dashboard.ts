@@ -5,3 +5,10 @@ export async function fetchSpiderNumber() {
     method: 'GET',
   });
 }
+
+export async function fetchSpiderReport() {
+  return request('/statistic/report', {
+    method: 'GET',
+  });
+}
+

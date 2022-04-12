@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import {Card, Col, Row, Statistic} from "antd";
-import { Chart, Axis, Geom, Legend, Tooltip } from 'bizcharts';
-import { fetchSpiderNumber } from '@/services/open-crawler/dashboard';
+import { Chart, Axis, Geom, Legend, Tooltip, LineAdvance } from 'bizcharts';
+import { fetchSpiderNumber, fetchSpiderReport } from '@/services/open-crawler/dashboard';
 
 
 
 const TableList: React.FC = () => {
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
+  const [statisticReport, setStatisticReport] = useState<API.StatisticReport[]>([]);
 
   // 数据源
   const data = [
@@ -23,7 +24,9 @@ const TableList: React.FC = () => {
 
   const onFetchStatisticData = useCallback(async () => {
     const result = await fetchSpiderNumber();
-    setStatisticNumber(result)
+    setStatisticNumber(result);
+    const report = await fetchSpiderReport();
+    setStatisticReport(report);
   }, []);
 
   useEffect(()=>{
@@ -87,12 +90,14 @@ const TableList: React.FC = () => {
         <Row gutter={16} style={{marginTop:'20px'}}>
           <Col span={12}>
             <Card>
-              <Chart width={600} height={400} data={data} scale={cols}>
-                <Axis name="genre" />
-                <Axis name="sold" />
-                <Legend position="top" dy={-20} />
-                <Tooltip />
-                <Geom type="interval" position="genre*sold" color="genre" />
+              <Chart padding={[10, 20, 50, 40]} autoFit height={400} data={statisticReport} >
+                <LineAdvance
+                  shape="smooth"
+                  point
+                  area
+                  position="date*value"
+                  color="name"
+                />
               </Chart>
             </Card>
           </Col>
