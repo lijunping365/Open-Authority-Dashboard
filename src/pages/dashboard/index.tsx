@@ -7,6 +7,7 @@ import { fetchSpiderNumber, fetchSpiderReport } from '@/services/open-crawler/da
 
 
 const TableList: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(true);
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
   const [statisticReport, setStatisticReport] = useState<API.StatisticReport[]>([]);
 
@@ -30,11 +31,11 @@ const TableList: React.FC = () => {
   }, []);
 
   useEffect(()=>{
-    onFetchStatisticData().then();
+    onFetchStatisticData().then(()=>setLoading(false));
   },[]);
 
   return (
-    <PageContainer>
+    <PageContainer loading={loading}>
       <Row gutter={16} style={{marginTop:'20px'}}>
         <Col span={6}>
           <Card>
