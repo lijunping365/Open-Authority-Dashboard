@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Button, Col, Form, Input, Modal, Row, Select} from 'antd';
+import {Button, Col, Form, Input, message, Modal, Row, Select} from 'antd';
 import CronModal from './CronModal';
 import { querySpiderList } from '@/services/open-crawler/spider';
+import { validateCronExpress } from '@/services/open-crawler/spidertask';
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -33,8 +34,19 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   const handleFinish = async () => {
     const fieldsValue: any = await form.validateFields();
+    if(!cronExpressValue || cronExpressValue.length === 0){
+      message.error("cron 表达式不能为空");
+      return;
+    }
+    const result = await validateCronExpress(cronExpressValue);
+    if(!result || result !== 'success'){
+      message.error("cron 校验失败，请重新输入");
+      return;
+    }
+    
     handleCreate({
       ...fieldsValue,
+      cronExpression: cronExpressValue
     });
   };
 
@@ -107,7 +119,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             <FormItem
               name="cronExpression"
               label="Cron 表达式"
-              rules={[{ required: true, message: '请输入Cron 表达式！' }]}>
+            >
               <Input.Group compact style={{display: 'flex'}}>
                 <Input placeholder="请输入Cron 表达式"  value={cronExpressValue} onChange={(e)=>setCronExpressValue(e.target.value)}/>
                 <Button

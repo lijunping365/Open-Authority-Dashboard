@@ -69,3 +69,12 @@ export async function nextTriggerTime(cronExpress: string) {
     },
   });
 }
+
+export async function validateCronExpress(cronExpress: string) {
+  return request(`/task/validateCron`, {
+    method: 'GET',
+    params: {
+      cronExpress,
+    },
+  });
+}
