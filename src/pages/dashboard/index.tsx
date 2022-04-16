@@ -4,8 +4,6 @@ import {Card, Col, Row, Statistic} from "antd";
 import { Chart, Axis, Geom, Legend, Tooltip, LineAdvance } from 'bizcharts';
 import { fetchSpiderNumber, fetchSpiderReport } from '@/services/open-crawler/dashboard';
 
-
-
 const TableList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
@@ -39,9 +37,9 @@ const TableList: React.FC = () => {
       <Row gutter={16} style={{marginTop:'20px'}}>
         <Col span={6}>
           <Card>
-            <Statistic 
-              title="采集模板数量" 
-              value={statisticNumber?.spiderTotalNum} 
+            <Statistic
+              title="采集模板数量"
+              value={statisticNumber?.spiderTotalNum}
             />
           </Card>
         </Col>
@@ -50,7 +48,7 @@ const TableList: React.FC = () => {
             <Statistic
               title="采集次数"
               value={statisticNumber?.spiderExeSucceedNum}
-              suffix={'/ ' + statisticNumber?.spiderExeTotalNum}
+              suffix={`/ ${  statisticNumber?.spiderExeTotalNum}`}
             />
           </Card>
         </Col>
@@ -59,7 +57,7 @@ const TableList: React.FC = () => {
             <Statistic
               title="采集任务数量"
               value={statisticNumber?.taskRunningNum}
-              suffix={'/ ' + statisticNumber?.taskTotalNum}
+              suffix={`/ ${  statisticNumber?.taskTotalNum}`}
             />
           </Card>
         </Col>
@@ -68,7 +66,7 @@ const TableList: React.FC = () => {
             <Statistic
               title="任务执行次数"
               value={statisticNumber?.scheduleSucceedNum}
-              suffix={'/ ' + statisticNumber?.scheduleTotalNum}
+              suffix={`/ ${  statisticNumber?.scheduleTotalNum}`}
             />
           </Card>
         </Col>
@@ -77,17 +75,16 @@ const TableList: React.FC = () => {
       <Row gutter={16} style={{marginTop:'20px'}}>
         <Col span={6}>
           <Card>
-            <Statistic 
-              title="执行器数量" 
-              value={statisticNumber?.executorOnlineNum} 
-              suffix={'/ ' + statisticNumber?.executorTotalNum}
+            <Statistic
+              title="执行器数量"
+              value={statisticNumber?.executorOnlineNum}
+              suffix={`/ ${  statisticNumber?.executorTotalNum}`}
               />
           </Card>
         </Col>
       </Row>
 
       <Card style={{marginTop: '20px'}}>
-
         <Row gutter={16} style={{marginTop:'20px'}}>
           <Col span={12}>
             <Card>
@@ -114,9 +111,6 @@ const TableList: React.FC = () => {
             </Card>
           </Col>
         </Row>
-
-
-
       </Card>
 
     </PageContainer>
