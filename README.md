@@ -1,8 +1,31 @@
-# Ant Design Pro
+# Open-Crawler-Admin
 
-This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
+<p align="center">
+2022 最新的企业级分布式爬虫后台管理系统
+</p>
+
+<p align="center">
+  <a href="https://search.maven.org/search?q=g:com.saucesubfresh%20a:open-starter-*">
+    <img alt="maven" src="https://img.shields.io/github/v/release/lijunping365/Open-Crawler-Admin?include_prereleases&logo=Open-Crawler-Admin&style=plastic">
+  </a>
+
+  <a href="https://www.apache.org/licenses/LICENSE-2.0">
+    <img alt="licenses" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
+  </a>
+
+  <a href="https://github.com/lijunping365/Open-Crawler-Admin">
+    <img alt="github" src="https://badgen.net/github/stars/lijunping365/Open-Crawler-Admin?icon=github" >
+  </a>
+
+  <a href="https://github.com/lijunping365/Open-Crawler-Admin">
+      <img alt="forks" src="https://badgen.net/github/forks/lijunping365/Open-Crawler-Admin?icon=github&color=4ab8a1" >
+    </a>
+</p>
+
 
 ## Environment Prepare
+
+Follow is the quick guide for how to use.
 
 Install `node_modules`:
 
