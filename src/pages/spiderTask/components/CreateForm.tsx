@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Col, Form, Input, message, Modal, Row, Select} from 'antd';
-import CronModal from './CronModal';
+import CronModal from '../../../components/CronModel';
 import { querySpiderList } from '@/services/open-crawler/spider';
 import { validateCronExpress } from '@/services/open-crawler/spidertask';
 
@@ -43,7 +43,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       message.error("cron 校验失败，请重新输入");
       return;
     }
-    
+
     handleCreate({
       ...fieldsValue,
       cronExpression: cronExpressValue
@@ -63,12 +63,24 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     onFetchSpiderData().then();
   },[]);
 
+  const renderFooter = () => {
+    return (
+      <>
+        <Button onClick={() => handleCreateModalVisible(false)}>取消</Button>
+        <Button type="primary" onClick={() => handleFinish()}>
+          保存
+        </Button>
+      </>
+    );
+  };
+
   return (
     <Modal
       destroyOnClose
       title="新建任务"
       width={900}
       visible={modalVisible}
+      footer={renderFooter()}
       onCancel={() => handleCreateModalVisible(false)}
       onOk={() => handleFinish()}
     >
