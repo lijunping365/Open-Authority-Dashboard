@@ -42,6 +42,7 @@ declare namespace API {
     method: string;
     params: string;
     headers: string;
+    extractRule: string;
     createTime: Date;
     createUser: number;
   };

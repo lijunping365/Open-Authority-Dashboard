@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {AutoComplete, Button, Col, Form, Input, Modal, Row, Select, Space} from 'antd';
+import {AutoComplete, Button, Checkbox, Col, Form, Input, Modal, Row, Select, Space} from 'antd';
 import {Headers, ContentTypes, Methods, Targets} from "../common"
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 
@@ -39,14 +39,18 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       targetType,
       method
     }
-
+  
     const {params} = fieldsValue;
     const {headers} = fieldsValue;
+    const {extractRule} = fieldsValue;
     if(params && params.length !== 0){
       formData.params = JSON.stringify(params);
     }
     if(headers && headers.length !== 0){
       formData.headers = JSON.stringify(headers);
+    }
+    if(extractRule && extractRule.length !== 0){
+      formData.extractRule = JSON.stringify(extractRule);
     }
 
     console.log(formData);
@@ -60,6 +64,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   const handleSelectSpider = (op: number) => {
     setTargetType(Targets[op]);
   };
+
+  const handleChange = (value: any) =>{
+
+  }
 
   const renderFooter = () => {
     return (
@@ -115,6 +123,18 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               <Select defaultValue={0} onChange={handleSelectMethod}>
                 <Option value={0}>GET</Option>
                 <Option value={1}>POST</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="parseType"
+              label="解析方式"
+              rules={[{ required: true, message: '请输入爬虫url！' }]}
+            >
+              <Select defaultValue="Page" onChange={handleChange}>
+                <Option value="Page">Page</Option>
+                <Option value="Json">Json</Option>
               </Select>
             </FormItem>
           </Col>
@@ -209,6 +229,61 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             </FormItem>
           </Col>
         </Row>
+
+        <Row>
+          <Col span={12}>
+          <FormItem
+              name="extractRule"
+              label="抽取规则"
+            >
+              <Form.List name="extractRule">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name }) => (
+                      <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'expressionType']}
+                        >
+                          <Select defaultValue="XPath" style={{ width: 120 }} onChange={handleChange}>
+                            <Option value="XPath">XPath</Option>
+                            <Option value="Css">Css</Option>
+                            <Option value="Json">Json</Option>
+                            <Option value="Regex">Regex</Option>
+                        </Select>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'expressionValue']}
+                        >
+                          <Input placeholder='请输入规则' style={{ width: 240 }}/>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'fieldName']}
+                        >
+                          <Input placeholder='请输入属性名称' style={{ width: 120 }}/>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'multi']}
+                        >
+                          <Checkbox onChange={handleChange} style={{ width: 60 }}>循环</Checkbox>
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        添加一行
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </FormItem>            
+          </Col>
+        </Row> 
 
       </Form>
     </Modal>

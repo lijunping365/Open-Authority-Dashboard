@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Form, Button, Input, Modal, Select, Col, Row, Space, AutoComplete} from 'antd';
+import {Form, Button, Input, Modal, Select, Col, Row, Space, AutoComplete, Checkbox} from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {Headers, ContentTypes, Methods, Targets} from "../common"
 
@@ -39,13 +39,15 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     const fieldsValue: any = await form.validateFields();
     const {headers} = fieldsValue;
     const {params} = fieldsValue;
+    const {extractRule} = fieldsValue;
     handleSubmit({
       ...values,
       ...fieldsValue,
       method,
       targetType,
       headers: headers ? JSON.stringify(headers): "",
-      params: params ? JSON.stringify(params): ""
+      params: params ? JSON.stringify(params): "",
+      extractRule: extractRule ? JSON.stringify(extractRule): "",
     });
   };
 
@@ -57,6 +59,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     setMethod(op);
   };
 
+  const handleChange = (value: any) =>{
+
+  }
+  
   const renderFooter = () => {
     return (
       <>
@@ -87,9 +93,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           method: values.method,
           params: values.params ? JSON.parse(values.params) : [],
           headers: values.headers ? JSON.parse(values.headers) : [],
-          rootPath: values.rootPath,
-          targetType: values.targetType,
-          topicName: values.topicName
+          extractRule: values.extractRule ? JSON.parse(values.extractRule) : []
         }}
       >
         <Row>
@@ -217,6 +221,61 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             </FormItem>
           </Col>
         </Row>
+
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="extractRule"
+              label="抽取规则"
+            >
+              <Form.List name="extractRule">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name }) => (
+                      <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'expressionType']}
+                        >
+                          <Select defaultValue="XPath" style={{ width: 120 }} onChange={handleChange}>
+                            <Option value="XPath">XPath</Option>
+                            <Option value="Css">Css</Option>
+                            <Option value="Json">Json</Option>
+                            <Option value="Regex">Regex</Option>
+                        </Select>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'expressionValue']}
+                        >
+                          <Input placeholder='请输入规则' style={{ width: 240 }}/>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'fieldName']}
+                        >
+                          <Input placeholder='请输入属性名称' style={{ width: 120 }}/>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
+                          name={[name, 'multi']}
+                        >
+                          <Checkbox onChange={handleChange} style={{ width: 60 }}>循环</Checkbox>
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        添加一行
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </FormItem>            
+          </Col>
+        </Row> 
         
       </Form>
     </Modal>
