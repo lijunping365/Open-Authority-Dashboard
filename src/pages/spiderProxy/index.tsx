@@ -108,6 +108,16 @@ const TableList: React.FC = () => {
       },
     },
     {
+      title: '用户名',
+      dataIndex: 'username',
+      valueType: 'text',
+    },
+    {
+      title: '密码',
+      dataIndex: 'password',
+      valueType: 'text',
+    },
+    {
       title: '创建时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
