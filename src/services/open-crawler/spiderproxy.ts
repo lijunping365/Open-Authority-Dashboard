@@ -10,14 +10,14 @@ export async function fetchProxyPage(
     /** 分组名称 */
     groupId?: any
     /** 分组名称 */
-    ip?: string
-    /** 分组名称 */
-    type?: number
+    host?: string
+    /** 1:http | 2:https */
+    scheme?: number
     /** 分组名称 */
     status?: number
   }
 ) {
-  return request('/spiderProxy/page', {
+  return request('/proxy/page', {
     method: 'GET',
     params: {
       ...params,
@@ -26,21 +26,21 @@ export async function fetchProxyPage(
 }
 
 export async function updateProxy(params: Partial<API.SpiderProxy>) {
-  return request('/spiderProxy/update', {
+  return request('/proxy/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
 export async function addProxy(params: API.SpiderProxy) {
-  return request('/spiderProxy/save', {
+  return request('/proxy/save', {
     method: 'POST',
     data: {...params}
   });
 }
 
 export async function removeProxy(params: {ids: number[]}) {
-  return request('/spiderProxy/delete', {
+  return request('/proxy/delete', {
     method: 'DELETE',
     data: {...params}
   });
