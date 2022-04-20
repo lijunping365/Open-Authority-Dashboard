@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Form, Button, Input, Modal, Select, Col, Row, Space, AutoComplete, Checkbox} from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import {Headers, ContentTypes, Methods, Targets} from "../common"
+import {Headers, ContentTypes, Methods, ExpressType} from "../common"
 
 export interface UpdateFormProps {
   onCancel: (flag?: boolean, formVals?: Partial<API.Spider>) => void;
@@ -25,8 +25,8 @@ const formItemLayout = {
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const [form] = Form.useForm();
   const [method, setMethod] = useState(Methods[0]);
-  const [targetType, setTargetType] = useState(Targets[0]);
-
+  const [expressType, setExpressType] = useState(ExpressType[0]);
+  const [checkboxValue, setCheckboxValue] = useState();
 
   const {
     onSubmit: handleSubmit,
@@ -44,25 +44,25 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       ...values,
       ...fieldsValue,
       method,
-      targetType,
+      expressType,
       headers: headers ? JSON.stringify(headers): "",
       params: params ? JSON.stringify(params): "",
       extractRule: extractRule ? JSON.stringify(extractRule): "",
     });
   };
 
-  const handleSpiderTypeSelect = (op: string) => {
-    setTargetType(op);
-  };
-
   const handleMethodSelect = (op: string) => {
     setMethod(op);
   };
 
-  const handleChange = (value: any) =>{
-
+  const handleSelectExpress = (op: number) =>{
+    setExpressType(ExpressType[op]);
   }
-  
+
+  const onCheckboxChange = (checkedValues: any) => {
+    setCheckboxValue(checkedValues);
+  };
+
   const renderFooter = () => {
     return (
       <>
@@ -93,7 +93,9 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           method: values.method,
           params: values.params ? JSON.parse(values.params) : [],
           headers: values.headers ? JSON.parse(values.headers) : [],
-          extractRule: values.extractRule ? JSON.parse(values.extractRule) : []
+          extractRule: values.extractRule ? JSON.parse(values.extractRule) : [],
+          retryTimes: values.retryTimes,
+          sleepTime: values.sleepTime
         }}
       >
         <Row>
@@ -131,7 +133,27 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               </Select>
             </FormItem>
           </Col>
+          <Col span={12}>
+            <FormItem
+              name="retryTimes"
+              label="重试次数"
+            >
+              <Input placeholder="请输入重试次数" />
+            </FormItem>
+          </Col>
         </Row>
+
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="sleepTime"
+              label="间隔时间"
+            >
+              <Input placeholder="请输入间隔时间" />
+            </FormItem>
+          </Col>
+        </Row>
+
         <Row>
           <Col span={12}>
             <FormItem
@@ -237,7 +259,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                           {...formItemLayout}
                           name={[name, 'expressionType']}
                         >
-                          <Select defaultValue="XPath" style={{ width: 120 }} onChange={handleChange}>
+                          <Select defaultValue={values.extractRule.expressType} style={{ width: 120 }} onChange={handleSelectExpress}>
                             <Option value="XPath">XPath</Option>
                             <Option value="Css">Css</Option>
                             <Option value="Json">Json</Option>
@@ -260,7 +282,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                           {...formItemLayout}
                           name={[name, 'multi']}
                         >
-                          <Checkbox onChange={handleChange} style={{ width: 60 }}>循环</Checkbox>
+                          <Checkbox onChange={onCheckboxChange} value={checkboxValue} style={{ width: 60 }}>循环</Checkbox>
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
@@ -273,10 +295,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                   </>
                 )}
               </Form.List>
-            </FormItem>            
+            </FormItem>
           </Col>
-        </Row> 
-        
+        </Row>
+
       </Form>
     </Modal>
   );

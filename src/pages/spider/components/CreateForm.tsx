@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {AutoComplete, Button, Checkbox, Col, Form, Input, Modal, Row, Select, Space} from 'antd';
-import {Headers, ContentTypes, Methods, Targets} from "../common"
+import {Headers, ContentTypes, Methods, ExpressType} from "../common"
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 
 interface CreateFormProps {
@@ -24,8 +24,9 @@ const { Option } = Select;
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [form] = Form.useForm();
-  const [targetType, setTargetType] = useState(Targets[0]);
   const [method, setMethod] = useState(Methods[0]);
+  const [expressType, setExpressType] = useState(ExpressType[0]);
+  const [checkboxValue, setCheckboxValue] = useState();
   const {
     modalVisible,
     onSubmit: handleCreate,
@@ -36,10 +37,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     const fieldsValue: any = await form.validateFields();
     const formData = {
       ...fieldsValue,
-      targetType,
-      method
+      method,
+      expressType
     }
-  
+
     const {params} = fieldsValue;
     const {headers} = fieldsValue;
     const {extractRule} = fieldsValue;
@@ -61,13 +62,13 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     setMethod(Methods[op]);
   };
 
-  const handleSelectSpider = (op: number) => {
-    setTargetType(Targets[op]);
-  };
-
-  const handleChange = (value: any) =>{
-
+  const handleSelectExpress = (op: number) =>{
+    setExpressType(ExpressType[op]);
   }
+
+  const onCheckboxChange = (checkedValues: any) => {
+    setCheckboxValue(checkedValues);
+  };
 
   const renderFooter = () => {
     return (
@@ -128,14 +129,21 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           </Col>
           <Col span={12}>
             <FormItem
-              name="parseType"
-              label="解析方式"
-              rules={[{ required: true, message: '请输入爬虫url！' }]}
+              name="retryTimes"
+              label="重试次数"
             >
-              <Select defaultValue="Page" onChange={handleChange}>
-                <Option value="Page">Page</Option>
-                <Option value="Json">Json</Option>
-              </Select>
+              <Input placeholder="请输入重试次数" />
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="sleepTime"
+              label="间隔时间"
+            >
+              <Input placeholder="请输入间隔时间" />
             </FormItem>
           </Col>
         </Row>
@@ -245,11 +253,11 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                           {...formItemLayout}
                           name={[name, 'expressionType']}
                         >
-                          <Select defaultValue="XPath" style={{ width: 120 }} onChange={handleChange}>
-                            <Option value="XPath">XPath</Option>
-                            <Option value="Css">Css</Option>
-                            <Option value="Json">Json</Option>
-                            <Option value="Regex">Regex</Option>
+                          <Select defaultValue={0} style={{ width: 120 }} onChange={handleSelectExpress}>
+                            <Option value={0}>XPath</Option>
+                            <Option value={1}>Css</Option>
+                            <Option value={2}>Json</Option>
+                            <Option value={3}>Regex</Option>
                         </Select>
                         </Form.Item>
                         <Form.Item
@@ -268,7 +276,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                           {...formItemLayout}
                           name={[name, 'multi']}
                         >
-                          <Checkbox onChange={handleChange} style={{ width: 60 }}>循环</Checkbox>
+                          <Checkbox onChange={onCheckboxChange} value={checkboxValue} style={{ width: 60 }}>循环</Checkbox>
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
@@ -281,9 +289,9 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                   </>
                 )}
               </Form.List>
-            </FormItem>            
+            </FormItem>
           </Col>
-        </Row> 
+        </Row>
 
       </Form>
     </Modal>

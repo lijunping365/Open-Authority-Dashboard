@@ -5,7 +5,7 @@ export const Headers = [
     {value: "User-Agent"},
     {value: "Cookie"}
   ]
-  
+
   export const ContentTypes = [
     {value : "application/json"},
     {value : "application/x-www-form-urlencoded"},
@@ -15,15 +15,17 @@ export const Headers = [
     {value : "text/html"},
     {value : "multipart/form-data"}
   ]
-  
+
   export const Methods = [
     "GET",
     "POST",
     "PUT",
     "DELETE",
   ]
-  
-  export const Targets = [
-    "JSON",
-    "PAGE"
+
+  export const ExpressType = [
+    "XPath",
+    "Regex",
+    "Css",
+    "JsonPath",
   ]
