@@ -65,18 +65,21 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         form={form}
         initialValues={{
           id: values.id,
-          ip: values.ip,
+          host: values.host,
           port: values.port,
-          type: values.type,
+          scheme: values.scheme,
+          username: values.username,
+          password: values.password,
         }}
       >
         <FormItem
-          name="ip"
+          name="host"
           label="代理 IP"
           rules={[{ required: true, message: '请输入代理IP！' }]}
         >
           <Input placeholder="请输入代理IP" />
         </FormItem>
+
         <FormItem
           name="port"
           label="代理端口"
@@ -84,15 +87,30 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         >
           <Input placeholder="请输入代理端口" />
         </FormItem>
+
         <FormItem
-          name="type"
+          name="scheme"
           label="代理类型"
           rules={[{ required: true, message: '请选择代理类型！' }]}
         >
-          <Select defaultValue={values.type} style={{ width: 120 }} onChange={handleSelect}>
-            <Option value={0}>http</Option>
-            <Option value={1}>https</Option>
+          <Select defaultValue={values.scheme} style={{ width: 120 }} onChange={handleSelect}>
+            <Option value={1}>http</Option>
+            <Option value={2}>https</Option>
           </Select>
+        </FormItem>
+
+        <FormItem
+          name="username"
+          label="用户名"
+        >
+          <Input placeholder="请输入代理IP用户名" />
+        </FormItem>
+
+        <FormItem
+          name="password"
+          label="密码"
+        >
+          <Input placeholder="请输入代理IP密码" />
         </FormItem>
       </Form>
     </Modal>

@@ -82,7 +82,7 @@ const TableList: React.FC = () => {
   const columns: ProColumns<API.SpiderProxy>[] = [
     {
       title: '代理IP',
-      dataIndex: 'ip',
+      dataIndex: 'host',
       valueType: 'text',
     },
     {
@@ -92,10 +92,10 @@ const TableList: React.FC = () => {
     },
     {
       title: '代理类型',
-      dataIndex: 'type',
+      dataIndex: 'scheme',
       valueEnum: {
-        0: { text: 'http'},
-        1: { text: 'https'},
+        1: { text: 'http'},
+        2: { text: 'https'},
       },
     },
     {
@@ -106,6 +106,16 @@ const TableList: React.FC = () => {
         0: { text: '禁用', status: 'Error' },
         1: { text: '启用', status: 'Success' },
       },
+    },
+    {
+      title: '用户名',
+      dataIndex: 'username',
+      valueType: 'text',
+    },
+    {
+      title: '密码',
+      dataIndex: 'password',
+      valueType: 'text',
     },
     {
       title: '创建时间',

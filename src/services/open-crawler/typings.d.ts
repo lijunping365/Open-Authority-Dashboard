@@ -66,9 +66,11 @@ declare namespace API {
 
   type SpiderProxy = {
     id: number;
-    ip: string;
-    port: string;
-    type: number;
+    scheme: number;
+    host: string;
+    port: number;
+    username: string;
+    password: string;
     status: number;
     createTime: Date;
     verifyTime: Date;
