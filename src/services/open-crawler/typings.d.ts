@@ -9,7 +9,7 @@ declare namespace API {
     phone: string;
     createTime: Date
   };
-  
+
   type StatisticNumber = {
     taskTotalNum: number;
     taskRunningNum: number;
@@ -43,6 +43,8 @@ declare namespace API {
     params: string;
     headers: string;
     extractRule: string;
+    retryTimes: number;
+    sleepTime: number;
     createTime: Date;
     createUser: number;
   };
