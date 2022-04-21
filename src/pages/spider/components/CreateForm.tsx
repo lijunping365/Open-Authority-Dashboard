@@ -58,12 +58,12 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     handleCreate(formData);
   };
 
-  const handleSelectMethod = (op: number) => {
-    setMethod(Methods[op]);
+  const handleSelectMethod = (op: string) => {
+    setMethod(op);
   };
 
-  const handleSelectExpress = (op: number) =>{
-    setExpressType(ExpressType[op]);
+  const handleSelectExpress = (op: string) =>{
+    setExpressType(op);
   }
 
   const onCheckboxChange = (checkedValues: any) => {
@@ -121,9 +121,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               name="method"
               label="请求方式"
             >
-              <Select defaultValue={0} onChange={handleSelectMethod}>
-                <Option value={0}>GET</Option>
-                <Option value={1}>POST</Option>
+              <Select defaultValue={Methods[0]} onChange={handleSelectMethod}>
+                {Methods.map(m => (
+                  <Option value={m}>{m}</Option>
+                ))}
               </Select>
             </FormItem>
           </Col>
@@ -253,12 +254,11 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                           {...formItemLayout}
                           name={[name, 'expressionType']}
                         >
-                          <Select defaultValue={0} style={{ width: 120 }} onChange={handleSelectExpress}>
-                            <Option value={0}>XPath</Option>
-                            <Option value={1}>Css</Option>
-                            <Option value={2}>Json</Option>
-                            <Option value={3}>Regex</Option>
-                        </Select>
+                          <Select defaultValue={ExpressType[0]} style={{ width: 120 }} onChange={handleSelectExpress}>
+                            {ExpressType.map(m => (
+                              <Option value={m}>{m}</Option>
+                            ))}
+                          </Select>
                         </Form.Item>
                         <Form.Item
                           {...formItemLayout}

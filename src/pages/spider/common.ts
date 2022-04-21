@@ -18,9 +18,7 @@ export const Headers = [
 
   export const Methods = [
     "GET",
-    "POST",
-    "PUT",
-    "DELETE",
+    "POST"
   ]
 
   export const ExpressType = [

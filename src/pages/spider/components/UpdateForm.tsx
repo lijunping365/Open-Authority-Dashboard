@@ -55,8 +55,8 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     setMethod(op);
   };
 
-  const handleSelectExpress = (op: number) =>{
-    setExpressType(ExpressType[op]);
+  const handleExpressSelect = (op: string) =>{
+    setExpressType(op);
   }
 
   const onCheckboxChange = (checkedValues: any) => {
@@ -259,12 +259,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                           {...formItemLayout}
                           name={[name, 'expressionType']}
                         >
-                          <Select defaultValue={values.extractRule.expressType} style={{ width: 120 }} onChange={handleSelectExpress}>
-                            <Option value="XPath">XPath</Option>
-                            <Option value="Css">Css</Option>
-                            <Option value="Json">Json</Option>
-                            <Option value="Regex">Regex</Option>
-                        </Select>
+                          <Select defaultValue={ExpressType[0]} style={{ width: 120 }} onChange={handleExpressSelect}>
+                            {ExpressType.map(m => (
+                              <Option value={m}>{m}</Option>
+                            ))}
+                          </Select>
                         </Form.Item>
                         <Form.Item
                           {...formItemLayout}
