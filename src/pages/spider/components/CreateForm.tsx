@@ -230,7 +230,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
         <Row>
           <Col span={12}>
-          <FormItem
+            <FormItem
               name="extractRule"
               label="抽取规则"
             >
