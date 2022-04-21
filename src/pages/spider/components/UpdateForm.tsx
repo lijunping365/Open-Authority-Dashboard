@@ -25,8 +25,6 @@ const formItemLayout = {
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const [form] = Form.useForm();
   const [method, setMethod] = useState(Methods[0]);
-  const [expressType, setExpressType] = useState(ExpressType[0]);
-  const [checkboxValue, setCheckboxValue] = useState();
 
   const {
     onSubmit: handleSubmit,
@@ -44,7 +42,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       ...values,
       ...fieldsValue,
       method,
-      expressType,
       headers: headers ? JSON.stringify(headers): "",
       params: params ? JSON.stringify(params): "",
       extractRule: extractRule ? JSON.stringify(extractRule): "",
@@ -53,14 +50,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
 
   const handleMethodSelect = (op: string) => {
     setMethod(op);
-  };
-
-  const handleExpressSelect = (op: string) =>{
-    setExpressType(op);
-  }
-
-  const onCheckboxChange = (checkedValues: any) => {
-    setCheckboxValue(checkedValues);
   };
 
   const renderFooter = () => {
@@ -254,12 +243,12 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name }) => (
-                      <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                      <Space key={key} align="baseline">
                         <Form.Item
                           {...formItemLayout}
                           name={[name, 'expressionType']}
                         >
-                          <Select defaultValue={ExpressType[0]} style={{ width: 120 }} onChange={handleExpressSelect}>
+                          <Select style={{ width: 120 }}>
                             {ExpressType.map(m => (
                               <Option value={m}>{m}</Option>
                             ))}
@@ -281,7 +270,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                           {...formItemLayout}
                           name={[name, 'multi']}
                         >
-                          <Checkbox onChange={onCheckboxChange} value={checkboxValue} style={{ width: 60 }}>循环</Checkbox>
+                          <Checkbox style={{ width: 60 }}>循环</Checkbox>
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>

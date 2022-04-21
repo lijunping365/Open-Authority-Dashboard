@@ -114,6 +114,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             <FormItem
               name="spiderId"
               label="选择爬虫"
+              rules={[{ required: true, message: '请选择爬虫模板！' }]}
             >
               <Select
                 value={spiderId}
@@ -133,7 +134,11 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               label="Cron 表达式"
             >
               <Input.Group compact style={{display: 'flex'}}>
-                <Input placeholder="请输入Cron 表达式"  value={cronExpressValue} onChange={(e)=>setCronExpressValue(e.target.value)}/>
+                <Input 
+                  placeholder="请输入Cron 表达式"  
+                  value={cronExpressValue} 
+                  onChange={(e)=>setCronExpressValue(e.target.value)}
+                />
                 <Button
                   type="primary"
                   onClick={() => {

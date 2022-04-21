@@ -116,7 +116,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         </Row>
         <Row>
           <Col span={12}>
-            <FormItem name="spiderId" label="选择爬虫">
+            <FormItem 
+              name="spiderId" 
+              label="选择爬虫"
+              rules={[{ required: true, message: '请选择爬虫模板！' }]}
+            >
               <Select
                 value={spiderId}
                 defaultValue={spiderId}
@@ -133,7 +137,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem name="cronExpression" label="Cron 表达式">
+            <FormItem 
+              name="cronExpression" 
+              label="Cron 表达式"
+            >
               <Input.Group compact style={{ display: 'flex' }}>
                 <Input
                   placeholder="请输入Cron 表达式"
