@@ -133,7 +133,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               name="sleepTime"
               label="间隔时间"
             >
-              <Input placeholder="请输入间隔时间" />
+              <Input placeholder="请输入间隔时间（单位毫秒）" />
             </FormItem>
           </Col>
         </Row>
