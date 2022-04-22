@@ -249,6 +249,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                         <Form.Item
                           {...formItemLayout}
                           name={[name, 'expressionType']}
+                          rules={[{ required: true, message: '请选择解析方式' }]}
                         >
                           <Select style={{ width: 120 }}>
                             {ExpressType.map(m => (
@@ -259,12 +260,14 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                         <Form.Item
                           {...formItemLayout}
                           name={[name, 'expressionValue']}
+                          rules={[{ required: true, message: '请输入解析规则' }]}
                         >
-                          <Input placeholder='请输入规则' style={{ width: 240 }}/>
+                          <Input placeholder='请输入解析规则' style={{ width: 240 }}/>
                         </Form.Item>
                         <Form.Item
                           {...formItemLayout}
                           name={[name, 'fieldName']}
+                          rules={[{ required: true, message: '请输入属性名称' }]}
                         >
                           <Input placeholder='请输入属性名称' style={{ width: 120 }}/>
                         </Form.Item>
