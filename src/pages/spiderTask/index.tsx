@@ -18,14 +18,12 @@ import { Link } from 'umi';
 const handleAdd = async (fields: Partial<API.SpiderTask>) => {
   const hide = message.loading('正在添加');
   try {
-    await addScheduleTask(fields);
+    const result = await addScheduleTask(fields);
     hide();
-    message.success('添加成功');
-    return true;
+    if(result) message.success('添加成功');
   } catch (error) {
     hide();
     message.error('添加失败请重试！');
-    return false;
   }
 };
 
@@ -37,15 +35,12 @@ const handleAdd = async (fields: Partial<API.SpiderTask>) => {
 const handleUpdate = async (fields: Partial<API.SpiderTask>) => {
   const hide = message.loading('正在配置');
   try {
-    await updateScheduleTask(fields);
+    const result = await updateScheduleTask(fields);
     hide();
-
-    message.success('配置成功');
-    return true;
+    if(result) message.success('配置成功');
   } catch (error) {
     hide();
     message.error('配置失败请重试！');
-    return false;
   }
 };
 
@@ -56,12 +51,10 @@ const handleUpdate = async (fields: Partial<API.SpiderTask>) => {
  */
  const handleRun = async (taskId: number) => {
   try {
-    await runTask(taskId);
-    message.success('运行成功');
-    return true;
+    const result = await runTask(taskId);
+    if(result) message.success('运行成功');
   } catch (error) {
     message.error('运行失败，请重试');
-    return false;
   }
 };
 
@@ -72,16 +65,14 @@ const handleUpdate = async (fields: Partial<API.SpiderTask>) => {
  */
 const handleRemove = async (selectedRows: any[]) => {
   const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
+  if (!selectedRows) return;
   try {
-    await removeScheduleTask({ids: selectedRows});
+    const result = await removeScheduleTask({ids: selectedRows});
     hide();
-    message.success('删除成功，即将刷新');
-    return true;
+    if(result) message.success('删除成功，即将刷新');
   } catch (error) {
     hide();
     message.error('删除失败，请重试');
-    return false;
   }
 };
 
@@ -148,10 +139,8 @@ const TableList: React.FC = () => {
       render: (_, record) => (
         <>
           <a
-              onClick={() => {
-                handleRun(record.id).then();
-              }}
-            >
+            onClick={() => handleRun(record.id).then()}
+          >
             运行
           </a>
           <Divider type="vertical" />

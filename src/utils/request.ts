@@ -53,10 +53,6 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
         return result.data;
       }
 
-      if (result && result.code === 400) { // 参数校验失败
-        notification.error({message: result.msg});
-      }
-
       if (result && result.code === 401 && ignorePath()) {
         history.push('/login');
       }
@@ -73,7 +69,15 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
         history.push('/500');
       }
 
-      return result;
+      // 业务异常
+      if (result && result.code >= 999) { 
+        notification.error({
+          message: `${result.code}: ${result.msg}`,
+          description: `${result.msg}`,
+        });
+      }
+      
+      return;
     }
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
