@@ -59,6 +59,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     handleUpdate({
       ...values,
       ...fieldsValue,
+      spiderId,
       cronExpression: cronExpressValue,
     });
   };
@@ -88,7 +89,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         {...formLayout}
         form={form}
         initialValues={{
-          id: values.id,
+          spiderId: values.spiderId,
           taskName: values.taskName,
           handlerName: values.handlerName,
           cronExpression: values.cronExpression,
@@ -122,16 +123,12 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               rules={[{ required: true, message: '请选择爬虫模板！' }]}
             >
               <Select
-                value={spiderId}
-                defaultValue={spiderId}
                 placeholder="请选项爬虫模板"
                 defaultActiveFirstOption={true}
                 onChange={handleChange}
               >
                 {spiderList.map((d) => (
-                  <Option key={d.id} value={d.id}>
-                    {d.name}
-                  </Option>
+                  <Option key={d.id} value={d.id}>{d.name}</Option>
                 ))}
               </Select>
             </FormItem>
