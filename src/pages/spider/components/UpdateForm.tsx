@@ -246,6 +246,13 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                       <Space key={key} align="baseline">
                         <Form.Item
                           {...formItemLayout}
+                          name={[name, 'unique']}
+                          valuePropName="checked"
+                        >
+                          <Checkbox style={{ width: 60 }}>主键</Checkbox>
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemLayout}
                           name={[name, 'expressionType']}
                         >
                           <Select style={{ width: 120 }}>
@@ -269,6 +276,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                         <Form.Item
                           {...formItemLayout}
                           name={[name, 'multi']}
+                          valuePropName="checked"
                         >
                           <Checkbox style={{ width: 60 }}>循环</Checkbox>
                         </Form.Item>
