@@ -52,7 +52,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     }
 
     console.log(formData);
-    //handleCreate(formData);
+    handleCreate(formData);
   };
 
   const handleSelectMethod = (op: string) => {
