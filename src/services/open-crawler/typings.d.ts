@@ -95,6 +95,14 @@ declare namespace API {
     createTime: Date;
   }
 
+  type SpiderGroup = {
+    id: number;
+    pid: number;
+    name: string;
+    children: API.SpiderGroup[];
+    createTime: Date;
+  }
+
   type CurrentUser = {
     username?: string;
     avatar?: string;

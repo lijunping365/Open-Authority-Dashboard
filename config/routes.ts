@@ -39,6 +39,12 @@
     hideInMenu: true,
   },
   {
+    name: 'spiderGroup',
+    icon: 'table',
+    path: '/spiderGroup',
+    component: './spiderGroup',
+  },
+  {
     name: 'spiderProxy',
     icon: 'table',
     path: '/spiderProxy',

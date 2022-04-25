@@ -12,6 +12,7 @@ import * as spiderdata from './spiderdata';
 import * as spiderlog from './spiderlog';
 import * as spidernode from './spidernode';
 import * as tasklog from './tasklog';
+import * as spidergroup from './spidergroup';
 
 export default {
   api,
@@ -23,5 +24,6 @@ export default {
   spiderlog,
   spiderproxy,
   spidernode,
-  tasklog
+  tasklog,
+  spidergroup
 };

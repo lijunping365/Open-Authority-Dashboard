@@ -8,6 +8,7 @@ export default {
   'menu.executor': '执行器管理',
   'menu.spider': '爬虫管理',
   'menu.spiderData': '爬虫数据',
+  'menu.spiderGroup': '爬虫分类',
   'menu.spiderLog': '爬虫日志',
   'menu.spiderProxy': '爬虫代理',
   'menu.spiderTask': '爬虫任务',
