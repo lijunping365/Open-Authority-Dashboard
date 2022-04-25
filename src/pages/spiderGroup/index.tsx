@@ -8,6 +8,7 @@ import UpdateForm from './components/UpdateForm';
 import { fetchProxyPage, addProxy, updateProxy, removeProxy } from '@/services/open-crawler/spiderproxy';
 import {confirmModal} from "@/components/ConfirmModel";
 import CreateForm from "./components/CreateForm";
+import ITreeSelect from '@/components/ITreeSelect';
 
 /**
  * 添加节点
@@ -78,58 +79,113 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   // const [currentRow, setCurrentRow] = useState<Proxy>();
   const [selectedRowsState, setSelectedRows] = useState<API.SpiderProxy[]>([]);
+  const [menuData, setMenuData] = useState<API.SpiderGroup[]>([]);
+  const [parentId, setParentId] = useState(0);
+
+
+  const handlerSelect = (pid: any) => {
+    setParentId(pid)
+  };
 
   const columns: ProColumns<API.SpiderProxy>[] = [
     {
-      title: '代理IP',
-      dataIndex: 'host',
-      valueType: 'text',
-    },
-    {
-      title: '代理端口',
-      dataIndex: 'port',
-      valueType: 'text',
-    },
-    {
-      title: '代理类型',
-      dataIndex: 'scheme',
-      valueEnum: {
-        1: { text: 'http'},
-        2: { text: 'https'},
+      title: '父菜单',
+      dataIndex: 'pid',
+      valueType: 'select',
+      search: false,
+      hideInTable: true,
+      renderFormItem: () => {
+        return (
+          <ITreeSelect onSelect={handlerSelect} treeData={menuData} defaultValue={[]} defaultExpandedKeys={[]}/>
+        );
       },
+    },
+    {
+      title: '图标',
+      dataIndex: 'icon',
+      search: false,
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '菜单图标为必填项',
+          },
+        ],
+      },
+      render: (dom, entity) => {
+        if (entity.level !== 1) return <></>;
+        return formatterIcon(entity.icon);
+      },
+    },
+    {
+      title: '菜单名称',
+      dataIndex: 'name',
+      tip: '菜单名称是唯一的 key',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '菜单名称为必填项',
+          },
+        ],
+      },
+      render: (dom, entity) => {
+        return <a onClick={() => setRow(entity)}>{dom}</a>;
+      },
+    },
+    {
+      title: '描述',
+      dataIndex: 'memo',
+      valueType: 'text',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '菜单描述为必填项',
+          },
+        ],
+      },
+    },
+    {
+      title: '路由',
+      dataIndex: 'path',
+      valueType: 'text',
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: '菜单路由为必填项',
+          },
+        ],
+      },
+    },
+    {
+      title: '排序',
+      dataIndex: 'sort',
+      valueType: 'digit',
+      sorter: true,
     },
     {
       title: '状态',
-      dataIndex: 'status',
+      dataIndex: 'enableStatus',
       hideInForm: true,
       valueEnum: {
-        0: { text: '禁用', status: 'Error' },
-        1: { text: '启用', status: 'Success' },
+        0: { text: '未启用', status: 'Default' },
+        1: { text: '启用中', status: 'Processing' },
       },
     },
     {
-      title: '用户名',
-      dataIndex: 'username',
-      valueType: 'text',
-    },
-    {
-      title: '密码',
-      dataIndex: 'password',
-      valueType: 'text',
+      title: '创建人',
+      dataIndex: 'createUser',
+      valueType: 'textarea',
+      hideInForm: true,
     },
     {
       title: '创建时间',
       dataIndex: 'createTime',
+      sorter: true,
       valueType: 'dateTime',
       hideInForm: true,
-      search: false,
-    },
-    {
-      title: '校验时间',
-      dataIndex: 'verifyTime',
-      valueType: 'dateTime',
-      hideInForm: true,
-      search: false,
     },
     {
       title: '操作',
@@ -140,23 +196,13 @@ const TableList: React.FC = () => {
           <a
             onClick={() => {
               handleUpdateModalVisible(true);
-              setUpdateFormValues(record);
+              setStepFormValues(record);
             }}
           >
             修改
           </a>
           <Divider type="vertical" />
-          <a
-            onClick={async () => {
-              const confirm = await confirmModal();
-              if (confirm){
-                await handleRemove([record.id]);
-                actionRef.current?.reloadAndRest?.();
-              }
-            }}
-          >
-            删除
-          </a>
+          <a href="">删除</a>
         </>
       ),
     },

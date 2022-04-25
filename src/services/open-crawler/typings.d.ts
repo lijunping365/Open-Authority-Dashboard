@@ -95,13 +95,19 @@ declare namespace API {
     createTime: Date;
   }
 
+  type TreeData = {
+    id: number;
+    name: string;
+    children: API.TreeData[];
+  };
+
   type SpiderGroup = {
     id: number;
     pid: number;
     name: string;
     children: API.SpiderGroup[];
     createTime: Date;
-  }
+  };
 
   type CurrentUser = {
     username?: string;
