@@ -46,6 +46,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
     {
       title: '采集数据',
       ellipsis: true,
+      search: false,
       render: (_, record) => (
         <span>{JSON.stringify(record)}</span>
       )
