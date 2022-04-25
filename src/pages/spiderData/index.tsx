@@ -1,11 +1,13 @@
-import {Button, message, Divider} from 'antd';
+import {Button, message, Divider, Modal} from 'antd';
 import React, { useState, useRef } from 'react';
+import {RouteChildrenProps} from "react-router";
+import ReactJson from 'react-json-view'
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { fetchSpiderDataPage, removeSpiderData } from '@/services/open-crawler/spiderdata';
 import {confirmModal} from "@/components/ConfirmModel";
-import {Link} from "@umijs/preset-dumi/lib/theme";
+import moment from 'moment';
 
 
 /**
@@ -28,25 +30,34 @@ const handleRemove = async (selectedRows: any[]) => {
   }
 };
 
-const TableList: React.FC = () => {
+const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const actionRef = useRef<ActionType>();
+  const { query }: any = location;
+  const [spiderId] = useState<number>(query.id);
   const [selectedRowsState, setSelectedRows] = useState<API.SpiderData[]>([]);
-
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [data, setData] = useState<any>();
   const columns: ProColumns<API.SpiderData>[] = [
     {
-      title: '爬虫ID',
-      dataIndex: 'spiderId',
+      title: 'ID',
+      dataIndex: 'id',
       valueType: 'text',
     },
     {
-      title: '爬虫数据',
-      dataIndex: 'data',
-      valueType: "text"
+      title: '采集数据',
+      ellipsis: true,
+      render: (_, record) => (
+        <span>{JSON.stringify(record)}</span>
+      )
     },
     {
-      title: '爬取时间',
+      title: '采集时间',
       dataIndex: 'createTime',
-      valueType: 'dateTime',
+      render: (text: any) =>{
+        return <span>{
+          moment(parseInt(text)).format('YYYY-MM-DD HH:mm:ss')
+        }</span>
+      }
     },
     {
       title: '操作',
@@ -54,16 +65,14 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <Link
-            to={{
-              pathname: '/util/ip',
-              search: `?id=${record.id}`,
-              hash: '#the-hash',
-              state: { fromDashboard: true },
+          <a
+            onClick={()=>{
+              setModalVisible(true);
+              setData(record);
             }}
           >
             查看详情
-          </Link>
+          </a>
           <Divider type="vertical" />
           <a
             onClick={async () => {
@@ -92,7 +101,7 @@ const TableList: React.FC = () => {
         }}
         toolBarRender={() => []}
         request={async (params) => {
-          const response = await fetchSpiderDataPage({ ...params });
+          const response = await fetchSpiderDataPage({ ...params, spiderId });
           return {
             data: response.records,
             total: response.total,
@@ -127,6 +136,22 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
+        <Modal
+          title="数据详情"
+          visible={modalVisible}
+          onOk={() => setModalVisible(false)}
+          onCancel={() => setModalVisible(false)}
+          width={600}
+        >
+          <ReactJson 
+            src={data} 
+            theme="google" 
+            iconStyle="square" 
+            enableClipboard={false} 
+            displayDataTypes={false}  
+            displayObjectSize={true}
+          />
+        </Modal>
     </PageContainer>
   );
 };

@@ -91,6 +91,7 @@ declare namespace API {
     id: number;
     taskId: number;
     status: number;
+    cause: string;
     createTime: Date;
   }
 

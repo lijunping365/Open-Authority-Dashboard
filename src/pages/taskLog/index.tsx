@@ -1,11 +1,12 @@
-import {Button, message, Divider} from 'antd';
+import {Button, message, Divider, Modal} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
+import {RouteChildrenProps} from "react-router";
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { fetchTaskLogPage, removeTaskLog} from '@/services/open-crawler/tasklog';
 import {confirmModal} from "@/components/ConfirmModel";
-import {Link} from "@umijs/preset-dumi/lib/theme";
+import ReactJson from 'react-json-view';
 
 
 
@@ -29,15 +30,19 @@ const handleRemove = async (selectedRows: any[]) => {
   }
 };
 
-const TableList: React.FC = () => {
+const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
   const actionRef = useRef<ActionType>();
+  const { query }: any = location;
+  const [taskId] = useState<number>(query.id);
   const [selectedRowsState, setSelectedRows] = useState<API.TaskLog[]>([]);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [data, setData] = useState<any>();
 
   const columns: ProColumns<API.TaskLog>[] = [
     {
-      title: '任务ID',
-      dataIndex: 'taskId',
+      title: 'ID',
+      dataIndex: 'id',
       valueType: 'text',
     },
     {
@@ -47,6 +52,12 @@ const TableList: React.FC = () => {
         0: { text: '执行失败', status: 'Error' },
         1: { text: '执行成功', status: 'Success' },
       },
+    },
+    {
+      title: '失败原因',
+      dataIndex: 'cause',
+      ellipsis: true,
+      valueType: 'text',
     },
     {
       title: '调度时间',
@@ -59,16 +70,14 @@ const TableList: React.FC = () => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <Link
-            to={{
-              pathname: '/util/ip',
-              search: `?id=${record.id}`,
-              hash: '#the-hash',
-              state: { fromDashboard: true },
+          <a
+            onClick={()=>{
+              setModalVisible(true);
+              setData(record);
             }}
           >
             查看详情
-          </Link>
+          </a>
           <Divider type="vertical" />
           <a
             onClick={async () => {
@@ -97,7 +106,7 @@ const TableList: React.FC = () => {
         }}
         toolBarRender={() => []}
         request={async (params) => {
-          const response = await fetchTaskLogPage({ ...params });
+          const response = await fetchTaskLogPage({ ...params, taskId });
           return {
             data: response.records,
             total: response.total,
@@ -132,6 +141,22 @@ const TableList: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
+      <Modal
+        title="数据详情"
+        visible={modalVisible}
+        onOk={() => setModalVisible(false)}
+        onCancel={() => setModalVisible(false)}
+        width={600}
+      >
+        <ReactJson 
+          src={data} 
+          theme="google" 
+          iconStyle="square" 
+          enableClipboard={false} 
+          displayDataTypes={false}  
+          displayObjectSize={true}
+        />
+      </Modal>
     </PageContainer>
   );
 };
