@@ -21,9 +21,11 @@ const handleAdd = async (fields: Partial<API.SpiderTask>) => {
     const result = await addScheduleTask(fields);
     hide();
     if(result) message.success('添加成功');
+    return true;
   } catch (error) {
     hide();
     message.error('添加失败请重试！');
+    return false;
   }
 };
 
@@ -38,9 +40,11 @@ const handleUpdate = async (fields: Partial<API.SpiderTask>) => {
     const result = await updateScheduleTask(fields);
     hide();
     if(result) message.success('配置成功');
+    return true;
   } catch (error) {
     hide();
     message.error('配置失败请重试！');
+    return false;
   }
 };
 
@@ -70,9 +74,11 @@ const handleRemove = async (selectedRows: any[]) => {
     const result = await removeScheduleTask({ids: selectedRows});
     hide();
     if(result) message.success('删除成功，即将刷新');
+    return true;
   } catch (error) {
     hide();
     message.error('删除失败，请重试');
+    return false;
   }
 };
 

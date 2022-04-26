@@ -41,6 +41,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     const {params} = fieldsValue;
     const {headers} = fieldsValue;
     const {extractRule} = fieldsValue;
+    const {proxy} = fieldsValue;
     if(params && params.length !== 0){
       formData.params = JSON.stringify(params);
     }
@@ -50,6 +51,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     if(extractRule && extractRule.length !== 0){
       formData.extractRule = JSON.stringify(extractRule);
     }
+    formData.proxy = proxy ? 1: 0;
 
     console.log(formData);
     handleCreate(formData);
@@ -134,6 +136,15 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               label="间隔时间"
             >
               <Input placeholder="请输入间隔时间（单位毫秒）" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="proxy"
+              label="代理"
+              valuePropName="checked"
+            >
+              <Checkbox>是否使用代理</Checkbox>
             </FormItem>
           </Col>
         </Row>

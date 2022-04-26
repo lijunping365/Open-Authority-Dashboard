@@ -101,23 +101,6 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: '图标',
-      dataIndex: 'icon',
-      search: false,
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '菜单图标为必填项',
-          },
-        ],
-      },
-      render: (dom, entity) => {
-        if (entity.level !== 1) return <></>;
-        return formatterIcon(entity.icon);
-      },
-    },
-    {
       title: '菜单名称',
       dataIndex: 'name',
       tip: '菜单名称是唯一的 key',
@@ -129,50 +112,9 @@ const TableList: React.FC = () => {
           },
         ],
       },
-      render: (dom, entity) => {
-        return <a onClick={() => setRow(entity)}>{dom}</a>;
-      },
-    },
-    {
-      title: '描述',
-      dataIndex: 'memo',
-      valueType: 'text',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '菜单描述为必填项',
-          },
-        ],
-      },
-    },
-    {
-      title: '路由',
-      dataIndex: 'path',
-      valueType: 'text',
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '菜单路由为必填项',
-          },
-        ],
-      },
-    },
-    {
-      title: '排序',
-      dataIndex: 'sort',
-      valueType: 'digit',
-      sorter: true,
-    },
-    {
-      title: '状态',
-      dataIndex: 'enableStatus',
-      hideInForm: true,
-      valueEnum: {
-        0: { text: '未启用', status: 'Default' },
-        1: { text: '启用中', status: 'Processing' },
-      },
+      // render: (dom, entity) => {
+      //   return <a onClick={() => setRow(entity)}>{dom}</a>;
+      // },
     },
     {
       title: '创建人',
@@ -196,7 +138,7 @@ const TableList: React.FC = () => {
           <a
             onClick={() => {
               handleUpdateModalVisible(true);
-              setStepFormValues(record);
+              //setStepFormValues(record);
             }}
           >
             修改

@@ -42,6 +42,7 @@ declare namespace API {
     method: string;
     params: string;
     headers: string;
+    proxy: number;
     extractRule: string;
     retryTimes: number;
     sleepTime: number;

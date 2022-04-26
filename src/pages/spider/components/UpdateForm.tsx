@@ -37,11 +37,13 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     const fieldsValue: any = await form.validateFields();
     const {headers} = fieldsValue;
     const {params} = fieldsValue;
+    const {proxy} = fieldsValue;
     const {extractRule} = fieldsValue;
     handleSubmit({
       ...values,
       ...fieldsValue,
       method,
+      proxy: proxy ? 1 : 0,
       headers: headers ? JSON.stringify(headers): "",
       params: params ? JSON.stringify(params): "",
       extractRule: extractRule ? JSON.stringify(extractRule): "",
@@ -80,6 +82,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           name: values.name,
           url: values.url,
           method: values.method,
+          proxy: values.proxy === 1,
           params: values.params ? JSON.parse(values.params) : [],
           headers: values.headers ? JSON.parse(values.headers) : [],
           extractRule: values.extractRule ? JSON.parse(values.extractRule) : [],
@@ -139,6 +142,15 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               label="间隔时间"
             >
               <Input placeholder="请输入间隔时间（单位毫秒）" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="proxy"
+              label="代理"
+              valuePropName="checked"
+            >
+              <Checkbox>是否使用代理</Checkbox>
             </FormItem>
           </Col>
         </Row>
