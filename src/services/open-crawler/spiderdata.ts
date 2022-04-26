@@ -19,7 +19,7 @@ export async function fetchSpiderDataPage(
   });
 }
 
-export async function removeSpiderData(params: {ids: number[]}) {
+export async function removeSpiderData(params: {spiderId: number, ids: number[]}) {
   return request('/spiderData/delete', {
     method: 'DELETE',
     data: {...params}

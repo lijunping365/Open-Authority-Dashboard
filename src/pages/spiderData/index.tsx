@@ -15,11 +15,11 @@ import moment from 'moment';
  *
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: any[]) => {
+const handleRemove = async (spiderId: number, selectedRows: any[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeSpiderData({ids: selectedRows});
+    await removeSpiderData({spiderId, ids: selectedRows});
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -79,7 +79,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
             onClick={async () => {
               const confirm = await confirmModal();
               if (confirm){
-                await handleRemove([record.id]);
+                await handleRemove(spiderId, [record.id]);
                 actionRef.current?.reloadAndRest?.();
               }
             }}
@@ -128,7 +128,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         >
           <Button
             onClick={async () => {
-              await handleRemove(selectedRowsState ? selectedRowsState.map((e) => e.id):[]);
+              await handleRemove(spiderId, selectedRowsState ? selectedRowsState.map((e) => e.id):[]);
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
