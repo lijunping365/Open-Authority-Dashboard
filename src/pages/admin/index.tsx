@@ -101,7 +101,7 @@ const TableList: React.FC = () => {
               setUpdateFormValues(record);
             }}
           >
-            修改
+            查看
           </a>
           <Divider type="vertical" />
           <a
