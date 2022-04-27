@@ -104,6 +104,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               name="handlerName"
               label="handlerName"
               rules={[{ required: true, message: '请输入handlerName！' }]}
+              tooltip="如果为自动爬取请输入：autoCrawlerHandler"
             >
               <Input placeholder="请输入handlerName" />
             </FormItem>
@@ -115,6 +116,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               name="spiderId"
               label="选择爬虫"
               rules={[{ required: true, message: '请选择爬虫模板！' }]}
+              tooltip="已经被选择的爬虫将不会在下拉选择框中出现"
             >
               <Select
                 value={spiderId}
@@ -132,6 +134,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
             <FormItem
               name="cronExpression"
               label="Cron 表达式"
+              tooltip="可以使用Cron 工具轻松帮您生成Cron 表达式"
             >
               <Input.Group compact style={{display: 'flex'}}>
                 <Input 
