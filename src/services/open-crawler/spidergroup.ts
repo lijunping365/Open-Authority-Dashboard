@@ -15,6 +15,13 @@ export async function fetchGroupPage(params: {
   });
 }
 
+export async function fetchGroupTree() {
+  return request('/group/tree', {
+    method: 'GET',
+  });
+}
+
+
 export async function updateGroup(params: Partial<API.SpiderGroup>) {
   return request('/group/update', {
     method: 'PUT',

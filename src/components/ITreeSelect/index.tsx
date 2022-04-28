@@ -5,12 +5,11 @@ export interface TreeProps {
   onSelect: (parentId: number) => void;
   treeData: API.TreeData[];
   defaultValue: any[];
-  defaultExpandedKeys: any[];
 }
 
 const ITreeSelect: React.FC<TreeProps> = (props) => {
   const [value, setValue] = useState(undefined);
-  const { onSelect: handlerSelect, treeData, defaultValue, defaultExpandedKeys } = props;
+  const { onSelect: handlerSelect, treeData, defaultValue } = props;
 
   const onChange = (selectValue: any) => {
     setValue(selectValue);
@@ -20,11 +19,11 @@ const ITreeSelect: React.FC<TreeProps> = (props) => {
   const loop = (data: any) =>{
     return data.map((item: any) => {
       if (item.children) {
-        return { title: item.name, key: item.id, children: loop(item.children) };
+        return { title: item.name, value: item.id, children: loop(item.children) };
       }
       return {
         title: item.name,
-        key: item.id,
+        value: item.id,
       };
     });
   };
@@ -37,7 +36,7 @@ const ITreeSelect: React.FC<TreeProps> = (props) => {
       value={value}
       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
       defaultValue={defaultValue}
-      treeDefaultExpandedKeys={defaultExpandedKeys}
+      treeDefaultExpandAll
       treeData={loop(treeData)}
       placeholder="Please select"
       onChange={onChange}

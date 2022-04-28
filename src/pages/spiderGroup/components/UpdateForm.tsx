@@ -1,14 +1,15 @@
-import React, {useState} from 'react';
-import {Form, Button, Input, Modal, Select} from 'antd';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Form, Button, Input, Modal} from 'antd';
+import ITreeSelect from '@/components/ITreeSelect';
+import { fetchGroupTree } from '@/services/open-crawler/spidergroup';
 
 export interface UpdateFormProps {
-  onCancel: (flag?: boolean, formVals?: Partial<API.SpiderProxy>) => void;
-  onSubmit: (values: Partial<API.SpiderProxy>) => void;
+  onCancel: (flag?: boolean, formVals?: Partial<API.SpiderGroup>) => void;
+  onSubmit: (values: Partial<API.SpiderGroup>) => void;
   updateModalVisible: boolean;
-  values: Partial<API.SpiderProxy>;
+  values: Partial<API.SpiderGroup>;
 }
 const FormItem = Form.Item;
-const { Option } = Select;
 
 const formLayout = {
   labelCol: { span: 7 },
@@ -17,7 +18,8 @@ const formLayout = {
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const [form] = Form.useForm();
-  const [proxyType, setProxyType] = useState(0);
+  const [pid, setPid] = useState(props.values.pid);
+  const [treeData, setTreeData] = useState<API.SpiderGroup[]>([]);
 
   const {
     onSubmit: handleUpdate,
@@ -26,17 +28,27 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     values,
   } = props;
 
+  const onFetchSpiderGroup = useCallback(async () => {
+    const result = await fetchGroupTree();
+    setTreeData(result);
+  }, []);
+
+  useEffect(()=>{
+    onFetchSpiderGroup().then();
+  },[]);
+
+
   const handleNext = async () => {
     const fieldsValue: any = await form.validateFields();
     handleUpdate({
       ...values,
       ...fieldsValue,
-      type: proxyType
+      pid,
     });
   };
 
-  const handleSelect = (op: number) => {
-    setProxyType(op);
+  const handlerSelect = (pid: any) => {
+    setPid(pid);
   };
 
   const renderFooter = () => {
@@ -55,7 +67,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       width={640}
       bodyStyle={{ padding: '32px 40px 48px' }}
       destroyOnClose
-      title="编辑代理"
+      title="编辑分类"
       visible={updateModalVisible}
       footer={renderFooter()}
       onCancel={() => handleUpdateModalVisible()}
@@ -65,52 +77,27 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         form={form}
         initialValues={{
           id: values.id,
-          host: values.host,
-          port: values.port,
-          scheme: values.scheme,
-          username: values.username,
-          password: values.password,
+          pid: values.pid,
+          name: values.name,
+        
         }}
       >
         <FormItem
-          name="host"
-          label="代理 IP"
-          rules={[{ required: true, message: '请输入代理IP！' }]}
+          name="pid"
+          label="父级分类"
         >
-          <Input placeholder="请输入代理IP" />
+          <ITreeSelect
+            onSelect={handlerSelect}
+            treeData={treeData}
+            defaultValue={[values.pid]}
+          />
         </FormItem>
-
         <FormItem
-          name="port"
-          label="代理端口"
-          rules={[{ required: true, message: '请输入代理端口！' }]}
+          name="name"
+          label="分类名称"
+          rules={[{ required: true, message: '请输入分类名称！' }]}
         >
-          <Input placeholder="请输入代理端口" />
-        </FormItem>
-
-        <FormItem
-          name="scheme"
-          label="代理类型"
-          rules={[{ required: true, message: '请选择代理类型！' }]}
-        >
-          <Select defaultValue={values.scheme} style={{ width: 120 }} onChange={handleSelect}>
-            <Option value={1}>http</Option>
-            <Option value={2}>https</Option>
-          </Select>
-        </FormItem>
-
-        <FormItem
-          name="username"
-          label="用户名"
-        >
-          <Input placeholder="请输入代理IP用户名" />
-        </FormItem>
-
-        <FormItem
-          name="password"
-          label="密码"
-        >
-          <Input placeholder="请输入代理IP密码" />
+          <Input placeholder="请输入分类名称" />
         </FormItem>
       </Form>
     </Modal>

@@ -84,6 +84,7 @@ const TableList: React.FC = () => {
       dataIndex: 'id',
       valueType: 'text',
       search: false,
+      hideInForm: true,
     },
     {
       title: 'pid',
@@ -192,21 +193,18 @@ const TableList: React.FC = () => {
         </FooterToolbar>
       )}
 
-      <CreateForm onCancel={() => handleCreateModalVisible(false)} modalVisible={createModalVisible}>
-        <ProTable<API.SpiderGroup, API.SpiderGroup>
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-            if (success) {
-              handleCreateModalVisible(false);
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
+      <CreateForm
+        onSubmit={async (value) => {
+          const success = await handleAdd(value);
+          if (success) {
+            handleCreateModalVisible(false);
+            if (actionRef.current) {
+              actionRef.current.reload();
             }
-          }}
-          rowKey="id"
-          type="form"
-          columns={columns}
-        />
+          }
+        }}
+        onCancel={() => handleCreateModalVisible(false)}
+        modalVisible={createModalVisible}>
       </CreateForm>
       {updateFormValues && Object.keys(updateFormValues).length ? (
         <UpdateForm
