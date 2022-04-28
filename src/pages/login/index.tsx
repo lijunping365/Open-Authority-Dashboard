@@ -9,7 +9,7 @@ import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
 import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
 import { login, getFakeCaptcha } from '@/services/open-crawler/login';
-
+import io from 'socket.io-client';
 import styles from './index.less';
 import {arrayBufferToBase64} from "@/utils/utils";
 import {getDeviceId, setAccessToken} from "@/utils/cache";
@@ -54,6 +54,9 @@ const Login: React.FC = () => {
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
+      // socketio 登录，和后端服务建立链接
+      const socket = io('ws://localhost:8442');
+      console.log("ddddddddddd", socket);
       setInitialState({
         ...initialState,
         currentUser: userInfo,

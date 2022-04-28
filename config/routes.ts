@@ -6,12 +6,12 @@
     component: './login',
     hideInMenu: true,
   },
-  {
-    path: '/welcome',
-    name: 'welcome',
-    icon: 'smile',
-    component: './Welcome',
-  },
+  // {
+  //   path: '/welcome',
+  //   name: 'welcome',
+  //   icon: 'smile',
+  //   component: './Welcome',
+  // },
   {
     name: 'dashboard',
     icon: 'table',
@@ -23,6 +23,12 @@
     icon: 'smile',
     path: 'spider',
     component: './spider',
+  },
+  {
+    name: 'realTimeData',
+    icon: 'smile',
+    path: 'realTimeData',
+    component: './realTimeData',
   },
   {
     name: 'spiderData',
@@ -77,7 +83,7 @@
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/dashboard',
   },
   {
     component: './404',

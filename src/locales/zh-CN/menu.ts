@@ -7,6 +7,7 @@ export default {
   'menu.dashboard': '运行报表',
   'menu.executor': '执行器管理',
   'menu.spider': '爬虫管理',
+  'menu.realTimeData': '实时数据',
   'menu.spiderData': '爬虫数据',
   'menu.spiderGroup': '爬虫分类',
   'menu.spiderLog': '爬虫日志',
