@@ -111,6 +111,7 @@ declare namespace API {
   };
 
   type CurrentUser = {
+    id:number;
     username?: string;
     avatar?: string;
     userid?: string;

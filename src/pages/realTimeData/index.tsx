@@ -1,5 +1,5 @@
 import {Button, message, Divider, Modal} from 'antd';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {RouteChildrenProps} from "react-router";
 import ReactJson from 'react-json-view'
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
@@ -8,6 +8,7 @@ import ProTable from '@ant-design/pro-table';
 import { fetchSpiderDataPage, removeSpiderData } from '@/services/open-crawler/spiderdata';
 import {confirmModal} from "@/components/ConfirmModel";
 import moment from 'moment';
+import { useModel } from 'umi';
 
 
 /**
@@ -31,12 +32,35 @@ const handleRemove = async (spiderId: number, selectedRows: any[]) => {
 };
 
 const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
+  const { initialState } = useModel('@@initialState');
+  const { socket } = initialState || {};
   const actionRef = useRef<ActionType>();
   const { query }: any = location;
   const [spiderId] = useState<number>(query.id);
   const [selectedRowsState, setSelectedRows] = useState<API.SpiderData[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [data, setData] = useState<any>();
+
+
+  const linearMessage = useCallback(async() => {
+    
+  }, []);
+
+  useEffect(()=>{
+    console.log(socket)
+
+
+    if(socket){
+      console.log("ddddddddddddddddddddddd", socket.receiveBuffer)
+
+      socket.connect("lijunping", async (message: any) => {
+        console.log("客户端接收到消息: ", message);
+      })
+    }
+
+    //linearMessage();
+  },[]);
+
   const columns: ProColumns<API.SpiderData>[] = [
     {
       title: 'ID',
@@ -101,16 +125,16 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
           labelWidth: 120,
         }}
         toolBarRender={() => []}
-        request={async (params) => {
-          const response = await fetchSpiderDataPage({ ...params, spiderId });
-          return {
-            data: response.records,
-            total: response.total,
-            success: true,
-            pageSize: response.pages,
-            current: response.current,
-          };
-        }}
+        // request={async (params) => {
+        //   const response = await fetchSpiderDataPage({ ...params, spiderId });
+        //   return {
+        //     data: response.records,
+        //     total: response.total,
+        //     success: true,
+        //     pageSize: response.pages,
+        //     current: response.current,
+        //   };
+        // }}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {

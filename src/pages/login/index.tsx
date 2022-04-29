@@ -54,12 +54,14 @@ const Login: React.FC = () => {
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
-      // socketio 登录，和后端服务建立链接
-      const socket = io('ws://localhost:8442');
-      console.log("ddddddddddd", socket);
+      const socket = io('http://localhost:8442',{
+        transports: ["websocket"],
+        query: { userId: userInfo.id},
+      });
       setInitialState({
         ...initialState,
         currentUser: userInfo,
+        socket
       });
     }
   };

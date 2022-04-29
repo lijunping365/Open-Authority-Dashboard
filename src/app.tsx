@@ -5,6 +5,7 @@ import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
+import io from 'socket.io-client';
 import { currentUser as queryCurrentUser } from './services/open-crawler/api';
 import {requestInterceptor, responseInterceptor} from "@/utils/request";
 
@@ -22,6 +23,7 @@ export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  socket?: any;
 }> {
   const fetchUserInfo = async () => {
     try {
@@ -32,14 +34,22 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
-  // 如果是登录页面，不执行
+  
+  // 如果是登录页面，不执行(页面刷新时执行)
   if (history.location.pathname !== loginPath) {
-    const currentUser = await fetchUserInfo();
-    return {
-      fetchUserInfo,
-      currentUser,
-      settings: {},
-    };
+    const currentUser: any = await fetchUserInfo();
+    if(currentUser){
+      const socket = io('http://localhost:8442',{
+      transports: ["websocket"],
+      query: { userId: currentUser.id},
+      });
+      return {
+        fetchUserInfo,
+        currentUser,
+        socket,
+        settings: {},
+      };
+    }
   }
   return {
     fetchUserInfo,
