@@ -6,7 +6,7 @@ import { history } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import io from 'socket.io-client';
-import { currentUser as queryCurrentUser } from './services/open-crawler/api';
+import { currentUser as queryCurrentUser } from './services/open-admin/api';
 import {requestInterceptor, responseInterceptor} from "@/utils/request";
 
 const loginPath = '/login';
@@ -34,7 +34,7 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
-  
+
   // 如果是登录页面，不执行(页面刷新时执行)
   if (history.location.pathname !== loginPath) {
     const currentUser: any = await fetchUserInfo();
@@ -68,7 +68,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: '分布式爬虫系统',
+      content: '权限管理系统',
 
     },
     footerRender: () => <Footer />,

@@ -28,86 +28,10 @@ declare namespace API {
     value: number;
   }
 
-  type Instance = {
-    clientId: string;
-    onlineTime: Date;
-    status: string;
-    weight: number;
-  };
-
-  type Spider = {
-    id: number;
-    name: string;
-    url: string;
-    method: string;
-    params: string;
-    headers: string;
-    proxy: number;
-    extractRule: string;
-    retryTimes: number;
-    sleepTime: number;
-    createTime: Date;
-    createUser: number;
-  };
-
-  type SpiderData = {
-    id: number;
-    spiderId: number;
-    data: string;
-    createTime: Date;
-  };
-
-  type SpiderLog = {
-    id: number;
-    spiderId: number;
-    status: number;
-    cause: string;
-    createTime: Date;
-  };
-
-  type SpiderProxy = {
-    id: number;
-    scheme: number;
-    host: string;
-    port: number;
-    username: string;
-    password: string;
-    status: number;
-    createTime: Date;
-    verifyTime: Date;
-  };
-
-  type SpiderTask = {
-    id: number;
-    spiderId: number;
-    taskName: string;
-    handlerName: string;
-    cronExpression: string;
-    status: number;
-    createTime: Date;
-    createUser: number;
-  };
-
-  type TaskLog = {
-    id: number;
-    taskId: number;
-    status: number;
-    cause: string;
-    createTime: Date;
-  }
-
   type TreeData = {
     id: number;
     name: string;
     children: API.TreeData[];
-  };
-
-  type SpiderGroup = {
-    id: number;
-    pid: number;
-    name: string;
-    children: API.SpiderGroup[];
-    createTime: Date;
   };
 
   type CurrentUser = {
@@ -156,29 +80,6 @@ declare namespace API {
     updatedAt?: string;
     createdAt?: string;
     progress?: number;
-  };
-
-  type TypeListItem = {
-    id?: number;
-    name?: string;
-    createTime?: string;
-  };
-
-  type ProxyGroupListItem = {
-    id?: number;
-    groupName?: string;
-    createTime?: string;
-  };
-
-  type ProxyIpListItem = {
-    id?: number;
-    groupId?: number;
-    ip?: string;
-    port?: string;
-    type?: number;
-    status?: number;
-    createTime?: string;
-    verifyTime?: string;
   };
 
   type RuleList = {

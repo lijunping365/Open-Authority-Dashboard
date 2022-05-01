@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import {Card, Col, Row, Statistic} from "antd";
 import { Chart, Axis, Geom, Legend, Tooltip, LineAdvance } from 'bizcharts';
-import { fetchSpiderNumber, fetchSpiderReport } from '@/services/open-crawler/dashboard';
+import { fetchSpiderNumber, fetchSpiderReport } from '@/services/open-admin/dashboard';
 
 const TableList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);

@@ -2,13 +2,14 @@ import { PlusOutlined } from '@ant-design/icons';
 import {Button, Divider, message, Drawer} from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
-import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
+import type { ProColumns, ActionType } from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { formatterIcon } from '@/utils/icon';
 import CustomizeTreeSelect from '@/components/ITreeSelect';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { TableListItem } from './data';
+import type { TableListItem } from './data';
 import { queryMenu, updateMenu, addMenu, removeRule } from './service';
 
 /**

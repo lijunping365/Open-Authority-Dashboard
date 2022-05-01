@@ -8,7 +8,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
 import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import { login, getFakeCaptcha } from '@/services/open-crawler/login';
+import { login, getFakeCaptcha } from '@/services/open-admin/login';
 import io from 'socket.io-client';
 import styles from './index.less';
 import {arrayBufferToBase64} from "@/utils/utils";
