@@ -5,25 +5,9 @@
 import * as api from './api';
 import * as user from './user';
 import * as login from './login';
-import * as spider from './spider';
-import * as spidertask from './spidertask';
-import * as spiderproxy from './spiderproxy';
-import * as spiderdata from './spiderdata';
-import * as spiderlog from './spiderlog';
-import * as spidernode from './spidernode';
-import * as tasklog from './tasklog';
-import * as spidergroup from './spidergroup';
 
 export default {
   api,
   user,
   login,
-  spider,
-  spidertask,
-  spiderdata,
-  spiderlog,
-  spiderproxy,
-  spidernode,
-  tasklog,
-  spidergroup
 };

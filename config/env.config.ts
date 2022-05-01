@@ -1,1 +1,1 @@
-export const HTTP_URL = "http://localhost:9748/openCrawler";
+export const HTTP_URL = "http://localhost:8080/openAdmin";
