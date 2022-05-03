@@ -26,18 +26,14 @@ export async function getInitialState(): Promise<{
   menuData?: API.MenuDataItem[];
 }> {
   if (ignorePath()) {
-    try {
-      const currentUser: any = await queryCurrentUser();
-      const response: any[] = await queryMenuTree();
-      const authRoutes = patchRoutes(response.length !== 0 ? response : []);
-      return {
-        currentUser,
-        settings: defaultSettings,
-        menuData: authRoutes,
-      };
-    } catch (error) {
-      history.push('/login');
-    }
+    const currentUser: any = await queryCurrentUser();
+    const response: any[] = await queryMenuTree();
+    const authRoutes = patchRoutes(response.length !== 0 ? response : []);
+    return {
+      currentUser,
+      settings: defaultSettings,
+      menuData: authRoutes,
+    };
   }
   return {
     settings: defaultSettings,
@@ -60,7 +56,7 @@ export const layout = ({initialState}: {
     disableContentMargin: false,
     footerRender: () => <Footer />,
     onPageChange: () => {
-      if (!initialState?.currentUser?.id && ignorePath()) {
+      if (!initialState?.currentUser && !ignorePath()) {
         history.push('/login');
       }
     },

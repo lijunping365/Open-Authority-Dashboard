@@ -12,18 +12,18 @@ import { login, getFakeCaptcha } from '@/services/open-admin/login';
 import styles from './index.less';
 import {arrayBufferToBase64} from "@/utils/utils";
 import {getDeviceId, setAccessToken} from "@/utils/cache";
+import {useModel} from "@@/plugin-model/useModel";
 
 /** 此方法会跳转到 redirect 参数所在的位置 */
 const goto = () => {
   if (!history) return;
-  setTimeout(() => {
-    const { query } = history.location;
-    const { redirect } = query as { redirect: string };
-    history.push(redirect || '/');
-  }, 10);
+  const { query } = history.location;
+  const { redirect } = query as { redirect: string };
+  history.push(redirect || '/');
 };
 
 const Login: React.FC = () => {
+  const { refresh } = useModel('@@initialState');
   const [submitting, setSubmitting] = useState(false);
   const [type, setType] = useState<string>('account');
   const [imageUrl, setImageUrl] = useState("");
@@ -35,7 +35,6 @@ const Login: React.FC = () => {
     if (result) setImageUrl(`data:image/jpeg;base64,${arrayBufferToBase64(result)}`)
   }, []);
 
-
   useEffect(()=>{
     if (type === "account"){
       onGetImageCaptcha().then()
@@ -44,26 +43,18 @@ const Login: React.FC = () => {
 
   const handlerSubmit = async (values: API.LoginParams) => {
     setSubmitting(true);
-    try {
-      const result = await login({ ...values, type, deviceId: getDeviceId()});
-      if (result) {
-        setAccessToken(result.accessToken);
-        const defaultLoginSuccessMessage = intl.formatMessage({
-          id: 'pages.login.success',
-          defaultMessage: '登录成功！',
-        });
-        message.success(defaultLoginSuccessMessage);
-        goto();
-        return;
-      }
-    } catch (error) {
-      setSubmitting(false);
-      const defaultLoginFailureMessage = intl.formatMessage({
-        id: 'pages.login.failure',
-        defaultMessage: '登录失败，请重试！',
+    const result = await login({ ...values, type, deviceId: getDeviceId()});
+    if (result) {
+      setAccessToken(result.accessToken);
+      const defaultLoginSuccessMessage = intl.formatMessage({
+        id: 'pages.login.success',
+        defaultMessage: '登录成功！',
       });
-      message.error(defaultLoginFailureMessage);
+      message.success(defaultLoginSuccessMessage);
+      goto();
+      refresh().then();
     }
+    setSubmitting(false);
   };
 
   return (
