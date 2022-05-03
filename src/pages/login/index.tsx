@@ -3,29 +3,15 @@ import {
   MobileOutlined,
   UserOutlined
 } from '@ant-design/icons';
-import {Alert, message, Tabs, Image} from 'antd';
+import {message, Tabs, Image} from 'antd';
 import React, {useCallback, useEffect, useState} from 'react';
 import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
-import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
+import { useIntl, Link, history, FormattedMessage, SelectLang } from 'umi';
 import Footer from '@/components/Footer';
 import { login, getFakeCaptcha } from '@/services/open-admin/login';
-import io from 'socket.io-client';
 import styles from './index.less';
 import {arrayBufferToBase64} from "@/utils/utils";
 import {getDeviceId, setAccessToken} from "@/utils/cache";
-
-const LoginMessage: React.FC<{
-  content: string;
-}> = ({ content }) => (
-  <Alert
-    style={{
-      marginBottom: 24,
-    }}
-    message={content}
-    type="error"
-    showIcon
-  />
-);
 
 /** 此方法会跳转到 redirect 参数所在的位置 */
 const goto = () => {
@@ -39,9 +25,7 @@ const goto = () => {
 
 const Login: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
-  const { initialState, setInitialState } = useModel('@@initialState');
   const [imageUrl, setImageUrl] = useState("");
 
   const intl = useIntl();
@@ -51,20 +35,6 @@ const Login: React.FC = () => {
     if (result) setImageUrl(`data:image/jpeg;base64,${arrayBufferToBase64(result)}`)
   }, []);
 
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-    if (userInfo) {
-      const socket = io('http://localhost:8442',{
-        transports: ["websocket"],
-        query: { userId: userInfo.id},
-      });
-      setInitialState({
-        ...initialState,
-        currentUser: userInfo,
-        socket
-      });
-    }
-  };
 
   useEffect(()=>{
     if (type === "account"){
@@ -75,7 +45,6 @@ const Login: React.FC = () => {
   const handlerSubmit = async (values: API.LoginParams) => {
     setSubmitting(true);
     try {
-      // 登录
       const result = await login({ ...values, type, deviceId: getDeviceId()});
       if (result) {
         setAccessToken(result.accessToken);
@@ -84,26 +53,18 @@ const Login: React.FC = () => {
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
         goto();
         return;
-      } else{
-        message.error(result.msg);
       }
-      // 如果失败去设置用户错误信息
-      setUserLoginState(result);
     } catch (error) {
+      setSubmitting(false);
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
         defaultMessage: '登录失败，请重试！',
       });
-
       message.error(defaultLoginFailureMessage);
     }
-    setSubmitting(false);
   };
-
-  const { status, type: loginType } = userLoginState;
 
   return (
     <div className={styles.container}>
@@ -142,7 +103,7 @@ const Login: React.FC = () => {
               },
             }}
             onFinish={async (values) => {
-              handlerSubmit(values as API.LoginParams);
+              handlerSubmit(values as API.LoginParams).then();
             }}
           >
             <Tabs activeKey={type} onChange={setType}>
@@ -162,14 +123,6 @@ const Login: React.FC = () => {
               />
             </Tabs>
 
-            {status === 'error' && loginType === 'account' && (
-              <LoginMessage
-                content={intl.formatMessage({
-                  id: 'pages.login.accountLogin.errorMessage',
-                  defaultMessage: '账户或密码错误',
-                })}
-              />
-            )}
             {type === 'account' && (
               <>
                 <ProFormText
@@ -255,7 +208,6 @@ const Login: React.FC = () => {
               </>
             )}
 
-            {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
             {type === 'mobile' && (
               <>
                 <ProFormText

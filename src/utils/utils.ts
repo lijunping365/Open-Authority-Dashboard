@@ -54,5 +54,10 @@ export const arrayBufferToBase64 = (buffer: ArrayBuffer) =>{
 
 
 export const ignorePath = () => {
-  return history.location.pathname !== '/user/login';
+  return (
+    history.location.pathname !== '/login' &&
+    history.location.pathname !== '/register' &&
+    history.location.pathname !== '/registerUser' &&
+    history.location.pathname !== '/registerResult'
+  );
 };

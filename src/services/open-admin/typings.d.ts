@@ -10,6 +10,26 @@ declare namespace API {
     createTime: Date
   };
 
+  export interface MenuData {
+    name: string;
+    icon: string;
+    path: string;
+    children?: MenuData[];
+  }
+
+  export interface MenuDataItem {
+    children?: MenuDataItem[];
+    routes?: MenuDataItem[];
+    hideChildrenInMenu?: boolean;
+    hideInMenu?: boolean;
+    icon?: string;
+    locale?: string;
+    name?: string;
+    key?: string;
+    path?: string;
+    [key: string]: any;
+  }
+
   type StatisticNumber = {
     taskTotalNum: number;
     taskRunningNum: number;
