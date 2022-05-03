@@ -8,14 +8,13 @@ import ResourceTransferTable from '@/pages/authorization/role/components/Resourc
 import MenuTransferTable from '@/pages/authorization/role/components/MenuTransferTable';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import { RoleMenuData, RoleResourceData, TableListItem } from './data';
-import { queryRole, updateRole, addRole, removeRule, allocResource, allocMenu } from './service';
+import { queryRole, updateRole, addRole, removeRule, allocResource, allocMenu } from '@/services/open-admin/role';
 
 /**
  * 添加节点
  * @param fields
  */
-const handleAdd = async (fields: TableListItem) => {
+const handleAdd = async (fields: API.TableListItem) => {
   const hide = message.loading('正在添加');
   try {
     await addRole({ ...fields });
@@ -33,7 +32,7 @@ const handleAdd = async (fields: TableListItem) => {
  * 更新节点
  * @param fields
  */
-const handleUpdate = async (fields: Partial<TableListItem>) => {
+const handleUpdate = async (fields: Partial<API.TableListItem>) => {
   const hide = message.loading('正在配置');
   try {
     await updateRole(fields);
@@ -52,7 +51,7 @@ const handleUpdate = async (fields: Partial<TableListItem>) => {
  *  删除节点
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: TableListItem[]) => {
+const handleRemove = async (selectedRows: API.TableListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
@@ -73,7 +72,7 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
  *  分配资源
  * @param roleResource
  */
-const handleAllocResource = async (roleResource: Partial<RoleResourceData>) => {
+const handleAllocResource = async (roleResource: Partial<API.RoleResourceData>) => {
   const hide = message.loading('正在修改状态');
   if (!roleResource) return true;
   try {
@@ -92,7 +91,7 @@ const handleAllocResource = async (roleResource: Partial<RoleResourceData>) => {
  *  分配菜单
  * @param roleMenu
  */
-const handleAllocMenu = async (roleMenu: Partial<RoleMenuData>) => {
+const handleAllocMenu = async (roleMenu: Partial<API.RoleMenuData>) => {
   const hide = message.loading('正在修改状态');
   if (!roleMenu) return true;
   try {
@@ -117,9 +116,9 @@ const TableList: React.FC<{}> = () => {
   const [defaultMenuIds, setDefaultMenuIds] = useState<any[]>([]);
   const [roleId, setRoleId] = useState(0);
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<TableListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
-  const columns: ProColumns<TableListItem>[] = [
+  const [row, setRow] = useState<API.TableListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<API.TableListItem[]>([]);
+  const columns: ProColumns<API.TableListItem>[] = [
     {
       title: '角色名称',
       dataIndex: 'name',
@@ -219,7 +218,7 @@ const TableList: React.FC<{}> = () => {
 
   return (
     <PageContainer>
-      <ProTable<TableListItem>
+      <ProTable<API.TableListItem>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
@@ -311,7 +310,7 @@ const TableList: React.FC<{}> = () => {
         />
       ) : null}
       <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
-        <ProTable<TableListItem, TableListItem>
+        <ProTable<API.TableListItem, API.TableListItem>
           onSubmit={async (value) => {
             const success = await handleAdd(value);
             if (success) {
@@ -356,7 +355,7 @@ const TableList: React.FC<{}> = () => {
         closable={false}
       >
         {row?.name && (
-          <ProDescriptions<TableListItem>
+          <ProDescriptions<API.TableListItem>
             column={2}
             title={row?.name}
             request={async () => ({

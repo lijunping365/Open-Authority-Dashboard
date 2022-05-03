@@ -30,6 +30,56 @@ declare namespace API {
     [key: string]: any;
   }
 
+  // role begin
+  type TableListItem = {
+    id: number;
+    name: string;
+    memo: string;
+    enableStatus: number;
+    sort: number;
+    resources: ResourceData[];
+    menus: MenuData[];
+    createUser: string;
+    createTime: Date;
+  }
+
+  type TableListPagination = {
+    total: number;
+    pageSize: number;
+    current: number;
+  }
+
+  type TableListData = {
+    list: TableListItem[];
+    pagination: Partial<TableListPagination>;
+  }
+
+  type TableListParams  = {
+    enableStatus?: number;
+    name?: string;
+    id?: number;
+    pageSize?: number;
+    currentPage?: number;
+    filter?: { [key: string]: any[] };
+    sorter?: { [key: string]: any };
+  }
+
+  type ResourceData = {
+    id: number;
+    name: string;
+  }
+
+  type RoleResourceData = {
+    roleId: number;
+    resourceId: number[];
+  }
+
+  type RoleMenuData = {
+    roleId: number;
+    menuId: number[];
+  }
+  // role end
+
   type StatisticNumber = {
     taskTotalNum: number;
     taskRunningNum: number;

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Modal, message} from 'antd';
-import {queryMenu} from "@/pages/authorization/role/service";
+import {queryMenu} from "@/services/open-admin/role";
 import TreeTransfer from "@/components/TreeTransfer";
 
 export interface MenuData {

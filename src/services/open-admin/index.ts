@@ -6,10 +6,12 @@ import * as api from './api';
 import * as user from './user';
 import * as login from './login';
 import * as menu from './menu';
+import * as role from './role';
 
 export default {
   api,
   user,
   login,
   menu,
+  role,
 };

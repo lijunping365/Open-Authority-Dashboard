@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal, message } from 'antd';
 import TableTransfer from "@/components/TableTransfer";
-import {queryResource} from "@/pages/authorization/role/service";
+import {queryResource} from "@/services/open-admin/role";
 
 const leftTableColumns = [
   {
