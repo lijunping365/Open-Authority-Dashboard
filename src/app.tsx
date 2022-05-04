@@ -26,14 +26,18 @@ export async function getInitialState(): Promise<{
   menuData?: API.MenuDataItem[];
 }> {
   if (ignorePath()) {
-    const currentUser: any = await queryCurrentUser();
-    const response: any[] = await queryMenuTree();
-    const authRoutes = patchRoutes(response.length !== 0 ? response : []);
-    return {
-      currentUser,
-      settings: defaultSettings,
-      menuData: authRoutes,
-    };
+    try {
+      const currentUser: any = await queryCurrentUser();
+      const response: any[] = await queryMenuTree();
+      const authRoutes = patchRoutes(response.length !== 0 ? response : []);
+      return {
+        currentUser,
+        settings: defaultSettings,
+        menuData: authRoutes,
+      };
+    } catch (error) {
+      history.push('/login');
+    }
   }
   return {
     settings: defaultSettings,
