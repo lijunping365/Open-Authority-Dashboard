@@ -9,13 +9,33 @@ export async function login(body: API.LoginParams) {
 }
 
 
-/** 发送验证码 POST /validate/code/list */
-export async function getFakeCaptcha(params: Partial<API.CaptchaParams>) {
-  return request('/captcha/create', {
+/** 发送图片验证码 */
+export async function getFakeImageCaptcha(params: Partial<API.CaptchaParams>) {
+  return request('/captcha/create/image', {
     method: 'POST',
     data: {
       ...params,
-    },
-    responseType: 'blob'
+    }
+  });
+}
+
+
+/** 发送算数图片验证码 */
+export async function getFakeMathImageCaptcha(params: Partial<API.CaptchaParams>) {
+  return request('/captcha/create/mathImage', {
+    method: 'POST',
+    data: {
+      ...params,
+    }
+  });
+}
+
+/** 发送短信验证码 */
+export async function getFakeSmsCaptcha(params: Partial<API.CaptchaParams>) {
+  return request('/captcha/create/sms', {
+    method: 'POST',
+    data: {
+      ...params,
+    }
   });
 }

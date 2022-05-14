@@ -8,9 +8,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
 import { useIntl, Link, history, FormattedMessage, SelectLang } from 'umi';
 import Footer from '@/components/Footer';
-import { login, getFakeCaptcha } from '@/services/open-admin/login';
+import { login, getFakeMathImageCaptcha, getFakeSmsCaptcha} from '@/services/open-admin/login';
 import styles from './index.less';
-import {arrayBufferToBase64} from "@/utils/utils";
 import {getDeviceId, setAccessToken} from "@/utils/cache";
 import {useModel} from "@@/plugin-model/useModel";
 
@@ -31,8 +30,8 @@ const Login: React.FC = () => {
   const intl = useIntl();
 
   const onGetImageCaptcha = useCallback(async () => {
-    const result = await getFakeCaptcha({type:"image", deviceId: getDeviceId()});
-    if (result) setImageUrl(`data:image/jpeg;base64,${arrayBufferToBase64(result)}`)
+    const result = await getFakeMathImageCaptcha({deviceId: getDeviceId()});
+    if (result && result.success) setImageUrl(`data:image/jpeg;base64,${result.imageCode}`)
   }, []);
 
   useEffect(()=>{
@@ -43,17 +42,18 @@ const Login: React.FC = () => {
 
   const handlerSubmit = async (values: API.LoginParams) => {
     setSubmitting(true);
-    const result = await login({ ...values, type, deviceId: getDeviceId()});
-    if (result) {
-      setAccessToken(result.accessToken);
-      const defaultLoginSuccessMessage = intl.formatMessage({
-        id: 'pages.login.success',
-        defaultMessage: '登录成功！',
+    login({ ...values, type, deviceId: getDeviceId()})
+      .then((res)=>{
+        if (res) {
+          setAccessToken(res.accessToken);
+          message.success("登录成功！");
+          goto();
+          refresh().then();
+        }
+      })
+      .catch((reason)=>{
+        message.success(`登录失败:${reason}`);
       });
-      message.success(defaultLoginSuccessMessage);
-      goto();
-      refresh().then();
-    }
     setSubmitting(false);
   };
 
@@ -270,9 +270,7 @@ const Login: React.FC = () => {
                   ]}
                   phoneName="mobile"
                   onGetCaptcha={async (mobile) => {
-                    const result = await getFakeCaptcha({
-                      type: "sms", mobile, deviceId: getDeviceId()
-                    });
+                    const result = await getFakeSmsCaptcha({mobile, deviceId: getDeviceId()});
                     if (result === false) {
                       return;
                     }

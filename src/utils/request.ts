@@ -33,7 +33,6 @@ export const requestInterceptor: RequestInterceptor = (url, options) => {
 
   // 当返回 data 的值为 null 时会走 errorHandle
   o.skipErrorHandler = true;
-  console.log("当前发出的请求是", `${HTTP_URL}${url}`)
   return {
     url: `${HTTP_URL}${url}`,
     options: o,
@@ -43,11 +42,6 @@ export const requestInterceptor: RequestInterceptor = (url, options) => {
 export const responseInterceptor: ResponseInterceptor = async (response, options) => {
   if (response && response.status) {
     if (response.status === 200) {
-      // 处理图片验证码
-      if (response.url.includes('/captcha/create') && options.data.type === "image") {
-        return response.clone().arrayBuffer();
-      }
-
       const result: any = await response.clone().json();
       if (result && result.code === 200) {
         return result.data;
@@ -70,21 +64,20 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
       }
 
       // 业务异常
-      if (result && result.code >= 999) { 
+      if (result && result.code >= 999) {
         notification.error({
           message: `${result.code}: ${result.msg}`,
           description: `${result.msg}`,
         });
       }
-      
-      return;
+    } else {
+      const errorText = codeMessage[response.status] || response.statusText;
+      const { status, url } = response;
+      notification.error({
+        message: `请求错误 ${status}: ${url}`,
+        description: errorText,
+      });
     }
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
   } else {
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
