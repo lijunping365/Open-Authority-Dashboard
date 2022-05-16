@@ -122,7 +122,7 @@ const TableList: React.FC<{}> = () => {
     {
       title: '角色名称',
       dataIndex: 'name',
-      tip: '角色名称是唯一的 key',
+      tip: '角色名称是唯一的',
       formItemProps: {
         rules: [
           {
@@ -161,6 +161,7 @@ const TableList: React.FC<{}> = () => {
         0: { text: '禁用', status: 'Default' },
         1: { text: '启用', status: 'Processing' },
       },
+      hideInForm: true
     },
     {
       title: '创建人',

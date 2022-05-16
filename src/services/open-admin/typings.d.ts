@@ -2,6 +2,21 @@
 /* eslint-disable */
 
 declare namespace API {
+  type Menu = {
+    id: number;
+    pid: number;
+    level: number;
+    icon: string;
+    name: string;
+    memo: string;
+    path: string;
+    sort: number;
+    children: Menu[];
+    enableStatus: number;
+    createTime: Date;
+    createUser: string;
+  };
+
   type User  = {
     id: number;
     username: string;

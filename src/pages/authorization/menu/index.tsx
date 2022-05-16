@@ -6,17 +6,17 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { formatterIcon } from '@/utils/icon';
-import CustomizeTreeSelect from '@/components/ITreeSelect';
 import CreateForm from './components/CreateForm';
 import UpdateForm from './components/UpdateForm';
-import type { TableListItem } from './data';
-import { queryMenu, updateMenu, addMenu, removeRule } from './service';
+import { queryMenuPage, updateMenu, addMenu, removeMenu } from '@/services/open-admin/menu';
+import {confirmModal} from "@/components/ConfirmModel";
+import ITreeSelect from "@/components/ITreeSelect";
 
 /**
  * 添加节点
  * @param fields
  */
-const handleAdd = async (fields: TableListItem) => {
+const handleAdd = async (fields: API.Menu) => {
   const hide = message.loading('正在添加');
   try {
     await addMenu({ ...fields });
@@ -34,7 +34,7 @@ const handleAdd = async (fields: TableListItem) => {
  * 更新节点
  * @param fields
  */
-const handleUpdate = async (fields: Partial<TableListItem>) => {
+const handleUpdate = async (fields: Partial<API.Menu>) => {
   const hide = message.loading('正在配置');
   try {
     await updateMenu(fields);
@@ -53,13 +53,11 @@ const handleUpdate = async (fields: Partial<TableListItem>) => {
  *  删除节点
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: TableListItem[]) => {
+const handleRemove = async (selectedRows: any[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeRule({
-      key: selectedRows.map((row) => row.id),
-    });
+    await removeMenu({ids: selectedRows});
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -70,21 +68,21 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
   }
 };
 
-const TableList: React.FC<{}> = () => {
+const TableList: React.FC = () => {
   const [createModalVisible, handleModalVisible] = useState<boolean>(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const [row, setRow] = useState<TableListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<TableListItem[]>([]);
-  const [menuData, setMenuData] = useState<TableListItem[]>([]);
+  const [row, setRow] = useState<API.Menu>();
+  const [selectedRowsState, setSelectedRows] = useState<API.Menu[]>([]);
+  const [menuData, setMenuData] = useState<API.Menu[]>([]);
   const [parentId, setParentId] = useState(0);
 
   const handlerSelect = (pid: any) => {
     setParentId(pid)
   };
 
-  const columns: ProColumns<TableListItem>[] = [
+  const columns: ProColumns<API.Menu>[] = [
     {
       title: '父菜单',
       dataIndex: 'pid',
@@ -93,7 +91,11 @@ const TableList: React.FC<{}> = () => {
       hideInTable: true,
       renderFormItem: () => {
         return (
-          <CustomizeTreeSelect onSelect={handlerSelect} treeData={menuData} defaultValue={[]} defaultExpandedKeys={[]}/>
+          <ITreeSelect
+            onSelect={handlerSelect}
+            treeData={menuData}
+            defaultValue={[]}
+          />
         );
       },
     },
@@ -199,7 +201,17 @@ const TableList: React.FC<{}> = () => {
             修改
           </a>
           <Divider type="vertical" />
-          <a href="">删除</a>
+          <a
+            onClick={async () => {
+              const confirm = await confirmModal();
+              if (confirm){
+                await handleRemove([record.id]);
+                actionRef.current?.reloadAndRest?.();
+              }
+            }}
+          >
+            删除
+          </a>
         </>
       ),
     },
@@ -207,7 +219,7 @@ const TableList: React.FC<{}> = () => {
 
   return (
     <PageContainer>
-      <ProTable<TableListItem>
+      <ProTable<API.Menu>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
@@ -219,15 +231,15 @@ const TableList: React.FC<{}> = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (params, sorter, filter) => {
-          const response = await queryMenu({ ...params, sorter, filter });
-          setMenuData(response);
+        request={async (params) => {
+          const response = await queryMenuPage({ ...params});
+          setMenuData(response.records);
           return {
-            data: response,
-            total: 1,
+            data: response.records,
+            total: response.total,
             success: true,
-            pageSize: 1,
-            current: 1,
+            pageSize: response.pages,
+            current: response.current,
           };
         }}
         columns={columns}
@@ -245,7 +257,7 @@ const TableList: React.FC<{}> = () => {
         >
           <Button
             onClick={async () => {
-              await handleRemove(selectedRowsState);
+              await handleRemove(selectedRowsState ? selectedRowsState.map((e) => e.id):[]);
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -256,7 +268,7 @@ const TableList: React.FC<{}> = () => {
         </FooterToolbar>
       )}
       <CreateForm onCancel={() => handleModalVisible(false)} modalVisible={createModalVisible}>
-        <ProTable<TableListItem, TableListItem>
+        <ProTable<API.Menu, API.Menu>
           onSubmit={async (value) => {
             const success = await handleAdd({
               ...value,
@@ -305,7 +317,7 @@ const TableList: React.FC<{}> = () => {
         closable={false}
       >
         {row?.name && (
-          <ProDescriptions<TableListItem>
+          <ProDescriptions<API.Menu>
             column={2}
             title={row?.name}
             request={async () => ({
