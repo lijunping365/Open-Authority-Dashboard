@@ -8,7 +8,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
 import { useIntl, Link, history, FormattedMessage, SelectLang } from 'umi';
 import Footer from '@/components/Footer';
-import { login, getFakeMathImageCaptcha, getFakeSmsCaptcha} from '@/services/open-admin/login';
+import {login, getFakeSmsCaptcha, getFakeImageCaptcha} from '@/services/open-admin/login';
 import styles from './index.less';
 import {getDeviceId, setAccessToken} from "@/utils/cache";
 import {useModel} from "@@/plugin-model/useModel";
@@ -30,8 +30,12 @@ const Login: React.FC = () => {
   const intl = useIntl();
 
   const onGetImageCaptcha = useCallback(async () => {
-    const result = await getFakeMathImageCaptcha({deviceId: getDeviceId()});
-    if (result && result.success) setImageUrl(`data:image/jpeg;base64,${result.imageCode}`)
+    getFakeImageCaptcha({ deviceId: getDeviceId() })
+      .then((result) => {
+        if (result && result.success) setImageUrl(`data:image/jpeg;base64,${result.imageCode}`);
+      }).catch((error) => {
+        message.success(`获取验证码失败:${error}`);
+      });
   }, []);
 
   useEffect(()=>{

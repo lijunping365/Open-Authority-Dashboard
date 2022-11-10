@@ -51,33 +51,14 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
         history.push('/login');
       }
 
-      if (result && result.code === 403) {
-        history.push('/403');
-      }
-
-      if (result && result.code === 404) {
-        history.push('/404');
-      }
-
-      if (result && result.code === 500) {
-        history.push('/500');
-      }
-
-      // 业务异常
-      if (result && result.code >= 999) {
-        notification.error({
-          message: `${result.code}: ${result.msg}`,
-          description: `${result.msg}`,
-        });
-      }
-    } else {
-      const errorText = codeMessage[response.status] || response.statusText;
-      const { status, url } = response;
-      notification.error({
-        message: `请求错误 ${status}: ${url}`,
-        description: errorText,
-      });
+      throw new Error(result ? result.msg : '服务出异常了');
     }
+    const errorText = codeMessage[response.status] || response.statusText;
+    const { status, url } = response;
+    notification.error({
+      message: `请求错误 ${status}: ${url}`,
+      description: errorText,
+    });
   } else {
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
