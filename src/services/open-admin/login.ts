@@ -1,10 +1,19 @@
 import { request } from 'umi';
+import {getRefreshToken} from "@/utils/cache";
 
 /** 登录接口 POST /login/list */
 export async function login(body: API.LoginParams) {
   return request(`/login/${body.type}`, {
     method: 'POST',
     data: body,
+  });
+}
+
+/** 退出登录接口 GET /login/refreshToken */
+export async function tryRefreshToken() {
+  return request('/login/refreshToken', {
+    method: 'GET',
+    params: {refreshToken: getRefreshToken()}
   });
 }
 

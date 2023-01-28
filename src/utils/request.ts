@@ -1,9 +1,10 @@
-import type {RequestInterceptor, ResponseInterceptor} from 'umi-request';
+import type {RequestInterceptor, RequestOptionsInit, ResponseInterceptor} from 'umi-request';
 import { history } from 'umi';
-import {getAccessToken} from '@/utils/cache';
+import {getAccessToken, getRefreshToken} from '@/utils/cache';
 import {message, notification} from 'antd';
 import { HTTP_URL } from '../../config/env.config';
 import {ignorePath} from "@/utils/utils";
+import {onRefreshToken} from "@/utils/token";
 
 export const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -24,6 +25,18 @@ export const codeMessage = {
   504: '网关超时。',
 };
 
+export const handler401 = (response: Response, options: RequestOptionsInit) =>{
+  // 如果 url 不包含 login/refreshToken 说明是 access_token 过期，则刷新 token，否则就是 refresh_token 过期了，应该重新登录了。
+  if (getRefreshToken() && response.url.indexOf('login/refreshToken') === -1) {
+    return onRefreshToken(response, options);
+  }
+  // 否则可能就是未登录或 refresh_token 过期抛出 401， 所以要重新登录
+  if (ignorePath()){
+    history.push('/login');
+  }
+  return null;
+}
+
 export const requestInterceptor: RequestInterceptor = (url, options) => {
   const o: any = options;
   o.headers = {
@@ -43,30 +56,28 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
   if (response && response.status) {
     if (response.status === 200) {
       const result: any = await response.clone().json();
-      if (result.code === 200) {
-        return result.data;
+
+      if (result.code === 401) { // 处理 access_token 非法或过期 和 refresh_token 非法或过期过期
+        handler401(response, options);
       }
 
-      if (result.code === 401 && ignorePath()) {
-        history.push('/login');
+      if (result.code === 1000){ // 处理业务异常状态码
+        message.error(result.msg);
       }
 
-      message.error(result.msg);
-    } else {
-      const errorText = codeMessage[response.status] || response.statusText;
-      const { status, url } = response;
-      notification.error({
-        message: `请求错误 ${status}: ${url}`,
-        description: errorText,
-      });
+      return result.data;
     }
+
+    const errorText = codeMessage[response.status] || response.statusText;
+    const { status, url } = response;
+    notification.error({
+      message: `请求错误 ${status}: ${url}`,
+      description: errorText,
+    });
   } else {
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
       message: '网络异常',
     });
   }
-  return response;
 };
-
-
