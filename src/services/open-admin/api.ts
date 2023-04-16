@@ -7,3 +7,7 @@ export async function queryCurrentUser(options?: { [key: string]: any }) {
     ...(options || {}),
   });
 }
+
+export async function queryUserMenu() {
+  return request<API.MenuData[]>('/user/getUserMenus');
+}

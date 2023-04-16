@@ -10,7 +10,7 @@ import { useIntl, Link, history, FormattedMessage, SelectLang } from 'umi';
 import Footer from '@/components/Footer';
 import {login, getFakeSmsCaptcha, getFakeImageCaptcha} from '@/services/open-admin/login';
 import styles from './index.less';
-import {getDeviceId, setAccessToken} from "@/utils/cache";
+import {getDeviceId, setAccessToken, setRefreshToken} from "@/utils/cache";
 import {useModel} from "@@/plugin-model/useModel";
 
 /** 此方法会跳转到 redirect 参数所在的位置 */
@@ -50,6 +50,7 @@ const Login: React.FC = () => {
       .then((res)=>{
         if (res) {
           setAccessToken(res.accessToken);
+          setRefreshToken(res.refreshToken);
           message.success("登录成功！");
           goto();
           refresh().then();

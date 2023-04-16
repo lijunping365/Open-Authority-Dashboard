@@ -32,7 +32,3 @@ export async function updateMenu(params: Partial<API.Menu>) {
     },
   });
 }
-
-export async function queryMenuTree() {
-  return request<API.MenuData[]>('/menu/tree');
-}

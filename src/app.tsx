@@ -5,10 +5,9 @@ import type { RequestConfig } from 'umi';
 import { history } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import { queryCurrentUser } from './services/open-admin/api';
+import { queryCurrentUser, queryUserMenu } from './services/open-admin/api';
 import {requestInterceptor, responseInterceptor} from "@/utils/request";
 import {ignorePath} from "@/utils/utils";
-import { queryMenuTree } from './services/open-admin/menu';
 import {patchRoutes} from "@/utils/menu";
 import defaultSettings from "../config/defaultSettings";
 
@@ -28,7 +27,7 @@ export async function getInitialState(): Promise<{
   if (ignorePath()) {
     try {
       const currentUser: any = await queryCurrentUser();
-      const response: any[] = await queryMenuTree();
+      const response: any[] = await queryUserMenu();
       const authRoutes = patchRoutes(response.length !== 0 ? response : []);
       return {
         currentUser,
