@@ -53,9 +53,9 @@ export async function allocMenu(params?: Partial<API.RoleMenuData>) {
 }
 
 export async function queryMenu() {
-  return request('/menu/treeList?total=1');
+  return request('/menu/tree');
 }
 
 export async function queryResource() {
-  return request('/resource/list?total=1');
+  return request('/access/list');
 }

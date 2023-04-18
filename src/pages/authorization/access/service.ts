@@ -2,13 +2,13 @@ import { request } from 'umi';
 import { TableListParams, TableListItem } from './data';
 
 export async function queryResource(params?: TableListParams) {
-  return request('/sys/resource/page', {
+  return request('/access/page', {
     params: { ...params, pageNum: params?.current },
   });
 }
 
 export async function removeResource(params: { key: number[] }) {
-  return request('/sys/resource/delete', {
+  return request('/access/delete', {
     method: 'POST',
     data: {
       ...params,
@@ -17,7 +17,7 @@ export async function removeResource(params: { key: number[] }) {
 }
 
 export async function addResource(params: TableListItem) {
-  return request('/sys/resource/save', {
+  return request('/access/save', {
     method: 'POST',
     data: {
       ...params,
@@ -26,7 +26,7 @@ export async function addResource(params: TableListItem) {
 }
 
 export async function updateResource(params: Partial<TableListItem>) {
-  return request('/sys/resource/update', {
+  return request('/access/update', {
     method: 'PUT',
     data: {
       ...params,
