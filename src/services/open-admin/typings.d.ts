@@ -52,8 +52,8 @@ declare namespace API {
     memo: string;
     enableStatus: number;
     sort: number;
-    resources: ResourceData[];
-    menus: MenuData[];
+    menus: string;
+    access: string;
     createUser: string;
     createTime: Date;
   }

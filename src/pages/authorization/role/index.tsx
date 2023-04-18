@@ -194,7 +194,7 @@ const TableList: React.FC<{}> = () => {
           <a
             onClick={() => {
               handleMenuModalVisible(true);
-              setDefaultMenuIds(record.menus ? record.menus.map((e) => e.id) : []);
+              setDefaultMenuIds(record.menus ? record.menus.split(",") : []);
               setRoleId(record.id);
             }}
           >
@@ -204,7 +204,7 @@ const TableList: React.FC<{}> = () => {
           <a
             onClick={() => {
               handleResourceModalVisible(true);
-              setDefaultResourceIds(record.resources ? record.resources.map((e) => e.id) : []);
+              setDefaultResourceIds(record.access ? record.access.split(",") : []);
               setRoleId(record.id);
             }}
           >
