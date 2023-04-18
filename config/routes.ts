@@ -13,12 +13,6 @@
     component: './Welcome',
   },
   {
-    name: 'dashboard',
-    icon: 'table',
-    path: '/dashboard',
-    component: './dashboard',
-  },
-  {
     name: 'user',
     icon: 'table',
     path: '/user',
@@ -36,16 +30,16 @@
         component: './authorization/role',
       },
       {
-        path: '/authorization/resource',
-        name: 'resource',
-        icon: 'dashboard',
-        component: './authorization/resource',
-      },
-      {
         path: '/authorization/menu',
         name: 'menu',
         icon: 'dashboard',
         component: './authorization/menu',
+      },
+      {
+        path: '/authorization/access',
+        name: 'access',
+        icon: 'dashboard',
+        component: './authorization/access',
       },
     ],
   },
